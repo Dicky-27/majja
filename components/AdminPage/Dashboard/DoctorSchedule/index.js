@@ -63,7 +63,7 @@ function DoctorSchedule({ updateRes, isAdmin, email }) {
 
   const fetchDataAdmin = async () => {
     try {
-      axios.get(`${url}/api/doctors/schedule/list`, {
+      axios.get(`/api/doctors/schedule/list`, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -72,7 +72,7 @@ function DoctorSchedule({ updateRes, isAdmin, email }) {
           setDataDokter(res.data.jadwal)
         })
 
-      axios.get(`${url}/api/doctors/list`, {
+      axios.get(`/api/doctors/list`, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -81,7 +81,7 @@ function DoctorSchedule({ updateRes, isAdmin, email }) {
           setDataDokterMaster(res.data.dokter)
         })
 
-      axios.get(`${url}/api/doctors/schedule/list_khusus`, {
+      axios.get(`/api/doctors/schedule/list_khusus`, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -98,7 +98,7 @@ function DoctorSchedule({ updateRes, isAdmin, email }) {
 
   const fetchDataNonAdmin = async () => {
     try {
-      axios.post(`${url}/api/doctors/schedule/scheduleonemail`, { email: JSON.parse(email) }, {
+      axios.post(`/api/doctors/schedule/scheduleonemail`, { email: JSON.parse(email) }, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -160,7 +160,7 @@ function DoctorSchedule({ updateRes, isAdmin, email }) {
   }
 
   function addDokterAPI(start, end, day, recur, rep, on, after, tidak_diulang) {
-    axios.post(`${url}/api/doctors/schedule/add`, {
+    axios.post(`/api/doctors/schedule/add`, {
       id_dokter: dokterSelected, hari:day, jam_mulai: start, jam_selesai: end,
       recurring: recur, repeat: rep, berakhir_pada: on, berakhir_setelah: after, tidak_diulang:tidak_diulang
     }, {
@@ -327,7 +327,7 @@ function DoctorSchedule({ updateRes, isAdmin, email }) {
   const onChangeHapus = () => {
     //semua
     if (hapusJadwal == 0) {
-      axios.post(`${url}/api/doctors/schedule/delete`, { id: idjadwal }, {
+      axios.post(`/api/doctors/schedule/delete`, { id: idjadwal }, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -358,7 +358,7 @@ function DoctorSchedule({ updateRes, isAdmin, email }) {
       var bln = tgl[2] == "Januari" ? '01' : tgl[2] == 'Februari' ? '02' : tgl[2] == 'Maret' ? '03' : tgl[2] == 'April' ? '04' : tgl[2] == 'Mei' ? '05' : tgl[2] == "Juni" ? '06' :
           tgl[2] == 'Juli' ? '07' : tgl[2] == 'Agustus' ? '08' : tgl[2] == 'September' ? '09' : tgl[2] == 'Oktober' ? '10' : tgl[2] == 'November' ? '11' : '12';
       var tgl2 = moment(tgl[3]+'-'+bln+'-'+tgl[1]).format('YYYY-MM-DD')
-      axios.post(`${url}/api/doctors/schedule/add_once`, {
+      axios.post(`/api/doctors/schedule/add_once`, {
         id_dokter: idDokter, hari: tanggalpraktek, jam_mulai: moment.utc(jamMulaiPraktek, "THH Z").format('HH:mm:ss'),
         jam_selesai: moment.utc(jamSelesaiPraktek, "THH Z").format('HH:mm:ss'), tanggal:tgl2, hapus: 1
       }, {

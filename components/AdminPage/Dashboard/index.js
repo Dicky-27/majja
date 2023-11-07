@@ -64,7 +64,7 @@ function Dashboard({ updateRes }) {
   }
 
   const handleStatusChange = (value, id, note) => {
-    axios.post(`${url}/api/booking/update_actionstatus`, { id_booking: id, action_status: value, catatan: note }, {
+    axios.post(`/api/booking/update_actionstatus`, { id_booking: id, action_status: value, catatan: note }, {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -85,7 +85,7 @@ function Dashboard({ updateRes }) {
   };
 
   function callData(start, end) {
-    axios.post(`${url}/api/booking/range`, { start, end }, {
+    axios.post(`/api/booking/range`, { start, end }, {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -96,7 +96,7 @@ function Dashboard({ updateRes }) {
   }
 
   function percentage(time) {
-    axios.get(`${url}/api/dashboard/` + time, {
+    axios.get(`/api/dashboard/` + time, {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -224,7 +224,7 @@ function Dashboard({ updateRes }) {
       callData(yesterday, nextyear)
       percentage('daily')
 
-      axios.get(`${url}/api/patient/list`, {
+      axios.get(`/api/patient/list`, {
         headers: {
           'Content-Type': 'application/json',
         },

@@ -16,7 +16,7 @@ function Booking({id}) {
   const url = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
   useEffect(() => {
-    axios.get(`${url}/api/doctors/`+id,{
+    axios.get(`/api/doctors/`+id,{
       headers: {
         'Content-Type': 'application/json',
       },
@@ -25,7 +25,7 @@ function Booking({id}) {
       setdokter(res.data.dokter)
     })
 
-    axios.get(`${url}/api/doctors/schedule/`+id,{
+    axios.get(`/api/doctors/schedule/`+id,{
       headers: {
         'Content-Type': 'application/json',
       },

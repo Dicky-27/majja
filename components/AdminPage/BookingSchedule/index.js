@@ -31,7 +31,7 @@ function BookingSchedule({ updateRes, isAdmin, email }) {
 
   const fetchDataAdmin = async () => {
     try {
-      axios.get(`${url}/api/booking`, {
+      axios.get(`/api/booking`, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -47,7 +47,7 @@ function BookingSchedule({ updateRes, isAdmin, email }) {
 
   const fetchDataNonAdmin = async () => {
     try {
-      axios.post(`${url}/api/booking/bookingonemail`, { email: JSON.parse(email) }, {
+      axios.post(`/api/booking/bookingonemail`, { email: JSON.parse(email) }, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -74,7 +74,7 @@ function BookingSchedule({ updateRes, isAdmin, email }) {
   }, []);
 
   const handleStatusChange = (value, id, note) => {
-    axios.post(`${url}/api/booking/update_actionstatus`, { id_booking: id, action_status: value, catatan: note }, {
+    axios.post(`/api/booking/update_actionstatus`, { id_booking: id, action_status: value, catatan: note }, {
       headers: {
         'Content-Type': 'application/json',
       },
