@@ -1,0 +1,27 @@
+.ArticleTitleHome{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 32px;
+    line-height: 48px;
+    text-align: center;
+    color: #A5090C;
+}
+.bacaSelengkapnya{
+    /* margin-top: 35px; */
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    color: #A5090C;
+}
+.image-upload > input {
+    visibility:hidden;
+    width:0;
+    height:0
+}
+
+.image-upload > label{
+    cursor: pointer;
+}

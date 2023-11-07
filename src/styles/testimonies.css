@@ -1,0 +1,53 @@
+.testi-title{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 32px;
+    line-height: 48px;
+    text-align: center;
+    color: #A5090C;
+}
+.swipercarousel {
+    position: relative;
+    padding: 0 5rem;
+}
+.swiper-button-prev,
+.swiper-button-next {
+    color: #A5090C !important;
+    /* padding: 1.4rem; */
+    /* background-color: #ffffff; */
+    /* font-weight: bold;
+    border-radius: 50px; */
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 30px;
+    z-index: 1;
+}
+.swiper-button-next {
+    right: 0;
+}
+.swiper-button-prev {
+    left: 0;
+}
+.swiper-button-next::after{
+    font-size: 10px;
+}
+.swipercarouselphone{
+    display: none;
+}
+.backtestimonies{
+    background: url('/images/backtestimonies.png');
+    background-position: center;
+    object-fit: contain;
+    background-repeat: no-repeat;
+}
+@media(max-width:768px){
+    .swipercarousel{
+        display: none;
+    }
+    .swipercarouselphone{
+        display: block;
+    }
+}

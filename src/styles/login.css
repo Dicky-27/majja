@@ -1,0 +1,134 @@
+/* Sign-in */
+.sign-in{
+    max-height: 50vh;
+}
+.loginTitle{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 100%;
+    color: #05445E;
+}
+.loginText{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 150%;
+    color: #8D8D8D;
+}
+.iconOutline{
+    color: #DF3034;
+}
+.form-label{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 21px;
+    color: #05445E;
+}
+.error {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 21px;
+    color: red;
+    text-decoration: none;
+}
+.btn-loginPage{
+    background: #DF3034;
+    border-radius: 10px;
+    color: white;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    text-align: center;
+    border: none;
+}
+.btn-loginPage:hover{
+    color: white;
+    background-color: #A5090C;
+}
+.btn-loginGoogle{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-size: 16px;
+    line-height: 24px;
+    text-align: center;
+    color: #189AB4;
+    border-radius: 10px;
+    border: 2px solid #189AB4;
+}
+.btn-loginGoogle:hover{
+    color: #189AB4;
+}
+.registerText{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 21px;
+    color: #05445E;
+}
+.form-control{
+    font-size: 14px;
+}
+.required{
+    font-size: 14px;
+    color: red;
+}
+.means{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 21px;
+    color: #05445E;
+}
+.pass{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 21px;
+}
+.forgot-password{
+    color: #1890FF;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 21px;
+    cursor: pointer;
+}
+@keyframes spinner {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.loading-spinner {
+    width: 30px;
+    height: 30px;
+    border: 10px solid #ccc;
+    /* Light grey */
+    border-top: 10px solid #383636;
+    /* Black */
+    border-radius: 50%;
+    animation: spinner 1.5s linear infinite;
+}
+.image{
+    height: 100vh;
+}
+@media (max-width:1024px) {
+    .image{
+        display: none;
+    }
+}
