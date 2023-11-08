@@ -1,27 +1,18 @@
 'use strict';
+
 const general = require('./general_routes');
 const gateway1 = require('./gateway1_routes');
 
+// Determine the base path
+const _basepath = process.env.BASEPATH || '';
+const basepath = _basepath ? `/${_basepath}` : '';
+console.log(`Starting ${basepath ? `with basepath: ${basepath}` : 'without basepath'}`);
 
-
-//########## start base path part
-const _basepath = process.env.BASEPATH
-console.log("basepath: ",typeof _basepath)
-let basepath ="";
-if(_basepath != "" && typeof _basepath != "undefined"){ //jika ada isinya
-    basepath = "/" + _basepath;
-    console.log("starting with basepath")
-}
-else if(typeof _basepath == "undefined" || _basepath == ""){ //jika gk ada isinya
-    basepath = basepath;
-    console.log("starting without basepath")
-}
-//########## end base path part
-
-
-
-//export function part
+// Set up routes
 module.exports = function (app) {
-    app.use(basepath + '/general', general);
-    app.use(basepath + '/gateway1', gateway1);
-}
+    app.use(`${basepath}/general`, general);
+    app.use(`${basepath}/gateway1`, gateway1);
+    app.get('/check', (req, res) => {
+        res.send('Server is running');
+    })
+};
