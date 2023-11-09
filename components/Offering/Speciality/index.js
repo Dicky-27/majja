@@ -53,7 +53,7 @@ function Speciality({ isMobile }) {
         className="ArticleTitleHome text-center"
         style={isMobile ? { fontSize: "26px", width: "95%" } : {}}
       >
-        Spesialiasi Kami
+        Spesialisasi Kami
       </h1>
       <div className={`row ${isMobile ? "" : "px-5"}`}>
         {specialities.map((item, i) => (
