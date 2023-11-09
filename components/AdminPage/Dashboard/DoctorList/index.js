@@ -48,7 +48,7 @@ function DoctorList({ updateRes }) {
   }
 
   function getJadwal(idnya){
-    axios.get(`/api/doctors/schedule/`+idnya,{
+    axios.get(`${url}/api/doctors/schedule/`+idnya,{
       headers: {
         'Content-Type': 'application/json',
       },
@@ -73,7 +73,7 @@ function DoctorList({ updateRes }) {
 
   const fetchData = async () => {
     try {
-      axios.get(`/api/doctors/list`,{
+      axios.get(`${url}/api/doctors/list`,{
         headers: {
           'Content-Type': 'application/json',
         },
@@ -99,7 +99,7 @@ function DoctorList({ updateRes }) {
   }, [])
 
   function deletedoctor(id){
-    axios.post(`/api/doctors/delete`, { id_dokter:id },{
+    axios.post(`${url}/api/doctors/delete`, { id_dokter:id },{
         headers: {
           'Content-Type': 'application/json',
         },

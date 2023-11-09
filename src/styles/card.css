@@ -1,6 +1,6 @@
 .card{
     background: #FFFFFF;
-    box-shadow: 0px 4px 50px rgba(192, 192, 192, 0.3);
+    box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.10);
     border-radius: 20px;
     margin: 10px;
     padding: 20px;
@@ -54,12 +54,31 @@
     -webkit-line-clamp: 3;
     overflow: hidden;
 }
+
+.cardSpecialityCaption{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: #8D8D8D;
+}
+
+.cardSpeciality{
+    background: #FFFFFF;
+    box-shadow: 0px 0px 30px 0px rgba(192, 192, 192, 0.30);
+    justify-content: center;
+    border-radius: 16px;
+    border:none !important;
+    height: 100%;
+}
 .cardLayanan{
     background: #FFFFFF;
     box-shadow: 0px 0px 30px rgba(192, 192, 192, 0.3);
     padding: 20px;
+    border-radius: 16px;
     border:none !important;
-    height: 210px;
+    height: 100%;
 }
 .cardLayananTitle{
     font-family: 'Poppins';

@@ -65,7 +65,7 @@ function NewDoctor({ updateBatal, updateSimpan, callData }) {
       toast.error('Email tidak valid')
     }
     else{
-      axios.post(`/api/doctors/add`,
+      axios.post(`${url}/api/doctors/add`,
         {
           nama,
           posisi: spesialis,
@@ -84,7 +84,7 @@ function NewDoctor({ updateBatal, updateSimpan, callData }) {
       .then((res) => {
         if (res.status == 200) {
           axios.post(
-              `/api/auth/register`,
+              `${url}/api/auth/register`,
               { nama, email, password, is_admin: 0 },
               {
                 headers: {

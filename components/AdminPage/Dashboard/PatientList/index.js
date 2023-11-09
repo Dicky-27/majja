@@ -31,7 +31,7 @@ function PatientList({ updateRes }) {
       router.push('/login')
     }
     else {
-      axios.get(`/api/patient/list`, {
+      axios.get(`${url}/api/patient/list`, {
         headers: {
           'Content-Type': 'application/json',
         },

@@ -125,7 +125,7 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
   const { TextArea } = Input;
 
   useEffect(() => {
-    axios.post(`/api/booking/checkbooking`, { today: moment(today).format("YYYY-MM-DD"), id_dokter: id }, {
+    axios.post(`${url}/api/booking/checkbooking`, { today: moment(today).format("YYYY-MM-DD"), id_dokter: id }, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -244,7 +244,7 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
       // }
     } else {
       const jam = valuejam.split('.');
-      axios.post(`/api/booking/add`, {
+      axios.post(`${url}/api/booking/add`, {
         nama, phone: phone.toString(), kategori: kategoriPasien, no_rekam_medis: rekamMedis, keluhan,
         tanggal_booking: moment(selectedDay.year + '-' + selectedDay.month + '-' + selectedDay.day).format("YYYY-MM-DD"), jam_booking: moment.utc(jam, "THH Z").format('HH:mm:ss'),
         id_dokter: router.query.id, action_status: 1
@@ -255,7 +255,7 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
       }).then(res => {
         if (res.status == 200) {
           if (kategoriPasien == "baru") {
-            axios.post(`/api/patient/add`, { nama, telp: phone.toString() }, {
+            axios.post(`${url}/api/patient/add`, { nama, telp: phone.toString() }, {
               headers: {
                 'Content-Type': 'application/json',
               },

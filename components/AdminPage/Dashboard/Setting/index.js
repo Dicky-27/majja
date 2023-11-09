@@ -25,7 +25,7 @@ function Setting() {
 
     useEffect(() => {
       if(isAdmin != "1"){
-        axios.post(`/api/doctors/byemail`,{email},{
+        axios.post(`${url}/api/doctors/byemail`,{email},{
           headers: {
             'Content-Type': 'application/json',
           },
@@ -45,7 +45,7 @@ function Setting() {
             setErrorOldPass(true)
         }
         else{
-            axios.post(`/api/auth/forgot`,{email, password, oldPass},{
+            axios.post(`${url}/api/auth/forgot`,{email, password, oldPass},{
                 headers: {
                   'Content-Type': 'application/json',
                 },
@@ -86,7 +86,7 @@ function Setting() {
         method: 'POST',
         body: uploadimg
       }).then(response => response.json()).then(dataRes => {
-        axios.post(`/api/doctors/edit`, {email:email, gambar:("https://cloud.squidex.io/api/assets/artikel/"+dataRes.id)}, {
+        axios.post(`${url}/api/doctors/edit`, {email:email, gambar:("https://cloud.squidex.io/api/assets/artikel/"+dataRes.id)}, {
           headers: {
             "Content-Type": "application/json",
           },

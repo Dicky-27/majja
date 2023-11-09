@@ -14,13 +14,17 @@ const ImageSlider = () => {
         modules={[Navigation, Pagination, Scrollbar, A11y]}
         spaceBetween={50}
         slidesPerView={1}
-        navigation
+        navigation={{ nextEl: ".arrow-left", prevEl: ".arrow-right" }}
         loop={true}
         autoplay={true}
-        // pagination={{ clickable: true }}
-        // scrollbar={{ draggable: true }}
-        // onSwiper={(swiper) => console.log(swiper)}
       >
+        <button className="arrow-left arrow">
+          <img src="/images/ic-chevron-left.svg" />
+        </button>
+        <button className="arrow-right arrow">
+          <img src="/images/ic-chevron-right.svg" />
+        </button>
+
         <SwiperSlide>
           <img src="/images/offering1.png" alt="slide1" />
         </SwiperSlide>
@@ -40,6 +44,30 @@ const ImageSlider = () => {
 
 const Wrapper = styled.div`
   width: 100%;
+  position: relative;
+
+  .swiper {
+    width: 100%;
+    height: auto;
+
+    .arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+      background: none;
+      border: none;
+    }
+
+    .arrow-left {
+      left: 3.5vw;
+    }
+
+    .arrow-right {
+      right: 3.5vw;
+    }
+  }
+
   @media (max-width: 1121px) {
     width: 110%;
     margin: 0 0 0 -7%;

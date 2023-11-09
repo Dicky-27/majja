@@ -14,7 +14,7 @@ import { useRouter } from "next/router";
 import axios from "axios";
 moment.locale("id");
 
-function Articles({data}) {
+function Articles({ data }) {
   const { Search } = Input;
   const [newsList, setNewsList] = useState([]);
   const [newsListMaster, setNewsListMaster] = useState([]);
@@ -23,20 +23,27 @@ function Articles({data}) {
   useEffect(() => {
     AOS.init();
 
-    axios.get(`https://cloud.squidex.io/api/content/artikel/artikel`,{
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-    .then(res => {
-      setNewsList(res.data.items.length >= 12 ? [...slice2(res.data.items, 0, 12)] : res.data.items)
-      setNewsListMaster(res.data.items)
-    })
+    axios
+      .get(`https://cloud.squidex.io/api/content/artikel/artikel`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((res) => {
+        setNewsList(
+          res.data.items.length >= 12
+            ? [...slice2(res.data.items, 0, 12)]
+            : res.data.items
+        );
+        setNewsListMaster(res.data.items);
+      });
   }, []);
 
   const handlePagination = async (value) => {
-    if (value * 12- 1 > newsList.length) {
-      setNewsList([...slice2(newsListMaster, (value - 1) * 12, newsListMaster.length)]);
+    if (value * 12 - 1 > newsList.length) {
+      setNewsList([
+        ...slice2(newsListMaster, (value - 1) * 12, newsListMaster.length),
+      ]);
     } else {
       setNewsList([...slice2(newsListMaster, (value - 1) * 12, value * 12)]);
     }
@@ -44,12 +51,12 @@ function Articles({data}) {
 
   function slice2(array, val, offset) {
     var subarray = [];
-    for (var i = val; i<offset; i++) {
-        subarray.push(array[i]);
+    for (var i = val; i < offset; i++) {
+      subarray.push(array[i]);
     }
 
     return subarray;
-}
+  }
 
   const onSearch = (value) => {
     const filteredData = newsListMaster.filter((entry) =>
@@ -77,22 +84,45 @@ function Articles({data}) {
           </SearchWrapper>
           <div className="row" data-aos="fade-up">
             {newsList?.map((item, index) => (
-              <div className="col-xl-3 col-lg-5 col-md-6 col-12 p-3" key={index} onClick={()=> router.push('/articles/' + item?.id)}>
+              <div
+                className="col-xl-3 col-lg-5 col-md-6 col-12 p-3"
+                key={index}
+                onClick={() => router.push("/articles/" + item?.id)}
+              >
                 <>
-                  <img src={item?.data?.photo?.iv} width="100%" style={{aspectRatio:'4/3', objectFit:'cover', borderRadius:'10px 10px 0 0'}}></img>
-                  <CardWrapper className="p-3">
-                    <CardTitleWrapper>
-                      <CardTitle>{item?.data?.judul?.iv}</CardTitle>
-                    </CardTitleWrapper>
-                    <CardBodyText>
-                      {item?.data?.date?.iv
-                      // moment(item?.data?.date?.iv).format("DD MMMM YYYY")
-                      }
-                    </CardBodyText>
-                    <CardBodyWrapper className="my-2">
-                      <CardBodyText><div dangerouslySetInnerHTML={{__html: item?.data?.content?.iv}}></div> </CardBodyText>
-                    </CardBodyWrapper>
-                    <BacaSelengkapnya link={'/articles/' + item?.id}></BacaSelengkapnya>
+                  <img
+                    src={item?.data?.photo?.iv}
+                    width="100%"
+                    style={{
+                      aspectRatio: "4/3",
+                      objectFit: "cover",
+                      borderRadius: "10px 10px 0 0",
+                    }}
+                  ></img>
+                  <CardWrapper className="d-flex flex-column justify-content-between p-3">
+                    <div>
+                      <CardTitleWrapper>
+                        <CardTitle>{item?.data?.judul?.iv}</CardTitle>
+                      </CardTitleWrapper>
+                      <CardBodyText>
+                        {
+                          item?.data?.date?.iv
+                          // moment(item?.data?.date?.iv).format("DD MMMM YYYY")
+                        }
+                      </CardBodyText>
+                      <CardBodyWrapper className="my-2">
+                        <CardBodyText>
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html: item?.data?.content?.iv,
+                            }}
+                          ></div>{" "}
+                        </CardBodyText>
+                      </CardBodyWrapper>
+                    </div>
+                    <BacaSelengkapnya
+                      link={"/articles/" + item?.id}
+                    ></BacaSelengkapnya>
                   </CardWrapper>
                 </>
               </div>
@@ -118,15 +148,13 @@ const StyledSection = styled.section`
   padding-top: 10%;
 `;
 
-
 const Wrapper = styled.div`
   padding: 0% 5%;
 
-  @media(max-width:576px){
+  @media (max-width: 576px) {
     padding: 30% 5%;
   }
 `;
-
 
 const SearchWrapper = styled.div`
   /* font-family: "Poppins";
@@ -144,7 +172,7 @@ const StyledTitle = styled.div`
   font-weight: 600;
   font-size: var(--fs-32);
   color: #a5090c;
-  
+
   margin-bottom: 2%;
 `;
 
@@ -176,7 +204,7 @@ const CardBodyWrapper = styled.div`
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
   overflow: hidden;
-  max-height:100px;
+  max-height: 100px;
 `;
 
 const CardBodyText = styled.p`

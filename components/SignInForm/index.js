@@ -51,7 +51,7 @@ export default function SignInForm({loading, setLoading}) {
     else {
       setErrorEmail(false)
       setErrorPass(false)
-      axios.post(`/api/auth/login`,data,{
+      axios.post(`${url}/api/auth/login`,data,{
         headers: {
           'Content-Type': 'application/json',
         },
