@@ -4,7 +4,6 @@ import AOS from "aos";
 import BacaSelengkapnya from "../BacaSelengkapnya";
 import ButtonAlt from "../ButtonAlt";
 import { useRouter } from "next/router";
-import { Icon } from "@iconify/react";
 
 // const newsList = [
 //     {
