@@ -5,8 +5,11 @@ const nextConfig = {
     styledComponents: true,
   },
   output: 'standalone',
-  images:{
-    domains:['cloud.squidex.io', 'lh3.googleusercontent.com']
+  images: {
+    domains: ['cloud.squidex.io', 'lh3.googleusercontent.com']
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
   }
 }
 
