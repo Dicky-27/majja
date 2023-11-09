@@ -32,7 +32,7 @@ function BookingSchedule({ updateRes, isAdmin, email }) {
   const fetchDataAdmin = async () => {
     try {
       axios
-        .get(`${url}/api/booking`, {
+        .get(`/api/booking`, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -50,7 +50,7 @@ function BookingSchedule({ updateRes, isAdmin, email }) {
     try {
       axios
         .post(
-          `${url}/api/booking/bookingonemail`,
+          `/api/booking/bookingonemail`,
           { email: JSON.parse(email) },
           {
             headers: {
@@ -79,7 +79,7 @@ function BookingSchedule({ updateRes, isAdmin, email }) {
   const handleStatusChange = (value, id, note) => {
     axios
       .post(
-        `${url}/api/booking/update_actionstatus`,
+        `/api/booking/update_actionstatus`,
         { id_booking: id, action_status: value, catatan: note },
         {
           headers: {
