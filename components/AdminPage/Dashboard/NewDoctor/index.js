@@ -22,93 +22,88 @@ function NewDoctor({ updateBatal, updateSimpan, callData }) {
   const [isValidEmail, setIsValidEmail] = useState(true);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const url = process.env.NEXT_PUBLIC_API_URL ||  "http://localhost:3000";
+  const url = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
   function addDokter() {
-    setLoading(true)
-    if(!nama){
-      setLoading(false)
-      toast.error('Nama Dokter harus diisi!')
-    }
-    else if(!phone){
-      setLoading(false)
+    setLoading(true);
+    if (!nama) {
+      setLoading(false);
+      toast.error("Nama Dokter harus diisi!");
+    } else if (!phone) {
+      setLoading(false);
       // seterrorphone(true)
-      toast.error('Nomor Telepon harus diisi!')
-    }
-    else if (!spesialis){
-      setLoading(false)
+      toast.error("Nomor Telepon harus diisi!");
+    } else if (!spesialis) {
+      setLoading(false);
       // seterrorspesialis(true)
-      toast.error('Spesialis harus diisi')
-    }
-    else if (!xpNumber || !xpText){
-      setLoading(false)
+      toast.error("Spesialis harus diisi");
+    } else if (!xpNumber || !xpText) {
+      setLoading(false);
       // seterrorspesialis(true)
-      toast.error('Pengalaman harus diisi')
-    }
-    else if (!status){
-      setLoading(false)
+      toast.error("Pengalaman harus diisi");
+    } else if (!status) {
+      setLoading(false);
       // seterrorspesialis(true)
-      toast.error('Status harus diisi')
-    }
-    else if(!email){
-      setLoading(false)
+      toast.error("Status harus diisi");
+    } else if (!email) {
+      setLoading(false);
       // seterroremail(true)
-      toast.error('Email harus diisi!')
-    }
-    else if(!password){
-      setLoading(false)
+      toast.error("Email harus diisi!");
+    } else if (!password) {
+      setLoading(false);
       // seterrorPass(true)
-      toast.error('Passsword harus diisi!')
-    }
-    else if(!isValidEmail){
-      setLoading(false)
-      toast.error('Email tidak valid')
-    }
-    else{
-      axios.post(`${url}/api/doctors/add`,
-        {
-          nama,
-          posisi: spesialis,
-          gambar: "",
-          xp: xpNumber + " " + xpText,
-          phone: phone.toString(),
-          status,
-          email,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
+      toast.error("Passsword harus diisi!");
+    } else if (!isValidEmail) {
+      setLoading(false);
+      toast.error("Email tidak valid");
+    } else {
+      axios
+        .post(
+          `/api/doctors/add`,
+          {
+            nama,
+            posisi: spesialis,
+            gambar: "",
+            xp: xpNumber + " " + xpText,
+            phone: phone.toString(),
+            status,
+            email,
           },
-        }
-      )
-      .then((res) => {
-        if (res.status == 200) {
-          axios.post(
-              `${url}/api/auth/register`,
-              { nama, email, password, is_admin: 0 },
-              {
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              }
-            )
-            .then((res) => {
-              if (res.status == 200) {
-                setLoading(false)
-                toast.success("Tambah Dokter Berhasil!");
-                // localStorage.setItem('halamandash', 4)
-                // window.location.reload()
-                updateSimpan(false);
-                callData(true);
-              } else {
-                toast.success("Tambah Dokter Gagal!");
-              }
-            });
-        } else {
-          setloading(false)
-          toast.success("Tambah Dokter Gagal!");
-        }
-      });
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((res) => {
+          if (res.status == 200) {
+            axios
+              .post(
+                `/api/auth/register`,
+                { nama, email, password, is_admin: 0 },
+                {
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                }
+              )
+              .then((res) => {
+                if (res.status == 200) {
+                  setLoading(false);
+                  toast.success("Tambah Dokter Berhasil!");
+                  // localStorage.setItem('halamandash', 4)
+                  // window.location.reload()
+                  updateSimpan(false);
+                  callData(true);
+                } else {
+                  toast.success("Tambah Dokter Gagal!");
+                }
+              });
+          } else {
+            setloading(false);
+            toast.success("Tambah Dokter Gagal!");
+          }
+        });
     }
   }
 
@@ -238,7 +233,7 @@ function NewDoctor({ updateBatal, updateSimpan, callData }) {
                     placeholder="3"
                     min={0}
                     type="number"
-                    max={xpText == "bulan" ? 12 : ''}
+                    max={xpText == "bulan" ? 12 : ""}
                     style={{ width: "100%" }}
                     value={xpNumber}
                     onChange={(event) => setxpNumber(event.target.value)}
@@ -248,7 +243,9 @@ function NewDoctor({ updateBatal, updateSimpan, callData }) {
                   <Select
                     placeholder="Tahun"
                     style={{ width: "100%" }}
-                    onChange={(e) => (setxpText(e), (xpNumber > 12 && setxpNumber(12)))}
+                    onChange={(e) => (
+                      setxpText(e), xpNumber > 12 && setxpNumber(12)
+                    )}
                     value={xpText}
                     options={[
                       {
@@ -297,7 +294,7 @@ function NewDoctor({ updateBatal, updateSimpan, callData }) {
                 placeholder="emaildokter@mail.com"
                 value={email}
                 onChange={handleEmailChange}
-                className={isValidEmail ? null : 'ant-input-error'}
+                className={isValidEmail ? null : "ant-input-error"}
               />
               {erroremail && (
                 <span className="error mt-4">Email harus diisi!</span>
@@ -323,23 +320,22 @@ function NewDoctor({ updateBatal, updateSimpan, callData }) {
             </div>
           </div>
           <div className="text-end">
-            {
-              !loading ?
+            {!loading ? (
               <>
-              <button className="buttonAlt mx-1" onClick={() => batal()}>
-                Batalkan
-              </button>
-              <button className="button mx-1" onClick={() => addDokter()}>
-                Simpan
-              </button>
+                <button className="buttonAlt mx-1" onClick={() => batal()}>
+                  Batalkan
+                </button>
+                <button className="button mx-1" onClick={() => addDokter()}>
+                  Simpan
+                </button>
               </>
-              :
-              <div className='d-flex flex-row' style={{float:'right'}}>
-                <div className="loading-spinner"></div> 
-                <div className='align-self-center ms-3'>Please Wait</div>
+            ) : (
+              <div className="d-flex flex-row" style={{ float: "right" }}>
+                <div className="loading-spinner"></div>
+                <div className="align-self-center ms-3">Please Wait</div>
               </div>
-              }
-            </div>
+            )}
+          </div>
         </BigCard>
       </div>
     </Wrapper>

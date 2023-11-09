@@ -13,36 +13,36 @@ moment.locale("id");
 const { Search } = Input;
 
 function PatientList({ updateRes }) {
-  const [DataPatient, setDataPatient] = useState()
+  const [DataPatient, setDataPatient] = useState();
   const [DataPatientMaster, setDataPatientMaster] = useState();
   const [loading, setLoading] = useState(false);
   const url = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
   const router = useRouter();
   const onSearch = (value) => {
-    const filteredData = DataPatientMaster.filter(entry =>
-      (entry.nama.toLowerCase().includes(value))
+    const filteredData = DataPatientMaster.filter((entry) =>
+      entry.nama.toLowerCase().includes(value)
     );
     setDataPatient(filteredData);
-  }
+  };
 
   useEffect(() => {
-    setLoading(true)
-    if (!Cookies.get('token')) {
-      router.push('/login')
-    }
-    else {
-      axios.get(`${url}/api/patient/list`, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-        .then(res => {
-          setLoading(false)
-          setDataPatient(res.data.pasien)
-          setDataPatientMaster(res.data.pasien)
+    setLoading(true);
+    if (!Cookies.get("token")) {
+      router.push("/login");
+    } else {
+      axios
+        .get(`/api/patient/list`, {
+          headers: {
+            "Content-Type": "application/json",
+          },
         })
+        .then((res) => {
+          setLoading(false);
+          setDataPatient(res.data.pasien);
+          setDataPatientMaster(res.data.pasien);
+        });
     }
-  }, [])
+  }, []);
 
   const columns = [
     {
@@ -66,28 +66,23 @@ function PatientList({ updateRes }) {
       title: "Status",
       dataIndex: "kategori",
       sorter: (a, b) => a.kategori.localeCompare(b.kategori),
-      render: ((_, record) => (
-        record.kategori == "baru" ?
-          <Tag color="geekblue">
-            Pasien Baru
-          </Tag>
-          :
-          record.kategori == "lama" ?
-            <Tag color="magenta">
-              Pasien Lama
-            </Tag>
-            :
-            <Tag color="red">
-              Unknown
-            </Tag>
-      )),
+      render: (_, record) =>
+        record.kategori == "baru" ? (
+          <Tag color="geekblue">Pasien Baru</Tag>
+        ) : record.kategori == "lama" ? (
+          <Tag color="magenta">Pasien Lama</Tag>
+        ) : (
+          <Tag color="red">Unknown</Tag>
+        ),
     },
   ];
 
   return (
     <Wrapper className="container-fluid">
       <div className="row">
-        <div className="col-6"><StyledTitle>Daftar Pasien</StyledTitle></div>
+        <div className="col-6">
+          <StyledTitle>Daftar Pasien</StyledTitle>
+        </div>
       </div>
       <div className="row">
         <BigCard className="col m-2">
@@ -101,23 +96,22 @@ function PatientList({ updateRes }) {
             />
           </div>
           <div>
-            {
-              !loading ?
-                <Table
-                  columns={columns}
-                  dataSource={DataPatient}
-                  pagination={false}
-                />
-                :
-                <div className="loader">
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                </div>
-            }
+            {!loading ? (
+              <Table
+                columns={columns}
+                dataSource={DataPatient}
+                pagination={false}
+              />
+            ) : (
+              <div className="loader">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            )}
           </div>
         </BigCard>
       </div>

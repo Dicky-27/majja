@@ -1,0 +1,6 @@
+{
+  // hide .next folder in VSCode
+  "files.exclude": {
+    "**/.next": true
+  },
+}

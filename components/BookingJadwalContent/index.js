@@ -7,7 +7,7 @@ import "@amir04lm26/react-modern-calendar-date-picker/lib/DatePicker.css";
 import { Calendar, utils } from "@amir04lm26/react-modern-calendar-date-picker";
 import { Icon } from "@iconify/react";
 import moment from "moment";
-require('moment/locale/id');
+require("moment/locale/id");
 import { useRouter } from "next/router";
 import {
   convertDaysToNumbers,
@@ -17,7 +17,7 @@ import {
   transformDatesToFormatDaysOn,
 } from "../../lib/getEveryDate";
 import axios from "axios";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 // const disabledDays = [
 //   {
@@ -93,20 +93,23 @@ import { toast } from 'react-toastify';
 function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
   const router = useRouter();
   const [selectedDay, setSelectedDay] = useState(utils().getToday());
-  let days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+  let days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
   // let d = new Date(selectedDay.year + '-' + selectedDay.month + '-' + selectedDay.day);
   // let dayName = days[d.getDay()];
-  let date = moment(`${selectedDay.year}-${selectedDay.month}-${selectedDay.day}`, 'YYYY-MM-DD');
-  date.locale('id');
-  let dayName = date.format('dddd');
+  let date = moment(
+    `${selectedDay.year}-${selectedDay.month}-${selectedDay.day}`,
+    "YYYY-MM-DD"
+  );
+  date.locale("id");
+  let dayName = date.format("dddd");
   const [today, setToday] = useState(new Date());
-  const [bookingan, setbookingan] = useState([])
+  const [bookingan, setbookingan] = useState([]);
   // const [DayofWeek, setDayofWeek] = useState(utils().getDayOfWeek());
   // const [filteredDate, setFilteredDate] = useState([]);
   const [valuejam, setValuejam] = useState();
   const [nama, setnama] = useState();
   const [phone, setphone] = useState();
-  const [rekamMedis, setrekamMedis] = useState('');
+  const [rekamMedis, setrekamMedis] = useState("");
   const [showRekamMedis, setshowrekamMedis] = useState(false);
   const [showCalendar, setshowCalendar] = useState(true);
   const [kategoriPasien, setKategoriPasien] = useState();
@@ -125,15 +128,24 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
   const { TextArea } = Input;
 
   useEffect(() => {
-    axios.post(`${url}/api/booking/checkbooking`, { today: moment(today).format("YYYY-MM-DD"), id_dokter: id }, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
+    axios
+      .post(
+        `/api/booking/checkbooking`,
+        { today: moment(today).format("YYYY-MM-DD"), id_dokter: id },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then((res) => {
-        res.data.result.length > 0 && res.data.result.map((item) => (
-          bookingan.push({ tanggal_booking: new Date(item.tanggal_booking), jam_booking: Number(item.jam_booking.split(":")[0]) + '.00' })
-        ));
+        res.data.result.length > 0 &&
+          res.data.result.map((item) =>
+            bookingan.push({
+              tanggal_booking: new Date(item.tanggal_booking),
+              jam_booking: Number(item.jam_booking.split(":")[0]) + ".00",
+            })
+          );
       });
     setValuejam(null);
   }, []);
@@ -163,34 +175,35 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
     transformDatesToFormatDaysOff(AllHariOffInThisYear);
 
   // Jadwal Days on
-  const JadwalHariOn = data && data.jadwal && data.jadwal.filter((jadwal) => jadwal.jam);
+  const JadwalHariOn =
+    data && data.jadwal && data.jadwal.filter((jadwal) => jadwal.jam);
   const convertHariOn = convertDaysToNumbers(
     hariOn && hariOn.map((hari) => hari)
   );
   const AllHariOnInThisYear = getArrayEveryNDayDatesFromToday(convertHariOn);
 
   // Jadwal Days on Jam on
-  const availableDaysDynamic = transformDatesToFormatDaysOn(AllHariOnInThisYear);
+  const availableDaysDynamic =
+    transformDatesToFormatDaysOn(AllHariOnInThisYear);
 
   // Memfilter waktu yang telah dipesan dari pilihan waktu yang akan ditampilkan
   const filteredTimes = (bookedTimes, allTimes) => {
     let arrJam;
     if (bookedTimes.length > 0) {
       let setJam = new Set();
-      allTimes.map((all) => (
-        bookedTimes.map((booked) => (
-          moment(d).format('YYYY-MM-DD') == moment(booked.tanggal_booking).format('YYYY-MM-DD') ?
-            (all != booked.jam_booking && setJam.add(all))
-            :
-            setJam.add(all)
-        ))
-      ))
-      arrJam = Array.from(setJam)
+      allTimes.map((all) =>
+        bookedTimes.map((booked) =>
+          moment(d).format("YYYY-MM-DD") ==
+          moment(booked.tanggal_booking).format("YYYY-MM-DD")
+            ? all != booked.jam_booking && setJam.add(all)
+            : setJam.add(all)
+        )
+      );
+      arrJam = Array.from(setJam);
+    } else {
+      arrJam = allTimes;
     }
-    else {
-      arrJam = allTimes
-    }
-    return arrJam
+    return arrJam;
   };
 
   // Membuat array dari 00:00:00 hingga 23:59:59
@@ -198,9 +211,11 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
     moment(i, "H").format("HH:mm:ss")
   );
 
-  const dgnPerjanjian = Array.from({ length: 12 }, (_, i) =>
-    // moment(i+8, "H").format("HH:mm")
-    Number(i + 8) + '.00'
+  const dgnPerjanjian = Array.from(
+    { length: 12 },
+    (_, i) =>
+      // moment(i+8, "H").format("HH:mm")
+      Number(i + 8) + ".00"
   );
 
   const handleSelectedTime = (e) => {
@@ -217,18 +232,18 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
 
   function bayar() {
     setLoading(true);
-    seterrornama(false)
-    seterrorphone(false)
-    seterrorkategori(false)
-    seterrorrekam(false)
+    seterrornama(false);
+    seterrorphone(false);
+    seterrorkategori(false);
+    seterrorrekam(false);
     if (!nama || !phone || !kategoriPasien) {
       if (!nama) {
         setLoading(false);
-        seterrornama(true)
+        seterrornama(true);
       }
       if (!phone) {
         setLoading(false);
-        seterrorphone(true)
+        seterrorphone(true);
       }
       // if(phone && !phone.match(regExPhone)){
       //   seterrorphone2(true)
@@ -236,60 +251,102 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
       // }
       if (!kategoriPasien) {
         setLoading(false);
-        seterrorkategori(true)
+        seterrorkategori(true);
       }
       // if(kategoriPasien == "lama" && !rekamMedis){
       //   setLoading(false);
       //   seterrorrekam(true)
       // }
     } else {
-      const jam = valuejam.split('.');
-      axios.post(`${url}/api/booking/add`, {
-        nama, phone: phone.toString(), kategori: kategoriPasien, no_rekam_medis: rekamMedis, keluhan,
-        tanggal_booking: moment(selectedDay.year + '-' + selectedDay.month + '-' + selectedDay.day).format("YYYY-MM-DD"), jam_booking: moment.utc(jam, "THH Z").format('HH:mm:ss'),
-        id_dokter: router.query.id, action_status: 1
-      }, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }).then(res => {
-        if (res.status == 200) {
-          if (kategoriPasien == "baru") {
-            axios.post(`${url}/api/patient/add`, { nama, telp: phone.toString() }, {
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            }).then(res => {
-              if (res.status != 200) {
-                toast.error(res.data.msg)
-              }
-            })
-          }
-          axios.post(`${awsendpoint}/gateway1/snap/checkout`, { booking_id: res.data.result.insertId, amount: 50000, full_name: nama, phone: phone.toString() }, {
+      const jam = valuejam.split(".");
+      axios
+        .post(
+          `/api/booking/add`,
+          {
+            nama,
+            phone: phone.toString(),
+            kategori: kategoriPasien,
+            no_rekam_medis: rekamMedis,
+            keluhan,
+            tanggal_booking: moment(
+              selectedDay.year + "-" + selectedDay.month + "-" + selectedDay.day
+            ).format("YYYY-MM-DD"),
+            jam_booking: moment.utc(jam, "THH Z").format("HH:mm:ss"),
+            id_dokter: router.query.id,
+            action_status: 1,
+          },
+          {
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
             },
-          }).then(res => {
-            if (res.status == 200) {
-              if (typeof window !== 'undefined') {
-                localStorage.setItem('nama_booking', nama)
-                localStorage.setItem('phone_booking', phone.toString())
-                localStorage.setItem('kategori_booking', kategoriPasien)
-                localStorage.setItem('rekamMedis_booking', rekamMedis)
-                localStorage.setItem('keluhan_booking', keluhan)
-                localStorage.setItem('tanggal_booking', moment(selectedDay.year + '-' + selectedDay.month + '-' + selectedDay.day).format("dddd, YYYY-MM-DD"))
-                localStorage.setItem('jam_booking', moment.utc(jam, "THH Z").format('HH:mm:ss'))
-                localStorage.setItem('idDokter_booking', router.query.id)
-              }
-              var url = res.data.url;
-              window.location.replace(url)
+          }
+        )
+        .then((res) => {
+          if (res.status == 200) {
+            if (kategoriPasien == "baru") {
+              axios
+                .post(
+                  `/api/patient/add`,
+                  { nama, telp: phone.toString() },
+                  {
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                  }
+                )
+                .then((res) => {
+                  if (res.status != 200) {
+                    toast.error(res.data.msg);
+                  }
+                });
             }
-          })
-        }
-        else {
-          toast.error('cek kembali data Anda!')
-        }
-      })
+            axios
+              .post(
+                `${awsendpoint}/gateway1/snap/checkout`,
+                {
+                  booking_id: res.data.result.insertId,
+                  amount: 50000,
+                  full_name: nama,
+                  phone: phone.toString(),
+                },
+                {
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                }
+              )
+              .then((res) => {
+                if (res.status == 200) {
+                  if (typeof window !== "undefined") {
+                    localStorage.setItem("nama_booking", nama);
+                    localStorage.setItem("phone_booking", phone.toString());
+                    localStorage.setItem("kategori_booking", kategoriPasien);
+                    localStorage.setItem("rekamMedis_booking", rekamMedis);
+                    localStorage.setItem("keluhan_booking", keluhan);
+                    localStorage.setItem(
+                      "tanggal_booking",
+                      moment(
+                        selectedDay.year +
+                          "-" +
+                          selectedDay.month +
+                          "-" +
+                          selectedDay.day
+                      ).format("dddd, YYYY-MM-DD")
+                    );
+                    localStorage.setItem(
+                      "jam_booking",
+                      moment.utc(jam, "THH Z").format("HH:mm:ss")
+                    );
+                    localStorage.setItem("idDokter_booking", router.query.id);
+                  }
+                  var url = res.data.url;
+                  window.location.replace(url);
+                }
+              });
+          } else {
+            toast.error("cek kembali data Anda!");
+          }
+        })
         .catch(function (error) {
           setLoading(true);
           if (error.response) {
@@ -297,17 +354,17 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
             console.log(error.response.status);
             console.log(error.response.headers);
             if (error.response.status == 404) {
-              toast.error(error)
+              toast.error(error);
               setLoading(false);
             }
           } else if (error.request) {
             console.log(error.request);
             setLoading(false);
           } else {
-            console.log('Error', error.message);
+            console.log("Error", error.message);
             setLoading(false);
           }
-        })
+        });
     }
   }
 
@@ -315,17 +372,17 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
     var temp = [];
     var jamstring;
     if (jam) {
-      jam.split('.')
+      jam.split(".");
       var awal = jam[0] + jam[1];
-      var awalconverted = Number(awal)
+      var awalconverted = Number(awal);
       var akhir = jam[6] + jam[7];
-      var akhirconverted = Number(akhir)
+      var akhirconverted = Number(akhir);
       for (var i = awalconverted; i < akhirconverted; i++) {
-        jamstring = i + '.00';
-        temp.push(jamstring)
+        jamstring = i + ".00";
+        temp.push(jamstring);
       }
     }
-    return temp
+    return temp;
   }
 
   return (
@@ -382,14 +439,24 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
                       <div className="row">
                         <div className="col-lg-3 col-4">
                           <img
-                            src={data && data[0] && (data[0].gambar != "" ? data[0].gambar : '/images/pp.png')}
+                            src={
+                              data &&
+                              data[0] &&
+                              (data[0].gambar != ""
+                                ? data[0].gambar
+                                : "/images/pp.png")
+                            }
                             alt={data && data[0] && data[0].nama}
                             width="100%"
                           />
                         </div>
                         <div className="col-lg-9 col-8">
-                          <StyledTitle>{data && data[0] && data[0].nama}</StyledTitle>
-                          <StyledText>{data && data[0] && data[0].posisi}</StyledText>
+                          <StyledTitle>
+                            {data && data[0] && data[0].nama}
+                          </StyledTitle>
+                          <StyledText>
+                            {data && data[0] && data[0].posisi}
+                          </StyledText>
                           <StyledTextWIcon>
                             <Icon
                               icon="ion:medkit"
@@ -423,38 +490,43 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
                         </RenderJamWrapper> */}
 
                         {/* Render pilihan waktu temu yang telah difilter */}
-                        <span className="waktuTemu pt-5">Waktu Temu</span><br></br>
+                        <span className="waktuTemu pt-5">Waktu Temu</span>
+                        <br></br>
                         <Select
                           showSearch
-                          className='py-1 waktuTemuSelector'
+                          className="py-1 waktuTemuSelector"
                           placeholder="Pilih jam"
                           optionFilterProp="children"
                           onChange={handleSelectedTime}
                           value={valuejam}
                         >
-                          {jadwal && jadwal.map((item, i) =>
-                          // dayName undefined @ safari, need to convert DateJS to MomentJS or DaysJS, fixed but need to check expected result
-                            dayName == item.hari &&
-                            (item.jam_mulai == "Dengan Perjanjian" ?
-                              filteredTimes(bookingan, dgnPerjanjian).filter((time) => isFutureTime(time)).map((time, i3) => (
-                                <Option key={i3} value={time}>
-                                  {time}
-                                </Option>
-                              ))
-                              :
-                              // Pecah jam item.jam menjadi array jam_booking yang telah dipesan
-                              filteredTimes(
-                                bookingan,
-                                pecahjam(item.jam_mulai + '-' + item.jam_selesai).map((item2, i2) => item2)
-                              )
-                                .filter((time) => isFutureTime(time)) // Filter only future times
-                                .map((time, i3) => (
-                                  <Option key={i3} value={time}>
-                                    {time}
-                                  </Option>
-                                ))
-                            )
-                          )}
+                          {jadwal &&
+                            jadwal.map(
+                              (item, i) =>
+                                // dayName undefined @ safari, need to convert DateJS to MomentJS or DaysJS, fixed but need to check expected result
+                                dayName == item.hari &&
+                                (item.jam_mulai == "Dengan Perjanjian"
+                                  ? filteredTimes(bookingan, dgnPerjanjian)
+                                      .filter((time) => isFutureTime(time))
+                                      .map((time, i3) => (
+                                        <Option key={i3} value={time}>
+                                          {time}
+                                        </Option>
+                                      ))
+                                  : // Pecah jam item.jam menjadi array jam_booking yang telah dipesan
+                                    filteredTimes(
+                                      bookingan,
+                                      pecahjam(
+                                        item.jam_mulai + "-" + item.jam_selesai
+                                      ).map((item2, i2) => item2)
+                                    )
+                                      .filter((time) => isFutureTime(time)) // Filter only future times
+                                      .map((time, i3) => (
+                                        <Option key={i3} value={time}>
+                                          {time}
+                                        </Option>
+                                      )))
+                            )}
                           {/* {data.jadwal &&
                             data.jadwal.map((item, i) =>
                               dayName === item.hari &&
@@ -478,21 +550,22 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
                   <div className="row align-items-center align-self-center">
                     <div className="col-md-7 col-12 p-3">
                       <span className="bookingInputLabel py-2">
-                        Nama lengkap pasien<span className='required'>*</span>
+                        Nama lengkap pasien<span className="required">*</span>
                       </span>
                       <Input
                         placeholder="Tulis nama lengkapmu di sini"
                         value={nama}
                         onChange={(event) => setnama(event.target.value)}
                       />
-                      {
-                        errornama &&
-                        <span className='error mt-4'>Nama Anda harus diisi!</span>
-                      }
+                      {errornama && (
+                        <span className="error mt-4">
+                          Nama Anda harus diisi!
+                        </span>
+                      )}
                     </div>
                     <div className="col-md-5 col-12 p-3">
                       <span className="bookingInputLabel py-2">
-                        Nomor Telepon<span className='required'>*</span>
+                        Nomor Telepon<span className="required">*</span>
                       </span>
                       <Input
                         placeholder="Tulis nomor HP di sini"
@@ -500,14 +573,15 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
                         type="number"
                         onChange={(event) => setphone(event.target.value)}
                       />
-                      {
-                        errorphone &&
-                        <span className='error mt-4'>Nomor Telepon Anda harus diisi!</span>
-                      }
+                      {errorphone && (
+                        <span className="error mt-4">
+                          Nomor Telepon Anda harus diisi!
+                        </span>
+                      )}
                     </div>
                     <div className="col-12 p-3">
                       <span className="bookingInputLabel py-2">
-                        Kategori Pasien<span className='required'>*</span>
+                        Kategori Pasien<span className="required">*</span>
                       </span>
                       <br></br>
                       <Radio.Group
@@ -519,10 +593,11 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
                         <Radio value="lama">Pasien Lama</Radio>
                       </Radio.Group>
                       <br></br>
-                      {
-                        errorkategori &&
-                        <span className='error mt-4'>Kategori harus dipilih!</span>
-                      }
+                      {errorkategori && (
+                        <span className="error mt-4">
+                          Kategori harus dipilih!
+                        </span>
+                      )}
                     </div>
                     {showRekamMedis && (
                       <div className="col-md-6 col-12 p-3">
@@ -588,7 +663,7 @@ const Wrapper = styled.div`
 
   padding-top: 10%;
 
-  @media(max-width:576px){
+  @media (max-width: 576px) {
     padding-top: 40%;
   }
 `;
@@ -624,7 +699,7 @@ const StyledSectionTitle = styled.div`
 
   padding: 0 0 0 6%;
 
-  @media(max-width:576px){
+  @media (max-width: 576px) {
     padding: 0 0 0 8%;
   }
 `;
