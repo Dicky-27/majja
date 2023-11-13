@@ -78,17 +78,4 @@ function Speciality({ isMobile }) {
   );
 }
 
-const Wrapper = styled.div``;
-
-const AboutConfig = styled.div`
-  font-family: "Poppins";
-  padding: 5% 0 5% 5%;
-
-  overflow: hidden;
-
-  @media (max-width: 1121px) {
-    /* padding: 5%; */
-  }
-`;
-
 export default Speciality;
