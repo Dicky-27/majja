@@ -68,7 +68,13 @@ function ArticlesPageContent() {
                 <CardBodyWrapper className="my-2">
                   <CardBodyText>{item.text}</CardBodyText>
                 </CardBodyWrapper>
-                <BacaSelengkapnya link={'/articles/' + item.slug + moment(item.created).format("YYYYMMDD")}></BacaSelengkapnya>
+                <BacaSelengkapnya
+                  link={
+                    "/articles/" +
+                    item.slug +
+                    moment(item.created).format("YYYYMMDD")
+                  }
+                ></BacaSelengkapnya>
               </CardWrapper>
             </>
             {/* </Link> */}
@@ -89,11 +95,10 @@ function ArticlesPageContent() {
 const Wrapper = styled.div`
   padding: 0% 5%;
 
-  @media(max-width:576px){
+  @media (max-width: 576px) {
     padding: 30% 5%;
   }
 `;
-
 
 const SearchWrapper = styled.div`
   /* font-family: "Poppins";
@@ -111,7 +116,7 @@ const StyledTitle = styled.div`
   font-weight: 600;
   font-size: var(--fs-32);
   color: #a5090c;
-  
+
   margin-bottom: 2%;
 `;
 

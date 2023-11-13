@@ -124,8 +124,9 @@ function Offering() {
                 </ImgWrapper>
               </div>
             </div>
-            <Speciality isMobile={false}/>
-            <div className="row align-items-center mt-5 me-5">
+            <Speciality isMobile={false} />
+            {/* MARK: Hidden section, unhide if this section needed */}
+            {/* <div className="row align-items-center mt-5 me-5">
               <h1 className="ArticleTitleHome py-5">Melayani Semua Usia</h1>
               <div className="row justify-content-center mb-2">
                 <div
@@ -349,7 +350,7 @@ function Offering() {
                       </div>
                     ))}
               </div>
-            </div>
+            </div> */}
           </div>
         </PC>
 
@@ -376,8 +377,9 @@ function Offering() {
                 </ImgWrapper>
               </div>
             </div>
-            <Speciality isMobile={true}/>
-            <div className="row mt-5">
+            <Speciality isMobile={true} />
+            {/* MARK: Hidden section, unhide if this section needed */}
+            {/* <div className="row mt-5">
               <h1
                 className="ArticleTitleHome text-center py-3"
                 style={{ fontSize: "26px", width: "95%" }}
@@ -606,7 +608,7 @@ function Offering() {
                       </div>
                     ))}
               </div>
-            </div>
+            </div> */}
           </div>
         </MOBILE>
       </AboutConfig>
