@@ -16,15 +16,21 @@ function FindUs() {
         <div>
           <Image src={"/images/img-flower.svg"} width="100%"></Image>
         </div>
-        <StyledSectionTitle>Find Us!</StyledSectionTitle>
+
         <PC>
-          <div className="container p-0" data-aos="fade-up">
+          <StyledSectionTitle className="px-5">Find Us!</StyledSectionTitle>
+          <div className="px-5 p-0" data-aos="fade-up">
             <div className="row align-items-center">
               <div className="col-6 p-0">
                 <iframe
                   src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15866.85873367116!2d106.806317!3d-6.168947!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f7a57dbadcb3%3A0x96cb5b79b9070c36!2sMAJJA%20Klinik%20Fertilitas%20Endokrin%20Reproduksi!5e0!3m2!1sen!2sid!4v1686694634517!5m2!1sen!2sid"
                   height="472px"
-                  style={{ border: "0", width: "95%", borderRadius: "10px" }}
+                  style={{
+                    border: "0",
+                    width: "95%",
+                    borderRadius: "10px",
+                    marginLeft: "10px",
+                  }}
                   allowFullScreen=""
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
@@ -89,13 +95,14 @@ function FindUs() {
         </PC>
 
         <MOBILE>
-          <div className="container-fluid">
+          <StyledSectionTitle>Find Us!</StyledSectionTitle>
+          <div>
             <div className="row align-items-center">
               <div className="col-12">
                 <iframe
                   src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15866.85873367116!2d106.806317!3d-6.168947!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f7a57dbadcb3%3A0x96cb5b79b9070c36!2sMAJJA%20Klinik%20Fertilitas%20Endokrin%20Reproduksi!5e0!3m2!1sen!2sid!4v1686694634517!5m2!1sen!2sid"
                   height="472px"
-                  style={{ border: "0", width: "100%" }}
+                  style={{ border: "0", width: "100%", borderRadius: "10px" }}
                   allowFullScreen=""
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
@@ -172,22 +179,14 @@ const Wrapper = styled.div`
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-`;
 
-// const ImgWrapper = styled.div`
-//   margin: 0 5%;
-// `;
+`;
 
 const AboutConfig = styled.div`
   position: relative;
   font-family: "Poppins";
-  padding: 2% 0 10% 5%;
-
+  padding: 5% 5% 10% 5%;
   overflow: hidden;
-
-  @media (max-width: 1121px) {
-    padding: 5%;
-  }
 `;
 
 const PC = styled.div`
@@ -217,7 +216,7 @@ const StyledSectionTitle = styled.div`
   font-size: var(--fs-32);
   color: #a5090c;
 
-  padding: 0 0 2.5% 5%;
+  padding: 0 0 2.5% 0;
 `;
 
 const StyledTitle = styled.div`

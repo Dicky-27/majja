@@ -40,7 +40,7 @@ function ArticleGridHome({ newsList }) {
   }, []);
 
   return (
-    <Wrapper className=" my-5" id="artikel">
+    <Wrapper className="my-5" id="artikel">
       <PC>
         <h1 className="ArticleTitleHome">Artikel Kesehatan</h1>
         <div className="row px-5 justify-content-center" data-aos="fade-up">
