@@ -179,7 +179,6 @@ const Wrapper = styled.div`
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-
 `;
 
 const AboutConfig = styled.div`
