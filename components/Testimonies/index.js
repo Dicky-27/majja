@@ -164,7 +164,7 @@ const Wrapper = styled.div`
     right: 30px;
   }
 
-  padding: 10%;
+  padding: 5%;
 `;
 
 export default Testimonies;

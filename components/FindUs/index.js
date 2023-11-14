@@ -13,16 +13,18 @@ function FindUs() {
   return (
     <Wrapper id="findUs">
       <AboutConfig>
-      <StyledSectionTitle>Find Us!</StyledSectionTitle>
+        <div>
+          <Image src={"/images/img-flower.svg"} width="100%"></Image>
+        </div>
+        <StyledSectionTitle>Find Us!</StyledSectionTitle>
         <PC>
           <div className="container p-0" data-aos="fade-up">
             <div className="row align-items-center">
-              <div className="col-6 p-0" >
+              <div className="col-6 p-0">
                 <iframe
                   src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15866.85873367116!2d106.806317!3d-6.168947!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f7a57dbadcb3%3A0x96cb5b79b9070c36!2sMAJJA%20Klinik%20Fertilitas%20Endokrin%20Reproduksi!5e0!3m2!1sen!2sid!4v1686694634517!5m2!1sen!2sid"
-                  // width="613px"
                   height="472px"
-                  style={{ border: "0", width: "95%", borderRadius:'10px' }}
+                  style={{ border: "0", width: "95%", borderRadius: "10px" }}
                   allowFullScreen=""
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
@@ -92,9 +94,8 @@ function FindUs() {
               <div className="col-12">
                 <iframe
                   src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15866.85873367116!2d106.806317!3d-6.168947!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f7a57dbadcb3%3A0x96cb5b79b9070c36!2sMAJJA%20Klinik%20Fertilitas%20Endokrin%20Reproduksi!5e0!3m2!1sen!2sid!4v1686694634517!5m2!1sen!2sid"
-                  // width="613px"
                   height="472px"
-                  style={{ border: "0", width:'100%' }}
+                  style={{ border: "0", width: "100%" }}
                   allowFullScreen=""
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
@@ -178,6 +179,7 @@ const Wrapper = styled.div`
 // `;
 
 const AboutConfig = styled.div`
+  position: relative;
   font-family: "Poppins";
   padding: 2% 0 10% 5%;
 
@@ -213,7 +215,7 @@ const StyledSectionTitle = styled.div`
   font-style: normal;
   font-weight: 700;
   font-size: var(--fs-32);
-  color: #A5090C;
+  color: #a5090c;
 
   padding: 0 0 2.5% 5%;
 `;
@@ -295,6 +297,24 @@ const IMG = styled.img`
   @media (max-width: 368px) {
     font-size: var(--fs-28);
   } */
+`;
+
+const Image = styled.img`
+  position: absolute;
+
+  @media (max-width: 1120px) {
+    width: 40vh;
+    right: -4vh;
+    bottom: -3vh;
+    z-index: -1;
+  }
+
+  @media (min-width: 1121px) {
+    width: 75vh;
+    right: -4vh;
+    bottom: -3vh;
+    z-index: -1;
+  }
 `;
 
 export default FindUs;

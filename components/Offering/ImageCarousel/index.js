@@ -14,7 +14,7 @@ const ImageSlider = () => {
         modules={[Navigation, Pagination, Scrollbar, A11y]}
         spaceBetween={50}
         slidesPerView={1}
-        navigation={{ nextEl: ".arrow-left", prevEl: ".arrow-right" }}
+        navigation={{ nextEl: ".arrow-right", prevEl: ".arrow-left" }}
         loop={true}
         autoplay={true}
       >

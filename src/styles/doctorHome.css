@@ -19,7 +19,7 @@
 }
 .doctorImg{
     position: absolute;
-    transform: translateX(-50%);
-    margin-top: 35px;
+    top: 50%;
+    transform: translate(-50%, -50%);
     height: 150px;
 }

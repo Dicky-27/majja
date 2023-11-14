@@ -4,6 +4,7 @@ import AOS from "aos";
 import BacaSelengkapnya from "../BacaSelengkapnya";
 import ButtonAlt from "../ButtonAlt";
 import { useRouter } from "next/router";
+import styled from "styled-components";
 
 // const newsList = [
 //     {
@@ -39,52 +40,116 @@ function ArticleGridHome({ newsList }) {
   }, []);
 
   return (
-    <div className="container my-5" id="artikel">
-      <h1 className="ArticleTitleHome">Artikel Kesehatan</h1>
-      <div className="row justify-content-center" data-aos="fade-up">
-        {newsList.map((item, index) => (
-          <div
-            className="col-xl-3 col-lg-5 col-md-6 col-12 p-3"
-            key={index}
-            onClick={() => router.push("/articles/" + item.id)}
-          >
-            <img
-              src={item?.data?.photo?.iv}
-              width="100%"
-              style={{
-                aspectRatio: "4/3",
-                objectFit: "cover",
-                borderRadius: "10px 10px 0 0",
-              }}
-            ></img>
-            <div className="cardArticle d-flex flex-column justify-content-between p-3">
-              <div>
-                <h1 className="cardArticleTitle">{item.data.judul.iv}</h1>
-                <div
-                  className="cardArticleText my-2"
-                  style={{ maxHeight: "90px" }}
-                  dangerouslySetInnerHTML={{ __html: item.data.content.iv }}
-                ></div>
-                <br></br>
+    <Wrapper className=" my-5" id="artikel">
+      <PC>
+        <h1 className="ArticleTitleHome">Artikel Kesehatan</h1>
+        <div className="row px-5 justify-content-center" data-aos="fade-up">
+          {newsList.map((item, index) => (
+            <div
+              className="col-xl-3 col-lg-5 col-md-6 col-12 p-3"
+              key={index}
+              onClick={() => router.push("/articles/" + item.id)}
+            >
+              <img
+                src={item?.data?.photo?.iv}
+                width="100%"
+                style={{
+                  aspectRatio: "4/3",
+                  objectFit: "cover",
+                  borderRadius: "10px 10px 0 0",
+                }}
+              ></img>
+              <div className="cardArticle d-flex flex-column justify-content-between p-3">
+                <div>
+                  <h1 className="cardArticleTitle">{item.data.judul.iv}</h1>
+                  <div
+                    className="cardArticleText my-2"
+                    style={{ maxHeight: "90px" }}
+                    dangerouslySetInnerHTML={{ __html: item.data.content.iv }}
+                  ></div>
+                  <br></br>
+                </div>
+                <BacaSelengkapnya
+                  link={"/articles/" + item.id}
+                  color="#DF3034"
+                ></BacaSelengkapnya>
               </div>
-              <BacaSelengkapnya
-                link={"/articles/" + item.id}
-                color="#DF3034"
-              ></BacaSelengkapnya>
             </div>
-          </div>
-        ))}
-      </div>
-      <div className="row justify-content-center my-4">
-        <div className="col-12 text-center">
-          <ButtonAlt
-            link="/articles"
-            text="Lihat Lebih Banyak Artikel"
-          ></ButtonAlt>
+          ))}
         </div>
-      </div>
-    </div>
+        <div className="row justify-content-center my-4">
+          <div className="col-12 text-center">
+            <ButtonAlt
+              link="/articles"
+              text="Lihat Lebih Banyak Artikel"
+            ></ButtonAlt>
+          </div>
+        </div>
+      </PC>
+      <MOBILE>
+        <h1 className="ArticleTitleHome">Artikel Kesehatan</h1>
+        <div className="row justify-content-center" data-aos="fade-up">
+          {newsList.map((item, index) => (
+            <div
+              className="col-xl-3 col-lg-5 col-md-6 col-12 p-3"
+              key={index}
+              onClick={() => router.push("/articles/" + item.id)}
+            >
+              <img
+                src={item?.data?.photo?.iv}
+                width="100%"
+                style={{
+                  aspectRatio: "4/3",
+                  objectFit: "cover",
+                  borderRadius: "10px 10px 0 0",
+                }}
+              ></img>
+              <div className="cardArticle d-flex flex-column justify-content-between p-3">
+                <div>
+                  <h1 className="cardArticleTitle">{item.data.judul.iv}</h1>
+                  <div
+                    className="cardArticleText my-2"
+                    style={{ maxHeight: "90px" }}
+                    dangerouslySetInnerHTML={{ __html: item.data.content.iv }}
+                  ></div>
+                  <br></br>
+                </div>
+                <BacaSelengkapnya
+                  link={"/articles/" + item.id}
+                  color="#DF3034"
+                ></BacaSelengkapnya>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="row justify-content-center my-4">
+          <div className="col-12 text-center">
+            <ButtonAlt
+              link="/articles"
+              text="Lihat Lebih Banyak Artikel"
+            ></ButtonAlt>
+          </div>
+        </div>
+      </MOBILE>
+    </Wrapper>
   );
 }
+
+const Wrapper = styled.div`
+  padding: 5%;
+  overflow: hidden;
+`;
+
+const PC = styled.div`
+  @media (max-width: 1120px) {
+    display: none;
+  }
+`;
+
+const MOBILE = styled.div`
+  @media (min-width: 1121px) {
+    display: none;
+  }
+`;
 
 export default ArticleGridHome;

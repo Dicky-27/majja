@@ -48,7 +48,7 @@ function Speciality({ isMobile }) {
   }, []);
 
   return (
-    <div className={`mt-5 row align-items-center ${isMobile ? "" : "me-5"}`}>
+    <div className={`my-5 row align-items-center ${isMobile ? "" : "me-5"}`}>
       <h1
         className="ArticleTitleHome text-center"
         style={isMobile ? { fontSize: "26px", width: "95%" } : {}}
