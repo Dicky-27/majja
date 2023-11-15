@@ -43,7 +43,7 @@ function Dashboard() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [selectedKey, setSelectedKey] = useState(1);
   const [selectedKeyString, setSelectedKeyString] = useState("1");
-  const email = Cookies.get('email');
+  const email = Cookies.get("email");
   const router = useRouter();
 
   const handleMenuSelect = ({ key }) => {
@@ -51,28 +51,26 @@ function Dashboard() {
   };
 
   useEffect(() => {
-    if(Cookies.get('is_admin') == "1"){
-      setIsAdmin(true)
-      if(localStorage.getItem('halamandash')){
-        setSelectedKey(Number(localStorage.getItem('halamandash')))
-        setSelectedKeyString(localStorage.getItem('halamandash').toString())
-      }else{
-        setSelectedKey(1)
-        setSelectedKeyString("1")
+    if (Cookies.get("is_admin") == "1") {
+      setIsAdmin(true);
+      if (localStorage.getItem("halamandash")) {
+        setSelectedKey(Number(localStorage.getItem("halamandash")));
+        setSelectedKeyString(localStorage.getItem("halamandash").toString());
+      } else {
+        setSelectedKey(1);
+        setSelectedKeyString("1");
       }
-      
-    }
-    else{
-      if(localStorage.getItem('halamandash')){
-        setSelectedKey(Number(localStorage.getItem('halamandash')))
-        setSelectedKeyString(localStorage.getItem('halamandash').toString())
-      }else{
-        setSelectedKey(2)
-        setSelectedKeyString("2")
+    } else {
+      if (localStorage.getItem("halamandash")) {
+        setSelectedKey(Number(localStorage.getItem("halamandash")));
+        setSelectedKeyString(localStorage.getItem("halamandash").toString());
+      } else {
+        setSelectedKey(2);
+        setSelectedKeyString("2");
       }
     }
-    const storedKey = localStorage.getItem('halamandash');
-  }, [])
+    const storedKey = localStorage.getItem("halamandash");
+  }, []);
 
   function getItem(label, key, icon, children) {
     return {
@@ -84,7 +82,7 @@ function Dashboard() {
   }
 
   const itemsAdmin = [
-     getItem(
+    getItem(
       "Dashboard",
       "1",
       <Icon
@@ -94,6 +92,7 @@ function Dashboard() {
           cursor: "pointer",
           fontSize: "18px",
           color: "#8D8D8D",
+          marginLeft: "auto",
         }}
       />
     ),
@@ -110,7 +109,7 @@ function Dashboard() {
         }}
       />
     ),
-     getItem(
+    getItem(
       "Daftar Pasien",
       "3",
       <Icon
@@ -123,7 +122,7 @@ function Dashboard() {
         }}
       />
     ),
-     getItem(
+    getItem(
       "Daftar Dokter",
       "4",
       <Icon
@@ -178,68 +177,68 @@ function Dashboard() {
   ];
 
   const itemsDoctor = [
-   getItem(
-     "Jadwal Temu",
-     "1",
-     <Icon
-       icon="ion:calendar"
-       className="iconDashboard me-2"
-       style={{
-         cursor: "pointer",
-         fontSize: "18px",
-         color: "#8D8D8D",
-       }}
-     />
-   ),
-   getItem(
-     "Jadwal Dokter",
-     "5",
-     <Icon
-       icon="ion:calendar"
-       className="iconDashboard me-2"
-       style={{
-         cursor: "pointer",
-         fontSize: "18px",
-         color: "#8D8D8D",
-       }}
-     />
-   ),
-   getItem(
-     "Artikel",
-     "6",
-     <Icon
-       icon="ant-design:home-filled"
-       className="iconDashboard me-2"
-       style={{
-         cursor: "pointer",
-         fontSize: "18px",
-         color: "#8D8D8D",
-       }}
-     />
-   ),
-   getItem(
-     "Pengaturan",
-     "7",
-     <Icon
-       icon="ant-design:setting-filled"
-       className="iconDashboard me-2"
-       style={{
-         cursor: "pointer",
-         fontSize: "18px",
-         color: "#8D8D8D",
-       }}
-     />
-   ),
- ];
+    getItem(
+      "Jadwal Temu",
+      "1",
+      <Icon
+        icon="ion:calendar"
+        className="iconDashboard me-2"
+        style={{
+          cursor: "pointer",
+          fontSize: "18px",
+          color: "#8D8D8D",
+        }}
+      />
+    ),
+    getItem(
+      "Jadwal Dokter",
+      "5",
+      <Icon
+        icon="ion:calendar"
+        className="iconDashboard me-2"
+        style={{
+          cursor: "pointer",
+          fontSize: "18px",
+          color: "#8D8D8D",
+        }}
+      />
+    ),
+    getItem(
+      "Artikel",
+      "6",
+      <Icon
+        icon="ant-design:home-filled"
+        className="iconDashboard me-2"
+        style={{
+          cursor: "pointer",
+          fontSize: "18px",
+          color: "#8D8D8D",
+        }}
+      />
+    ),
+    getItem(
+      "Pengaturan",
+      "7",
+      <Icon
+        icon="ant-design:setting-filled"
+        className="iconDashboard me-2"
+        style={{
+          cursor: "pointer",
+          fontSize: "18px",
+          color: "#8D8D8D",
+        }}
+      />
+    ),
+  ];
 
-  function logout(){
+  function logout() {
     localStorage.clear();
-    Cookies.remove('token');
-    Cookies.remove('username')
-    Cookies.remove('is_admin');
-    router.push('/login');
+    Cookies.remove("token");
+    Cookies.remove("username");
+    Cookies.remove("is_admin");
+    router.push("/login");
   }
-  
+
   return (
     <>
       <Head>
@@ -251,11 +250,12 @@ function Dashboard() {
         }}
       >
         <Sider
-          // collapsible
-          // collapsed={collapsed}
-          // onCollapse={(value) => setCollapsed(value)}
           theme="light"
-          style={{ height:"100vh", width:'100px', position:'fixed'}}
+          width={256}
+          style={{
+            height: "100vh",
+            position: "fixed",
+          }}
         >
           <Logo>
             <Img src="/images/Logo.png" />
@@ -267,56 +267,60 @@ function Dashboard() {
             items={isAdmin ? itemsAdmin : itemsDoctor}
             onSelect={handleMenuSelect}
           />
-          <div className="text-center mx-auto py-1 px-5 my-3" style={{position:'absolute', bottom:'20px'}}>
-            <button className="buttonAlt" onClick={() => logout()}>Logout</button>
+          <div
+            className="text-center mx-auto py-1 px-5 my-3"
+            style={{
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              right: 0,
+              bottom: "20px",
+            }}
+          >
+            <button className="buttonAlt" onClick={() => logout()}>
+              Logout
+            </button>
           </div>
         </Sider>
-        <Layout
-          style={{width:'100px'}}
-        >
-          {/* <Header
-            style={{
-              padding: 0,
-              background: "#FFFFFF",
-            }}
-          /> */}
+        <Layout style={{ width: "100px" }}>
           <Content
             style={{
               margin: "3rem 3rem",
-              marginLeft:'250px'
+              marginLeft: "306px",
             }}
           >
             {selectedKey == 1 && isAdmin ? (
               <DashboardSection updateRes={setSelectedKey} />
             ) : selectedKey == 2 ? (
-              <BookingSchedule updateRes={setSelectedKey} isAdmin={isAdmin} email={email}/>
-            )
-            : (isAdmin != "1" && selectedKey == 1) ? (
-              <BookingSchedule updateRes={setSelectedKey} isAdmin={isAdmin} email={email}/>
-            )
-             : selectedKey == 3 && isAdmin ? (
+              <BookingSchedule
+                updateRes={setSelectedKey}
+                isAdmin={isAdmin}
+                email={email}
+              />
+            ) : isAdmin != "1" && selectedKey == 1 ? (
+              <BookingSchedule
+                updateRes={setSelectedKey}
+                isAdmin={isAdmin}
+                email={email}
+              />
+            ) : selectedKey == 3 && isAdmin ? (
               <PatientList updateRes={setSelectedKey} />
             ) : selectedKey == 4 && isAdmin ? (
               <DoctorList updateRes={setSelectedKey} />
-            ) : 
-            selectedKey == 5 ? (
-              <DoctorSchedule updateRes={setSelectedKey}  isAdmin={isAdmin} email={email} />
-               ) : 
-               selectedKey == 6 ? (
-                <ArticleDashboard updateRes={setSelectedKey} />
+            ) : selectedKey == 5 ? (
+              <DoctorSchedule
+                updateRes={setSelectedKey}
+                isAdmin={isAdmin}
+                email={email}
+              />
+            ) : selectedKey == 6 ? (
+              <ArticleDashboard updateRes={setSelectedKey} />
             ) : selectedKey == 7 ? (
-             <Setting></Setting>
+              <Setting></Setting>
             ) : (
               <></>
             )}
           </Content>
-          {/* <Footer
-            style={{
-              textAlign: "center",
-            }}
-          >
-            Ant Design ©2023 Created by Ant UED
-          </Footer> */}
         </Layout>
       </Layout>
     </>
@@ -324,7 +328,7 @@ function Dashboard() {
 }
 
 const Logo = styled.div`
-  padding: 1.5rem;
+  padding: 2.5rem;
 `;
 
 const Img = styled.img`
