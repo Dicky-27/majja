@@ -7,7 +7,7 @@ import axios from "axios";
 import FloatingWA from "../../../components/FloatingWA";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
-// import { dokter } from '../../../components/DokterData';
+import styled from "styled-components";
 
 function Dokter() {
   const { Option } = Select;
@@ -15,7 +15,6 @@ function Dokter() {
   const [DataDokter, setDataDokter] = useState();
   const [DataJadwalDokter, setDataJadwalDokter] = useState();
   const [DataDokterMaster, setDataDokterMaster] = useState();
-  const [dayselected, setdayselected] = useState();
   const [layanan, setlayanan] = useState();
   const [harihari, setharihari] = useState([
     "Senin",
@@ -106,7 +105,6 @@ function Dokter() {
       })
       .then((res) => {
         setDataDokter([...slice2(res.data.dokter, 0, 9)]);
-        // setDataDokter(res.data.dokter)
         setDataDokterMaster(res.data.dokter);
       });
 
@@ -129,7 +127,7 @@ function Dokter() {
       </Head>
       <Navbar></Navbar>
       <section className="dokterWrapper">
-        <div className="container">
+        <Wrapper>
           <h1 className="dokterPageTitle">Dokter</h1>
           <div className="filter p-2 my-3">
             <div className="row align-items-center my-1 px-5">
@@ -156,9 +154,6 @@ function Dokter() {
                   optionFilterProp="children"
                   onChange={(e) => filterLayanan(e)}
                   value={layanan}
-                  // filterOption={(input) =>
-                  //   (option.children).toLowerCase().includes(input.toLowerCase())
-                  //   }
                 >
                   <Option value="Spesialis Anestesi Konsultan Intensive Care">
                     Spesialis Anestesi Konsultan Intensive Care
@@ -203,9 +198,7 @@ function Dokter() {
                   className="py-1"
                   placeholder=""
                   optionFilterProp="children"
-                  // defaultValue="atoz"
                   onChange={(e) => sortNama(e)}
-                  // value={sekilselected}
                 >
                   <Option value="atoz">A to Z</Option>
                   <Option value="ztoa">Z to A</Option>
@@ -217,66 +210,67 @@ function Dokter() {
             <div className="row">
               {DataDokter?.map((item, i) => (
                 <div className="col-xl-4 col-lg-6 col-12 p-3" key={i}>
-                  <div className="cardDokterList container">
-                    <div className="d-flex">
-                      <img
-                        src={
-                          item?.gambar != "" ? item?.gambar : "/images/pp.png"
-                        }
-                        alt={item?.nama}
-                        height="140px"
-                        width="105px"
-                        style={{ borderRadius: "5px", objectFit: "cover" }}
-                      />
-                      <div className="ps-3" style={{ height: "140px" }}>
-                        <span className="cardDokterTitle">{item?.nama}</span>
-                        <p className="cardDokterText">{item?.posisi}</p>
-                        <div className="d-flex">
-                          <Icon
-                            icon="fa6-solid:briefcase-medical"
-                            className="me-2"
-                            style={{
-                              cursor: "pointer",
-                              fontSize: "18px",
-                              color: "#8D8D8D",
-                            }}
-                          />
-                          <p className="cardDokterText">
-                            Pengalaman: {item?.xp}
-                          </p>
+                  <div className="cardDokterList d-flex flex-column justify-content-between container">
+                    <div>
+                      <div className="d-flex">
+                        <img
+                          src={
+                            item?.gambar != "" ? item?.gambar : "/images/pp.png"
+                          }
+                          alt={item?.nama}
+                          height="140px"
+                          width="105px"
+                          style={{ borderRadius: "5px", objectFit: "cover" }}
+                        />
+                        <div className="ps-3" style={{ height: "140px" }}>
+                          <span className="cardDokterTitle">{item?.nama}</span>
+                          <p className="cardDokterText">{item?.posisi}</p>
+                          <div className="d-flex">
+                            <Icon
+                              icon="fa6-solid:briefcase-medical"
+                              className="me-2"
+                              style={{
+                                cursor: "pointer",
+                                fontSize: "18px",
+                                color: "#8D8D8D",
+                              }}
+                            />
+                            <p className="cardDokterText">
+                              Pengalaman: {item?.xp}
+                            </p>
+                          </div>
                         </div>
                       </div>
+                      <div className="dot my-3"></div>
+                      {harihari.map((hari, i) => (
+                        <div key={i}>
+                          <div className="row py-1">
+                            <div className="col-2 text">{hari}</div>
+                            {DataJadwalDokter?.map(
+                              (jdwl, i) =>
+                                jdwl?.id_dokter == item?.id_dokter &&
+                                jdwl.hari == hari && (
+                                  <div className="col-5">
+                                    <span className="text2">
+                                      {jdwl.jam_mulai +
+                                        (jdwl.jam_selesai != null
+                                          ? " - " + jdwl.jam_selesai
+                                          : "")}
+                                    </span>
+                                  </div>
+                                )
+                            )}
+                          </div>
+                          <div className="line"></div>
+                        </div>
+                      ))}
                     </div>
-                    <div className="dot my-3"></div>
-                    {harihari.map((hari, i) => (
-                      <div key={i}>
-                        <div className="row py-1">
-                          <div className="col-2 text">{hari}</div>
-                          {DataJadwalDokter?.map(
-                            (jdwl, i) =>
-                              jdwl?.id_dokter == item?.id_dokter &&
-                              jdwl.hari == hari && (
-                                <div className="col-5">
-                                  <span className="text2">
-                                    {jdwl.jam_mulai +
-                                      (jdwl.jam_selesai != null
-                                        ? " - " + jdwl.jam_selesai
-                                        : "")}
-                                  </span>
-                                </div>
-                                // :
-                                // <div className='col-10'> <span className='text'>Tidak ada jadwal praktek</span></div>
-                              )
-                          )}
-                        </div>
-                        <div className="line"></div>
-                      </div>
-                    ))}
+
                     <Link
                       href={"/booking/" + item?.id_dokter}
                       style={{ textDecoration: "none" }}
                     >
-                      <div className="button2 mt-5">Booking Jadwal</div>
+                      <div className="button2 mt-3">Booking Jadwal</div>
                     </Link>
                   </div>
                 </div>
@@ -303,7 +297,7 @@ function Dokter() {
               />
             </div>
           </div>
-        </div>
+        </Wrapper>
       </section>
 
       <FloatingWA></FloatingWA>
@@ -311,5 +305,8 @@ function Dokter() {
     </>
   );
 }
+const Wrapper = styled.div`
+  padding: 0 5% 0 5%;
+`;
 
 export default Dokter;
