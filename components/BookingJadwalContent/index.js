@@ -302,7 +302,7 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
             }
             axios
               .post(
-                `${awsendpoint}/gateway1/snap/checkout`,
+                `${process.env.NEXT_PUBLIC_AWSENDPOINT}/gateway1/snap/checkout`,
                 {
                   booking_id: res.data.result.insertId,
                   amount: 50000,
@@ -613,7 +613,7 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
                           }
                         />
                         {/* {
-                        errorrekam &&  
+                        errorrekam &&
                           <span className='error mt-4'>Rekam medis harus diisi!</span>
                         } */}
                       </div>
