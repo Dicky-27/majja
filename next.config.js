@@ -10,7 +10,11 @@ const nextConfig = {
   },
   eslint: {
     ignoreDuringBuilds: true,
-  }
+  },
+  publicRuntimeConfig: {
+    // Will be available on both server and client
+    paymentUrl: process.env.NEXT_PUBLIC_AWSENDPOINT,
+  },
 }
 
 module.exports = nextConfig

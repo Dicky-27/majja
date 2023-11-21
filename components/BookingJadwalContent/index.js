@@ -18,6 +18,7 @@ import {
 } from "../../lib/getEveryDate";
 import axios from "axios";
 import { toast } from "react-toastify";
+import getConfig from 'next/config';
 
 // const disabledDays = [
 //   {
@@ -123,7 +124,7 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
   const [loading, setLoading] = useState(false);
   const url = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
-  const awsendpoint = process.env.NEXT_PUBLIC_AWSENDPOINT;
+  const { publicRuntimeConfig } = getConfig();
   const { Option } = Select;
   const { TextArea } = Input;
 
@@ -302,7 +303,7 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
             }
             axios
               .post(
-                `${process.env.NEXT_PUBLIC_AWSENDPOINT}/gateway1/snap/checkout`,
+                `${publicRuntimeConfig.paymentUrl}/gateway1/snap/checkout`,
                 {
                   booking_id: res.data.result.insertId,
                   amount: 50000,
