@@ -63,9 +63,8 @@ function DoctorSchedule({ updateRes, isAdmin, email }) {
 
   const fetchDataAdmin = async () => {
     try {
-      axios /
-        api
-          .get(`/api/doctors/schedule/list`, {
+      axios
+        .get(`/api/doctors/schedule/list`, {
             headers: {
               "Content-Type": "application/json",
             },
