@@ -95,7 +95,7 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
   const router = useRouter();
   const [selectedDay, setSelectedDay] = useState(utils().getToday());
   let days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-  // let d = new Date(selectedDay.year + '-' + selectedDay.month + '-' + selectedDay.day);
+  let d = new Date(selectedDay.year + '-' + selectedDay.month + '-' + selectedDay.day);
   // let dayName = days[d.getDay()];
   let date = moment(
     `${selectedDay.year}-${selectedDay.month}-${selectedDay.day}`,
