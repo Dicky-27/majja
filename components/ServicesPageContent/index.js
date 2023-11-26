@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import AOS from "aos";
 import styled from "styled-components";
-// import { newsList } from "../ArticleData";
 import { serviceList } from "../ServiceData";
 import BacaSelengkapnya from "../BacaSelengkapnya";
 import { Input, Pagination } from "antd";
@@ -58,27 +57,32 @@ function ServicesPageContent() {
       <div className="row" data-aos="fade-up">
         {sortedServicesList.map((item, index) => (
           <div className="col-xl-3 col-lg-5 col-md-6 col-12 p-3" key={index}>
-            {/* <Link href={item.link} style={{textDecoration:'none'}}> */}
             <>
-              <img src={item.image} width="100%"></img>
-              <CardWrapper className="p-3">
-                <CardTitleWrapper>
-                  <CardTitle>{item.title}</CardTitle>
-                </CardTitleWrapper>
-                <CardBodyText>
-                  {moment(item.created).format("DD MMMM YYYY")}
-                </CardBodyText>
-                <CardBodyWrapper className="my-2">
-                  <CardBodyText>{item.text}</CardBodyText>
-                </CardBodyWrapper>
+              <img
+                src={item.image}
+                width="100%"
+                style={{
+                  width: "100%",
+                  borderRadius: "10px 10px 0 0", // Top-left and top-right corners are rounded
+                }}
+              ></img>
+              <CardWrapper className="d-flex flex-column justify-content-between p-3">
+                <div>
+                  <CardTitleWrapper>
+                    <CardTitle>{item.title}</CardTitle>
+                  </CardTitleWrapper>
+                  <CardBodyText>
+                    {moment(item.created).format("DD MMMM YYYY")}
+                  </CardBodyText>
+                  <CardBodyWrapper className="my-2">
+                    <CardBodyText>{item.text}</CardBodyText>
+                  </CardBodyWrapper>
+                </div>
                 <BacaSelengkapnya
-                  link={
-                    "/services/" + item.id 
-                  }
+                  link={"/services/" + item.id}
                 ></BacaSelengkapnya>
               </CardWrapper>
             </>
-            {/* </Link> */}
           </div>
         ))}
       </div>
@@ -95,8 +99,8 @@ function ServicesPageContent() {
 
 const Wrapper = styled.div`
   padding: 0 5%;
-  
-  @media(max-width:576px){
+
+  @media (max-width: 576px) {
     padding: 30% 5%;
   }
 `;

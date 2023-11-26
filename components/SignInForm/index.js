@@ -131,7 +131,10 @@ export default function SignInForm({ loading, setLoading }) {
           <p>{""}</p>
         )}
         {errorEmail2 ? (
-          <p className="error">User Doesn&apos;t Exist!</p>
+          <p className="error">
+            Unauthorized Access: Incorrect email or password. Please try again
+            or contact support for assistance
+          </p>
         ) : (
           <p>{""}</p>
         )}

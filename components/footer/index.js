@@ -2,13 +2,27 @@ import React from "react";
 import { useRouter } from "next/router";
 import moment from "moment";
 import { Icon } from "@iconify/react";
-// import i18n from '../../i18n';
-import Link2 from "react-scroll/modules/components/Link";
 import styled from "styled-components";
 
 function Footer() {
   const router = useRouter();
   var year = moment().format("YYYY");
+
+  const handleScrollTo = (id) => {
+    const targetElement = document.getElementById(id);
+    if (targetElement) {
+      targetElement.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  };
+
+  const navigateTo = (route, id) => {
+    router.push(route, undefined, { shallow: true }).then(() => {
+      handleScrollTo(id);
+    });
+  };
 
   return (
     <footer>
@@ -21,15 +35,24 @@ function Footer() {
                   <img className="footer-img" src="/images/logoputih.png"></img>
                 </div>
                 <div className="col-lg-2 col-md-3 col-12 p-md-2 px-4 py-2">
-                  <h3 className="footer-title">
-                    {/* {i18n.t('product')} */} Information
-                  </h3>
-                  <p className="footer-text">
-                    <Link2 to="hero">Home</Link2>
+                  <h3 className="footer-title">Information</h3>
+
+                  <p
+                    className="footer-text"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => navigateTo("/", "hero")}
+                  >
+                    Home
                   </p>
-                  <p className="footer-text">
-                    <Link2 to="offering">About</Link2>
+
+                  <p
+                    className="footer-text"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => navigateTo("/", "offering")}
+                  >
+                    About
                   </p>
+
                   <p
                     className="footer-text"
                     style={{ cursor: "pointer" }}
@@ -46,14 +69,13 @@ function Footer() {
                   </p>
                 </div>
                 <div className="col-lg-2 col-md-3 col-12 p-md-2 px-4 py-2">
-                  <h3 className="footer-title">
-                    {/* {i18n.t('product')} */} Supports
-                  </h3>
-                  <p className="footer-text">
-                    <Link2 to="findUs">Location</Link2>
-                  </p>
-                  <p className="footer-text">
-                    <Link2 to="findUs">Contacts</Link2>
+                  <h3 className="footer-title">Supports</h3>
+                  <p
+                    className="footer-text"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => navigateTo("/", "findUs")}
+                  >
+                    Location
                   </p>
                   <p
                     className="footer-text"
@@ -68,7 +90,8 @@ function Footer() {
                   <a
                     className="social"
                     target="_blank"
-                    href="https://www.facebook.com/petanetra"
+                    //*TODO: add social link
+                    href=""
                     rel="noreferrer"
                   >
                     <Icon
@@ -80,7 +103,8 @@ function Footer() {
                   <a
                     className="social"
                     target="_blank"
-                    href="https://www.instagram.com/petanetra/"
+                    //*TODO: add social link
+                    href=""
                     rel="noreferrer"
                   >
                     <Icon
@@ -92,7 +116,8 @@ function Footer() {
                   <a
                     className="social"
                     target="_blank"
-                    href="https://www.youtube.com/@petanetra"
+                    //*TODO: add social link
+                    href=""
                     rel="noreferrer"
                   >
                     <Icon
