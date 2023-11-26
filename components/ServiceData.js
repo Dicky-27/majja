@@ -7,7 +7,7 @@ export const serviceList = [
     created: "2021-08-28T10:42:15Z",
     updated: "2021-08-28T10:42:15Z",
     creator: "Dr. Cindy Rani, SpOG-KFER",
-    image: "/images/serviceImgs/service1.png",
+    image: "/images/service_images/service1.png",
     slug: "PolycysticOvarianSyndrome",
     contentFirst:
       "<p>Sindrom polikistik ovarium atau polycystic ovarian syndrome (PCOS) adalah gangguan hormon yang terjadi pada wanita di usia subur. PCOS ditandai dengan gangguan menstruasi dan kadar hormon maskulin (hormon androgen) yang berlebihan.</p>",
@@ -24,7 +24,7 @@ export const serviceList = [
     created: "2021-08-27T10:42:15Z",
     updated: "2021-08-28T10:42:15Z",
     creator: "Dr. Cindy Rani, SpOG-KFER",
-    image: "/images/serviceImgs/service2.png",
+    image: "/images/service_images/service2.png",
     slug: "Endometriosis",
     contentFirst:
       "<p>Sindrom polikistik ovarium atau polycystic ovarian syndrome (PCOS) adalah gangguan hormon yang terjadi pada wanita di usia subur. PCOS ditandai dengan gangguan menstruasi dan kadar hormon maskulin (hormon androgen) yang berlebihan.</p>",
@@ -41,7 +41,7 @@ export const serviceList = [
     created: "2021-08-26T10:42:15Z",
     updated: "2021-08-28T10:42:15Z",
     creator: "Dr. Cindy Rani, SpOG-KFER",
-    image: "/images/serviceImgs/service3.png",
+    image: "/images/service_images/service3.png",
     slug: "KistaEndometriosis",
     contentFirst:
       "<p>Sindrom polikistik ovarium atau polycystic ovarian syndrome (PCOS) adalah gangguan hormon yang terjadi pada wanita di usia subur. PCOS ditandai dengan gangguan menstruasi dan kadar hormon maskulin (hormon androgen) yang berlebihan.</p>",
@@ -58,7 +58,7 @@ export const serviceList = [
     created: "2021-08-25T10:42:15Z",
     updated: "2021-08-28T10:42:15Z",
     creator: "Dr. Cindy Rani, SpOG-KFER",
-    image: "/images/serviceImgs/service4.png",
+    image: "/images/service_images/service4.png",
     slug: "Adenomiosis",
     contentFirst:
       "<p>Sindrom polikistik ovarium atau polycystic ovarian syndrome (PCOS) adalah gangguan hormon yang terjadi pada wanita di usia subur. PCOS ditandai dengan gangguan menstruasi dan kadar hormon maskulin (hormon androgen) yang berlebihan.</p>",
@@ -75,7 +75,7 @@ export const serviceList = [
     created: "2021-08-24T10:42:15Z",
     updated: "2021-08-28T10:42:15Z",
     creator: "Dr. Cindy Rani, SpOG-KFER",
-    image: "/images/serviceImgs/service5.png",
+    image: "/images/service_images/service5.png",
     slug: "Mioma",
     contentFirst:
       "<p>Sindrom polikistik ovarium atau polycystic ovarian syndrome (PCOS) adalah gangguan hormon yang terjadi pada wanita di usia subur. PCOS ditandai dengan gangguan menstruasi dan kadar hormon maskulin (hormon androgen) yang berlebihan.</p>",
@@ -92,7 +92,7 @@ export const serviceList = [
     created: "2021-08-23T10:42:15Z",
     updated: "2021-08-28T10:42:15Z",
     creator: "Dr. Cindy Rani, SpOG-KFER",
-    image: "/images/serviceImgs/service6.png",
+    image: "/images/service_images/service6.png",
     slug: "InfeksiGinekologi",
     contentFirst:
       "<p>Sindrom polikistik ovarium atau polycystic ovarian syndrome (PCOS) adalah gangguan hormon yang terjadi pada wanita di usia subur. PCOS ditandai dengan gangguan menstruasi dan kadar hormon maskulin (hormon androgen) yang berlebihan.</p>",
@@ -109,7 +109,7 @@ export const serviceList = [
     created: "2021-08-22T10:42:15Z",
     updated: "2021-08-28T10:42:15Z",
     creator: "Dr. Cindy Rani, SpOG-KFER",
-    image: "/images/serviceImgs/service7.png",
+    image: "/images/service_images/service7.png",
     slug: "PolipEndometrium",
     contentFirst:
       "<p>Sindrom polikistik ovarium atau polycystic ovarian syndrome (PCOS) adalah gangguan hormon yang terjadi pada wanita di usia subur. PCOS ditandai dengan gangguan menstruasi dan kadar hormon maskulin (hormon androgen) yang berlebihan.</p>",
@@ -126,7 +126,7 @@ export const serviceList = [
     created: "2021-08-21T10:42:15Z",
     updated: "2021-08-28T10:42:15Z",
     creator: "Dr. Cindy Rani, SpOG-KFER",
-    image: "/images/serviceImgs/service8.png",
+    image: "/images/service_images/service8.png",
     slug: "SumbatanTubaFallopi",
     contentFirst:
       "<p>Sindrom polikistik ovarium atau polycystic ovarian syndrome (PCOS) adalah gangguan hormon yang terjadi pada wanita di usia subur. PCOS ditandai dengan gangguan menstruasi dan kadar hormon maskulin (hormon androgen) yang berlebihan.</p>",
@@ -143,7 +143,7 @@ export const serviceList = [
     created: "2021-08-20T10:42:15Z",
     updated: "2021-08-28T10:42:15Z",
     creator: "Dr. Cindy Rani, SpOG-KFER",
-    image: "/images/serviceImgs/service9.png",
+    image: "/images/service_images/service9.png",
     slug: "EvaluasiAwalInfertilitasPria",
     contentFirst:
       "<p>Sindrom polikistik ovarium atau polycystic ovarian syndrome (PCOS) adalah gangguan hormon yang terjadi pada wanita di usia subur. PCOS ditandai dengan gangguan menstruasi dan kadar hormon maskulin (hormon androgen) yang berlebihan.</p>",
@@ -160,7 +160,7 @@ export const serviceList = [
     created: "2021-08-19T10:42:15Z",
     updated: "2021-08-28T10:42:15Z",
     creator: "Dr. Cindy Rani, SpOG-KFER",
-    image: "/images/serviceImgs/service10.png",
+    image: "/images/service_images/service10.png",
     slug: "AnalisaSperma",
     contentFirst:
       "<p>Sindrom polikistik ovarium atau polycystic ovarian syndrome (PCOS) adalah gangguan hormon yang terjadi pada wanita di usia subur. PCOS ditandai dengan gangguan menstruasi dan kadar hormon maskulin (hormon androgen) yang berlebihan.</p>",
@@ -177,7 +177,7 @@ export const serviceList = [
     created: "2021-08-18T10:42:15Z",
     updated: "2021-08-28T10:42:15Z",
     creator: "Dr. Cindy Rani, SpOG-KFER",
-    image: "/images/serviceImgs/service11.png",
+    image: "/images/service_images/service11.png",
     slug: "GangguanHaid",
     contentFirst:
       "<p>Sindrom polikistik ovarium atau polycystic ovarian syndrome (PCOS) adalah gangguan hormon yang terjadi pada wanita di usia subur. PCOS ditandai dengan gangguan menstruasi dan kadar hormon maskulin (hormon androgen) yang berlebihan.</p>",
@@ -194,7 +194,7 @@ export const serviceList = [
     created: "2021-08-17T10:42:15Z",
     updated: "2021-08-28T10:42:15Z",
     creator: "Dr. Cindy Rani, SpOG-KFER",
-    image: "/images/serviceImgs/service12.png",
+    image: "/images/service_images/service12.png",
     slug: "TrackingCycle",
     contentFirst:
       "<p>Sindrom polikistik ovarium atau polycystic ovarian syndrome (PCOS) adalah gangguan hormon yang terjadi pada wanita di usia subur. PCOS ditandai dengan gangguan menstruasi dan kadar hormon maskulin (hormon androgen) yang berlebihan.</p>",
@@ -211,7 +211,7 @@ export const serviceList = [
     created: "2021-08-16T10:42:15Z",
     updated: "2021-08-28T10:42:15Z",
     creator: "Dr. Cindy Rani, SpOG-KFER",
-    image: "/images/serviceImgs/service13.png",
+    image: "/images/service_images/service13.png",
     slug: "IUIInseminasi",
     contentFirst:
       "<p>Sindrom polikistik ovarium atau polycystic ovarian syndrome (PCOS) adalah gangguan hormon yang terjadi pada wanita di usia subur. PCOS ditandai dengan gangguan menstruasi dan kadar hormon maskulin (hormon androgen) yang berlebihan.</p>",
@@ -228,7 +228,7 @@ export const serviceList = [
     created: "2021-08-15T10:42:15Z",
     updated: "2021-08-28T10:42:15Z",
     creator: "Dr. Cindy Rani, SpOG-KFER",
-    image: "/images/serviceImgs/service14.png",
+    image: "/images/service_images/service14.png",
     slug: "ProgramBayiTabung",
     contentFirst:
       "<p>Sindrom polikistik ovarium atau polycystic ovarian syndrome (PCOS) adalah gangguan hormon yang terjadi pada wanita di usia subur. PCOS ditandai dengan gangguan menstruasi dan kadar hormon maskulin (hormon androgen) yang berlebihan.</p>",
@@ -245,7 +245,7 @@ export const serviceList = [
     created: "2021-08-14T10:42:15Z",
     updated: "2021-08-28T10:42:15Z",
     creator: "Dr. Cindy Rani, SpOG-KFER",
-    image: "/images/serviceImgs/service15.png",
+    image: "/images/service_images/service15.png",
     slug: "Histeroscopy",
     contentFirst:
       "<p>Sindrom polikistik ovarium atau polycystic ovarian syndrome (PCOS) adalah gangguan hormon yang terjadi pada wanita di usia subur. PCOS ditandai dengan gangguan menstruasi dan kadar hormon maskulin (hormon androgen) yang berlebihan.</p>",
@@ -262,7 +262,7 @@ export const serviceList = [
     created: "2021-08-13T10:42:15Z",
     updated: "2021-08-28T10:42:15Z",
     creator: "Dr. Cindy Rani, SpOG-KFER",
-    image: "/images/serviceImgs/service16.png",
+    image: "/images/service_images/service16.png",
     slug: "PenjadwalanLaparoscopy",
     contentFirst:
       "<p>Sindrom polikistik ovarium atau polycystic ovarian syndrome (PCOS) adalah gangguan hormon yang terjadi pada wanita di usia subur. PCOS ditandai dengan gangguan menstruasi dan kadar hormon maskulin (hormon androgen) yang berlebihan.</p>",
