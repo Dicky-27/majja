@@ -32,6 +32,7 @@ const Header = () => {
   return (
     <>
       <HeaderWrapper
+        className="header"
         style={{
           backgroundColor: "rgba(250, 250, 250, 0.8)",
           backdropFilter: "blur(5px)",

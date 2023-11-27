@@ -3,28 +3,27 @@
     padding-bottom: 30px;
     padding-left: 10%;
     padding-right: 10%;
-    background: linear-gradient(180deg, #FFFFFF 0%, #EDF6FF 35.55%);
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.70) -5.83%, rgba(0, 0, 0, 0.00) 59.17%), url('/images/img-hero-bg.png');
     background-size: cover;
-    background-position: bottom;
-    min-height: 100vh;
+    background-position: top; 
+    margin-top: 111px;
+    min-height: calc(100vh - 111px);
 }
 .hero-title {
+  color: var(--White, #FFF);
   font-family: "Poppins";
+  font-size: 48px;
   font-style: normal;
   font-weight: 600;
-  font-size: 48px;
-  line-height: 60px;
-  color: #a5090c;
-  padding-right: 5%;
+  line-height: 64px;
 }
 .hero-text {
+  color: var(--White, #FFF);
   font-family: "Poppins";
+  font-size: 24px;
   font-style: normal;
   font-weight: 500;
-  font-size: 20px;
-  line-height: 150%;
-  color: #8d8d8d;
-  padding-right: 15%;
+  line-height: normal;
 }
 .hero-right {
   align-self: center;
@@ -106,6 +105,7 @@
   }
   .hero-wrapper {
     min-height: 45vh;
+    margin-top: 0px;
   }
 }
 @media (max-width: 768px) {
