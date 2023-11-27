@@ -208,7 +208,7 @@ function Setting() {
           </div>
           <div className="col-6 pt-4">
             <label>
-              <b>Password</b>
+              <b>Ganti Password</b>
             </label>
             <Input.Password
               className="text-lg"
