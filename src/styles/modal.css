@@ -6,6 +6,14 @@
     line-height: 100%;
     color: #433B3B;
 }
+.modalConfirmTitle{
+    color: #8D8D8D;
+    font-family: Poppins;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 22px;
+}
 .modalSubtitle{
     font-family: 'Poppins';
     font-style: normal;
