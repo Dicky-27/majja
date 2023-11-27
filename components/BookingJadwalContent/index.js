@@ -379,7 +379,11 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
       var akhir = jam[6] + jam[7];
       var akhirconverted = Number(akhir);
       for (var i = awalconverted; i < akhirconverted; i++) {
-        jamstring = i + ".00";
+        if (i >= 10 && i <= 99) {
+          jamstring = i + ".00";
+        } else {
+          jamstring = "0" + i + ".00";
+        }
         temp.push(jamstring);
       }
     }
