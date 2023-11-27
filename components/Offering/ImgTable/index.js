@@ -1,114 +1,84 @@
-import React, { useEffect } from "react";
+import React, { useEffect, Fragment } from "react";
 import styled from "styled-components";
 import { Icon } from "@iconify/react";
 import Aos from "aos";
 
-function ImgTable() {
+function ImgTable({ isMobile }) {
+  const data = [
+    {
+      icon: "images/icons/ic-experience.svg",
+      number: "20+",
+      text: "Years of Experiences",
+    },
+    {
+      icon: "images/icons/ic-love.svg",
+      number: "15,000+",
+      text: "Happy Patients",
+    },
+    { icon: "images/icons/ic-baby.svg", number: "10,100+", text: "IUI Baby" },
+    {
+      icon: "images/icons/ic-doctor.svg",
+      number: "10+",
+      text: "Qualified Doctors & Staffs",
+    },
+
+    { icon: "images/icons/ic-services.svg", number: "30+", text: "Services" },
+  ];
+
   useEffect(() => {
     Aos.init();
   }, []);
 
   return (
-    <Wrapper>
-      <StyledText>
-        <table>
-          <tbody>
-            <tr>
-              <td data-aos="fade-up" style={{ padding: ".5rem 3rem .25rem 0" }}>
-                <Icon
-                  icon="ion:medkit"
-                  className=""
-                  style={{
-                    cursor: "pointer",
-                    fontSize: "36px",
-                    color: "#DF3034",
-                  }}
-                />
-              </td>
-              <td data-aos="fade-up" style={{ padding: ".5rem 3rem .25rem 0" }}>
-                <Icon
-                  icon="mdi:heart"
-                  className=""
-                  style={{
-                    cursor: "pointer",
-                    fontSize: "36px",
-                    color: "#DF3034",
-                  }}
-                />
-              </td>
-              <td data-aos="fade-up" style={{ padding: ".5rem 3rem .25rem 0" }}>
-                <Icon
-                  icon="ph:stethoscope-bold"
-                  className=""
-                  style={{
-                    cursor: "pointer",
-                    fontSize: "36px",
-                    color: "#DF3034",
-                  }}
-                />
-              </td>
-              <td data-aos="fade-up" style={{ padding: ".5rem 3rem .25rem 0" }}>
-                <Icon
-                  icon="fa6-solid:hand-holding-medical"
-                  className=""
-                  style={{
-                    cursor: "pointer",
-                    fontSize: "36px",
-                    color: "#DF3034",
-                  }}
-                />
-              </td>
-            </tr>
-            <tr>
-              <td data-aos="fade-up" style={{ padding: ".5rem 3rem .25rem 0" }}>
-                <StyledNumberTable>20+</StyledNumberTable>
-              </td>
-              <td data-aos="fade-up" style={{ padding: ".5rem 3rem .25rem 0" }}>
-                <StyledNumberTable>8,500+</StyledNumberTable>
-              </td>
-              <td data-aos="fade-up" style={{ padding: ".5rem 3rem .25rem 0" }}>
-                <StyledNumberTable>10+</StyledNumberTable>
-              </td>
-              <td data-aos="fade-up" style={{ padding: ".5rem 3rem .25rem 0" }}>
-                <StyledNumberTable>10+</StyledNumberTable>
-              </td>
-            </tr>
-            <tr>
-              <td data-aos="fade-up" style={{ padding: ".5rem 3rem .25rem 0" }}>
-                <StyledTextTable>Years of Experiences</StyledTextTable>
-              </td>
-              <td data-aos="fade-up" style={{ padding: ".5rem 3rem .25rem 0" }}>
-                <StyledTextTable>Happy Patients</StyledTextTable>
-              </td>
-              <td data-aos="fade-up" style={{ padding: ".5rem 3rem .25rem 0" }}>
-                <StyledTextTable>Qualified Doctors & Staffs</StyledTextTable>
-              </td>
-              <td data-aos="fade-up" style={{ padding: ".5rem 3rem .25rem 0" }}>
-                <StyledTextTable>Services</StyledTextTable>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </StyledText>
-    </Wrapper>
+    <div className={`row align-items-center ${isMobile ? "" : "me-5"}`}>
+      <div className={`${isMobile ? "row" : "px-5"}`}>
+        <Box>
+          <StyledText>
+            <div
+              className={`d-flex flex-row justify-content-between ${
+                isMobile ? "" : "px-5"
+              }`}
+              style={{ gap: "0.5rem" }}
+            >
+              {data.map((item, index) => (
+                <Fragment key={index}>
+                  <div data-aos="fade-up">
+                    <img
+                      src={item.icon}
+                      alt={`Icon ${index}`}
+                      style={{
+                        cursor: "pointer",
+                        width: "36px",
+                        height: "36px",
+                        marginBottom: "16px",
+                      }}
+                    />
+                    <StyledNumberTable>{item.number}</StyledNumberTable>
+                    <StyledTextTable>{item.text}</StyledTextTable>
+                  </div>
+                </Fragment>
+              ))}
+            </div>
+          </StyledText>
+        </Box>
+      </div>
+    </div>
   );
 }
 
-const Wrapper = styled.div`
-  /* padding: 0 0 5% 0; */
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 1rem;
-  padding-left:2.5rem;
-
+const Box = styled.div`
+  padding: 1.5rem;
   background: #ffffff;
   box-shadow: 0px 0px 2rem rgba(192, 192, 192, 0.25);
-  border-radius: 5%;
+  border-radius: 10px;
+  margin-right: 2%;
+  margin-left: 1%;
+  margin-bottom: 10%;
 
   @media (max-width: 1121px) {
     box-shadow: none;
+    margin-right: 0%;
+    margin-left: 0%;
   }
 `;
 

@@ -2,71 +2,26 @@ import React from "react";
 import CardLayanan from "../CardLayanan";
 import ButtonAlt from "../ButtonAlt";
 import styled from "styled-components";
+import { serviceList } from "../ServiceData";
 
 function LayananHome() {
-  const layanan = [
-    {
-      image: "/images/services_icon/andrologi.png",
-      title: "Andrologi",
-      text: "Sindrom polikistik ovarium atau polycystic ovarian syndrome (PCOS) adalah gangguan hormon yang terjadi pada wanita di usia su..",
-    },
-    {
-      image: "/images/services_icon/endometriosis.png",
-      title: "Endometriosis",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus lobortis, lorem at finibus imperdiet, erat erat tincidunt nunc",
-    },
-    {
-      image: "/images/services_icon/implantasi.png",
-      title: "Implantasi & Kehamilan Dini",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus lobortis, lorem at finibus imperdiet, erat erat tincidunt nunc",
-    },
-    {
-      image: "/images/services_icon/reproduksi_genetik.png",
-      title: "Reproduksi Genetik",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus lobortis, lorem at finibus imperdiet, erat erat tincidunt nunc",
-    },
-    {
-      image: "/images/services_icon/masalah_kesuburan.png",
-      title: "Masalah Kesuburan",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus lobortis, lorem at finibus imperdiet, erat erat tincidunt nunc",
-    },
-    {
-      image: "/images/services_icon/prakonsepsi.png",
-      title: "Prakonsepsi ECS",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus lobortis, lorem at finibus imperdiet, erat erat tincidunt nunc",
-    },
-    {
-      image: "/images/services_icon/operasi.png",
-      title: "Operasi Endometriosis",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus lobortis, lorem at finibus imperdiet, erat erat tincidunt nunc",
-    },
-    {
-      image: "/images/services_icon/stimulasi.png",
-      title: "Stimulasi Ovarium",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus lobortis, lorem at finibus imperdiet, erat erat tincidunt nunc",
-    },
-    {
-      image: "/images/services_icon/anomali.png",
-      title: "Anomali Genital Wanita",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus lobortis, lorem at finibus imperdiet, erat erat tincidunt nunc",
-    },
-  ];
   return (
     <section className="layananWrapper py-4" id="layanan">
       <Wrapper>
         <PC>
           <h1 className="ArticleTitleHome">Layanan Terbaik Untuk Kamu</h1>
           <div className="row px-5">
-            {layanan.map((item, i) => (
+            {serviceList.slice(0, 9).map((item, i) => (
               <div
                 className="col-xl-4 col-lg-4 col-md-6 col-12 p-4"
                 key={i}
                 data-aos="fade-up"
               >
                 <CardLayanan
-                  image={item.image}
+                  image={item.icon}
                   title={item.title}
                   text={item.text}
+                  link={"/services/" + item.id}
                 ></CardLayanan>
               </div>
             ))}
@@ -83,16 +38,17 @@ function LayananHome() {
         <MOBILE>
           <h1 className="ArticleTitleHome">Layanan Terbaik Untuk Kamu</h1>
           <div className="row">
-            {layanan.map((item, i) => (
+            {serviceList.slice(0, 9).map((item, i) => (
               <div
                 className="col-xl-4 col-lg-4 col-md-6 col-12 p-4"
                 key={i}
                 data-aos="fade-up"
               >
                 <CardLayanan
-                  image={item.image}
+                  image={item.icon}
                   title={item.title}
                   text={item.text}
+                  link={"/services/" + item.id}
                 ></CardLayanan>
               </div>
             ))}

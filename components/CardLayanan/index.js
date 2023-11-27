@@ -1,7 +1,7 @@
 import React from "react";
 import BacaSelengkapnya from "../BacaSelengkapnya";
 
-function CardLayanan({ text, title, image }) {
+function CardLayanan({ text, title, image, link }) {
   return (
     <div className="cardLayanan p-3">
       <div className="row justify-content-center">
@@ -13,7 +13,7 @@ function CardLayanan({ text, title, image }) {
         </div>
       </div>
       <div className="cardLayananArticle py-2">{text}</div>
-      <BacaSelengkapnya link="/services" color={"#DF3034"}></BacaSelengkapnya>
+      <BacaSelengkapnya link={link} color={"#DF3034"}></BacaSelengkapnya>
     </div>
   );
 }

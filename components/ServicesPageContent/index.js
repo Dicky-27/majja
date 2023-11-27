@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import AOS from "aos";
 import styled from "styled-components";
 import { serviceList } from "../ServiceData";
-import BacaSelengkapnya from "../BacaSelengkapnya";
+import CardLayanan from "../CardLayanan";
 import { Input, Pagination } from "antd";
 import { sortByCreatedDateDescending } from "../../lib/sortBy";
 import moment from "moment";
@@ -12,11 +12,10 @@ moment.locale("id");
 function ServicesPageContent() {
   useEffect(() => {
     AOS.init();
-    setDataServices([...slice2(serviceList, 0, 8)]);
+    setDataServices([...slice2(serviceList, 0, 9)]);
   }, []);
   const { Search } = Input;
   const [DataServices, setDataServices] = useState(serviceList);
-  const sortedServicesList = sortByCreatedDateDescending(DataServices);
 
   const onSearch = (value) => {
     const filteredData = serviceList.filter((entry) =>
@@ -26,12 +25,12 @@ function ServicesPageContent() {
   };
 
   const handlePagination = async (value) => {
-    if (value * 8 - 1 > serviceList.length) {
+    if (value * 9 - 1 > serviceList.length) {
       setDataServices([
-        ...slice2(serviceList, (value - 1) * 8, serviceList.length),
+        ...slice2(serviceList, (value - 1) * 9, serviceList.length),
       ]);
     } else {
-      setDataServices([...slice2(serviceList, (value - 1) * 8, value * 8)]);
+      setDataServices([...slice2(serviceList, (value - 1) * 9, value * 9)]);
     }
   };
 
@@ -54,35 +53,19 @@ function ServicesPageContent() {
           onSearch={onSearch}
         />
       </SearchWrapper>
-      <div className="row" data-aos="fade-up">
-        {sortedServicesList.map((item, index) => (
-          <div className="col-xl-3 col-lg-5 col-md-6 col-12 p-3" key={index}>
-            <>
-              <img
-                src={item.image}
-                width="100%"
-                style={{
-                  width: "100%",
-                  borderRadius: "10px 10px 0 0", // Top-left and top-right corners are rounded
-                }}
-              ></img>
-              <CardWrapper className="d-flex flex-column justify-content-between p-3">
-                <div>
-                  <CardTitleWrapper>
-                    <CardTitle>{item.title}</CardTitle>
-                  </CardTitleWrapper>
-                  <CardBodyText>
-                    {moment(item.created).format("DD MMMM YYYY")}
-                  </CardBodyText>
-                  <CardBodyWrapper className="my-2">
-                    <CardBodyText>{item.text}</CardBodyText>
-                  </CardBodyWrapper>
-                </div>
-                <BacaSelengkapnya
-                  link={"/services/" + item.id}
-                ></BacaSelengkapnya>
-              </CardWrapper>
-            </>
+      <div className="row pt-2">
+        {DataServices.map((item, i) => (
+          <div
+            className="col-xl-4 col-lg-4 col-md-6 col-12 mb-4"
+            key={i}
+            data-aos="fade-up"
+          >
+            <CardLayanan
+              image={item.icon}
+              title={item.title}
+              text={item.text}
+              link={"/services/" + item.id}
+            ></CardLayanan>
           </div>
         ))}
       </div>
