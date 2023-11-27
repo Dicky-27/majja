@@ -21,13 +21,7 @@ export default async function exportDoctor(req, res) {
             query:'SELECT no_rekam_medis, nama FROM tb_pasien where telp = ?',
             values:[phone],
         });
-        if(pasien.length > 0){
-            res.status(400).json({ message:'Pasien Sudah Terdaftar! Silahkan Pilih Kategori Pasien Lama!' })
-        }
-        else{
-            res.status(200).json({ pasien });
-        }
-
+        res.status(200).json({ pasien });
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
