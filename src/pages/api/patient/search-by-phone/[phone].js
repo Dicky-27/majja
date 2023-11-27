@@ -1,7 +1,7 @@
 import excuteQuery from "../../../../../lib/db";
 import NextCors from 'nextjs-cors';
 
-export default async function exportDoctor(req, res) {  
+export default async function exportDoctor(req, res) {
     await NextCors(req, res, {
         // Options
         methods: ['GET'],
@@ -18,16 +18,16 @@ export default async function exportDoctor(req, res) {
     try {
         const pasien = await excuteQuery({
             // query: `SELECT * FROM tb_pasien LIMIT 100`,
-            query:'SELECT * FROM tb_pasien where telp = ?',
+            query:'SELECT no_rekam_medis, nama FROM tb_pasien where telp = ?',
             values:[phone],
         });
         if(pasien.length > 0){
             res.status(400).json({ message:'Pasien Sudah Terdaftar! Silahkan Pilih Kategori Pasien Lama!' })
         }
         else{
-            res.status(200).json({ message: 'OK'});
+            res.status(200).json({ pasien });
         }
-        
+
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
