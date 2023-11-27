@@ -1,18 +1,7 @@
-import { React, useState, useEffect } from "react";
+import React from "react";
 import Button from "../Button";
 
 function Hero() {
-  const [navbarHeight, setNavbarHeight] = useState(0);
-
-  useEffect(() => {
-    const navbar = document.querySelector(".header");
-    if (navbar) {
-      const height = navbar.offsetHeight;
-      setNavbarHeight(height);
-      console.log(height);
-    }
-  }, []);
-
   return (
     <section className="hero-wrapper" id="hero">
       <div className="container-fluid">
