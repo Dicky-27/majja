@@ -18,84 +18,15 @@ import {
 } from "../../lib/getEveryDate";
 import axios from "axios";
 import { toast } from "react-toastify";
-import getConfig from 'next/config';
-
-// const disabledDays = [
-//   {
-//     year: 2023,
-//     month: 6,
-//     day: 19,
-//   },
-//   {
-//     year: 2023,
-//     month: 6,
-//     day: 29,
-//   },
-//   {
-//     year: 2023,
-//     month: 6,
-//     day: 27,
-//   },
-// ];
-
-// const availableDays = [
-//   {
-//     year: 2023,
-//     month: 6,
-//     day: 20,
-//     className: "GrDay",
-//     hour: {
-//       available: [9, 10, 17, 19, 20, 21],
-//       unavailable: [8, 18],
-//     },
-//   },
-//   {
-//     year: 2023,
-//     month: 6,
-//     day: 21,
-//     className: "GrDay",
-//     hour: {
-//       available: [9, 17, 19, 21],
-//       unavailable: [8, 10, 18, 20],
-//     },
-//   },
-//   {
-//     year: 2023,
-//     month: 6,
-//     day: 22,
-//     className: "GrDay",
-//     hour: {
-//       available: [8, 9, 10, 17, 19, 20, 21],
-//       unavailable: [18],
-//     },
-//   },
-//   {
-//     year: 2023,
-//     month: 6,
-//     day: 23,
-//     className: "GrDay",
-//     hour: {
-//       available: [8, 9, 10, 17, 18, 19, 20, 21],
-//       unavailable: [],
-//     },
-//   },
-//   {
-//     year: 2023,
-//     month: 6,
-//     day: 24,
-//     className: "GrDay",
-//     hour: {
-//       available: [9],
-//       unavailable: [8, 10, 17, 18, 19, 20, 21],
-//     },
-//   },
-// ];
+import getConfig from "next/config";
 
 function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
   const router = useRouter();
   const [selectedDay, setSelectedDay] = useState(utils().getToday());
   let days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-  let d = new Date(selectedDay.year + '-' + selectedDay.month + '-' + selectedDay.day);
+  let d = new Date(
+    selectedDay.year + "-" + selectedDay.month + "-" + selectedDay.day
+  );
   // let dayName = days[d.getDay()];
   let date = moment(
     `${selectedDay.year}-${selectedDay.month}-${selectedDay.day}`,
@@ -121,6 +52,7 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
   const [errorkategori, seterrorkategori] = useState(false);
   const [errorrekam, seterrorrekam] = useState(false);
   const regExPhone = /^(\+62|62)8[1-9]{1}\d{1}[\s-]?\d{4}[\s-]?\d{2,5}$/;
+  const [errorTime, setErrorTime] = useState(false);
   const [loading, setLoading] = useState(false);
   const url = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
@@ -128,28 +60,37 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
   const { Option } = Select;
   const { TextArea } = Input;
 
-  useEffect(() => {
+  const checkBooking = async (time) => {
     axios
       .post(
         `/api/booking/checkbooking`,
-        { today: moment(today).format("YYYY-MM-DD"), id_dokter: id },
+        {
+          today: moment(
+            selectedDay.year + "-" + selectedDay.month + "-" + selectedDay.day,
+            "YYYY-MM-DD"
+          ).toISOString(),
+          id_dokter: id,
+          time: moment.utc(time, "THH Z").format("HH:mm:ss"),
+        },
         {
           headers: {
             "Content-Type": "application/json",
           },
         }
       )
-      .then((res) => {
-        res.data.result.length > 0 &&
-          res.data.result.map((item) =>
-            bookingan.push({
-              tanggal_booking: new Date(item.tanggal_booking),
-              jam_booking: Number(item.jam_booking.split(":")[0]) + ".00",
-            })
-          );
+      .then((response) => {
+        const result = response.data.result;
+        if (result.length !== 0) {
+          setErrorTime(true);
+          setValuejam(null);
+        } else {
+          setErrorTime(false);
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error.response.data);
       });
-    setValuejam(null);
-  }, []);
+  };
 
   const onChangeKategori = (e) => {
     setKategoriPasien(e.target.value);
@@ -221,6 +162,7 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
 
   const handleSelectedTime = (e) => {
     setValuejam(e);
+    checkBooking(e);
   };
 
   const isFutureTime = (time) => {
@@ -478,23 +420,6 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
                         </div>
                       </div>
                       <div className="pt-3">
-                        {/* <RenderJam data={availableDays} selectedDate={selectedDay} /> */}
-                        {/* <RenderJamWrapper className="section">
-                          {sortAllHour.map((item, i) => (
-                            // <ButtonJam text={item} disabled={chkDisabled} />
-                            <BtnWrapper
-                              // onClick={(e) => handleInput(e, "value")}
-                              key={i}
-                              onClick={(e) => setValuejam(e.target.value, "value")}
-                            >
-                              <StyledButton value={item}>
-                                {moment(item, "HH").format("HH:mm")}
-                              </StyledButton>
-                            </BtnWrapper>
-                          ))}
-                        </RenderJamWrapper> */}
-
-                        {/* Render pilihan waktu temu yang telah difilter */}
                         <span className="waktuTemu pt-5">Waktu Temu</span>
                         <br></br>
                         <Select
@@ -532,23 +457,14 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
                                         </Option>
                                       )))
                             )}
-                          {/* {data.jadwal &&
-                            data.jadwal.map((item, i) =>
-                              dayName === item.hari &&
-                              item.jam2 &&
-                              filteredTimes(
-                                availableTimes,
-                                pecahjam(item.jam2).map((item3, i3) => item3)
-                              )
-                              .filter((time) => isFutureTime(time)) // Filter only future times
-                              .map((time, i3) => (
-                                <Option key={i3} value={time}>
-                                  {time}
-                                </Option>
-                              ))
-                            )} */}
                         </Select>
                       </div>
+                      {errorTime && (
+                        <span className="error mt-4">
+                          Maaf, jam ini sudah terbooking. Silahkan pilih jam
+                          lainnya.
+                        </span>
+                      )}
                     </div>
                   </div>
                 ) : (

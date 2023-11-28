@@ -1,53 +1,30 @@
 import Head from "next/head";
-import React, { useEffect } from "react";
+import React from "react";
 import Footer from "../../../components/footer";
 import Navbar from "../../../components/Navbar";
+import axios from "axios";
 import FloatingWA from "../../../components/FloatingWA";
 import { Card } from "antd";
 import styled from "styled-components";
+// import Lottie from 'react-lottie';
 import Lottie from "lottie-react";
-import * as animationDataSuccess from "../../../public/images/success.json";
-import * as animationDataFail from "../../../public/images/fail.json";
+import * as animationData from "../../../public/images/success.json";
 import moment from "moment";
-import { useRouter } from "next/router";
-import axios from "axios";
 
 function BookingSuccess() {
-  const router = useRouter();
-  const { order_id, status_code, transaction_status } = router.query;
-  const [paymentStatus, setPaymentStatus] = useState("");
-
-  const checkPaymentStatus = () => {
-    const requestData = {
-      id_booking: order_id, // Replace with the actual booking ID
-    };
-
-    axios
-      .post("/api/booking/payment_status", requestData)
-      .then((response) => {
-        const result = response.data.result;
-        if (result.length !== 0) {
-          const paymentStatus = result[0].payment_status;
-          setPaymentStatus(paymentStatus);
-        } else {
-          console.log("No payment status found for the given booking ID.");
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error.response.data);
-      });
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: animationData,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
   };
-
-  useEffect(() => {
-    checkPaymentStatus();
-  }, []);
 
   return (
     <>
       <Head>
-        <title>
-          {paymentStatus == "capture" ? "Booking Success" : "Booking Failed"}
-        </title>
+        <title>Booking Success</title>
       </Head>
       <Navbar></Navbar>
       <Wrapper id="findUs">
@@ -59,43 +36,23 @@ function BookingSuccess() {
                 <Card
                   style={{
                     width: "100%",
+                    // height: "32rem",
                     backgroundColor: "white",
                     borderRadius: "1rem",
                     boxShadow: "0px 4px 20px rgba(192, 192, 192, 0.25)",
                   }}
                 >
                   <div className="align-self-center pt-4">
-                    <h1
-                      className={
-                        paymentStatus == "capture"
-                          ? "successTitle"
-                          : "failTitle"
-                      }
-                    >
-                      {paymentStatus == "capture"
-                        ? "Pembayaran Berhasil"
-                        : "Pembayaran Gagal"}
-                    </h1>
+                    <h1 className="successTitle">Pembayaran Berhasil</h1>
+                    {/* <img src='/images/successful.gif' width="60%"></img> */}
                     <div className="row justify-content-center">
                       <div className="col-lg-8 col-12">
-                        <Lottie
-                          animationData={
-                            paymentStatus == "capture"
-                              ? animationDataSuccess
-                              : animationDataFail
-                          }
-                          loop={true}
-                        />
+                        <Lottie animationData={animationData} loop={true} />
                       </div>
                     </div>
-                    <p
-                      className={
-                        paymentStatus == "capture" ? "successText" : "failText"
-                      }
-                    >
-                      {paymentStatus == "capture"
-                        ? "Anda akan segera menerima pesan konfirmasi melalui Whatsapp"
-                        : "Mohon maaf, kami mengalami kendala dalam memproses pembayaran untuk booking jadwal Anda saat ini. Harap mencoba kembali!"}
+                    <p className="successText">
+                      Anda akan segera menerima pesan konfirmasi melalui
+                      Whatsapp
                     </p>
                   </div>
                 </Card>
@@ -104,6 +61,7 @@ function BookingSuccess() {
                 <Card
                   style={{
                     width: "100%",
+                    // height: "32rem",
                     backgroundColor: "white",
                     borderRadius: "1rem",
                     boxShadow: "0px 4px 20px rgba(192, 192, 192, 0.25)",
@@ -203,6 +161,10 @@ function BookingSuccess() {
 }
 
 const Wrapper = styled.div`
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
+
   background: #edf6ff;
   background-size: cover;
   background-repeat: no-repeat;
