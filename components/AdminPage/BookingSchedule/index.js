@@ -195,7 +195,6 @@ function BookingSchedule({ updateRes, isAdmin, email }) {
                   ? "#433B3B"
                   : ""),
               cursor: "not-allowed",
-              opacity: 0.7,
             }}
             onClick={(e) => e.stopPropagation()} // stop onRow click on table
           >
@@ -330,7 +329,6 @@ function BookingSchedule({ updateRes, isAdmin, email }) {
                   ? "#FAFAFA"
                   : ""),
               cursor: "not-allowed",
-              opacity: 0.7,
               border:
                 record.action_status &&
                 (record.action_status == 1

@@ -218,13 +218,13 @@ function Dashboard({ updateRes }) {
               color:
                 record.action_status &&
                 (record.action_status == 1
-                  ? "#1D5D9B"
+                  ? "#1890FF"
                   : record.action_status == 2
-                  ? "#F4D160"
+                  ? "#FAAD14"
                   : record.action_status == 3
-                  ? "#54B435"
+                  ? "#09A53E"
                   : record.action_status == 4
-                  ? "#666"
+                  ? "#433B3B"
                   : ""),
             }}
             onClick={(e) => e.stopPropagation()} // stop onRow click on table
