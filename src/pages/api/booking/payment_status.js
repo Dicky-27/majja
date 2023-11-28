@@ -3,7 +3,7 @@ import excuteQuery from "../../../../lib/db";
 import NextCors from 'nextjs-cors';
 
 export default async function checkPaymentStatus(req, res) {
-    const { id_booking } = req.body;
+    const { phone, tanggal, jam, id_dokter } = req.body;
 
     await NextCors(req, res, {
         methods: ['POST'],
@@ -13,8 +13,8 @@ export default async function checkPaymentStatus(req, res) {
 
     try {
         const result = await excuteQuery({
-            query: "SELECT payment_status FROM booking WHERE id = ?",
-            values:[id_booking],
+            query: "SELECT payment_status FROM booking WHERE phone = ? AND tanggal_booking = ? AND jam_booking = ? AND id_dokter = ?",
+            values:[phone, tanggal, jam, id_dokter],
         });
         res.status(200).json({ result })
     } catch (error) {
