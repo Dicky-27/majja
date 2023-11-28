@@ -16,13 +16,15 @@ function BookingSuccess() {
 
   const checkPaymentStatus = () => {
     const time = localStorage.getItem("jam_booking");
-    const date = localStorage.getItem("tanggal_booking");
+    const date = moment(localStorage.getItem("tanggal_booking")).format(
+      "YYYY-MM-DD"
+    );
     const phone = localStorage.getItem("phone_booking");
     const idDoctor = localStorage.getItem("idDokter_booking");
 
     const requestData = {
       phone: phone,
-      tanggal: moment(date, "dddd, YYYY-MM-DD").format("YYYY-MM-DD"),
+      tanggal: date,
       jam: time,
       id_dokter: idDoctor,
     };
