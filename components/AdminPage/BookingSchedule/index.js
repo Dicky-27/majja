@@ -76,7 +76,7 @@ function BookingSchedule({ updateRes, isAdmin, email }) {
     fetchDataAdmin();
   }, []);
 
-  const handleStatusChange = (value, id, note) => {
+  const handleStatusChange = (value, id, note, isJustNotes) => {
     axios
       .post(
         `/api/booking/update_actionstatus`,
@@ -89,7 +89,11 @@ function BookingSchedule({ updateRes, isAdmin, email }) {
       )
       .then((res) => {
         if (res.status == 200) {
-          toast.success("Edit Action Status Success!");
+          toast.success(
+            isJustNotes
+              ? "Update Notes Success!"
+              : "Edit Action Status Success!"
+          );
           setModalOpen(false);
           isAdmin ? fetchDataAdmin() : fetchDataNonAdmin;
           updateRes(2);
@@ -175,7 +179,7 @@ function BookingSchedule({ updateRes, isAdmin, email }) {
           <Select
             value={record.action_status && record.action_status.toString()}
             onChange={(value) =>
-              handleStatusChange(value, record.id, record.catatan)
+              handleStatusChange(value, record.id, record.catatan, false)
             }
             style={{
               fontFamily: "Poppins",
@@ -513,6 +517,15 @@ function BookingSchedule({ updateRes, isAdmin, email }) {
                 ) : (
                   catatan
                 )}
+                <div className="mt-4">
+                  <SaveButton
+                    onClick={() =>
+                      handleStatusChange(statusbook, idBooking, catatan, true)
+                    }
+                  >
+                    Simpan
+                  </SaveButton>
+                </div>
               </div>
             </div>
           </div>
@@ -520,7 +533,7 @@ function BookingSchedule({ updateRes, isAdmin, email }) {
             {statusbook == 1 ? (
               <button
                 className="buttonModalReminded"
-                onClick={() => handleStatusChange(2, idBooking, catatan)}
+                onClick={() => handleStatusChange(2, idBooking, catatan, false)}
               >
                 Reminded
               </button>
@@ -528,13 +541,17 @@ function BookingSchedule({ updateRes, isAdmin, email }) {
               <div className="text-end">
                 <button
                   className="buttonModalNot mx-1"
-                  onClick={() => handleStatusChange(4, idBooking, catatan)}
+                  onClick={() =>
+                    handleStatusChange(4, idBooking, catatan, false)
+                  }
                 >
                   Not Shown
                 </button>
                 <button
                   className="buttonModalComplete mx-1"
-                  onClick={() => handleStatusChange(3, idBooking, catatan)}
+                  onClick={() =>
+                    handleStatusChange(3, idBooking, catatan, false)
+                  }
                 >
                   Completed
                 </button>
@@ -566,6 +583,21 @@ const BigCard = styled.div`
   padding: 1.5rem;
   min-height: 32rem;
   background-color: #ffffff;
+`;
+
+const SaveButton = styled.a`
+  color: #df3034;
+  text-align: center;
+  font-family: Poppins;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+
+  border-radius: 8px;
+  border: 1px solid #df3034;
+  background: var(--White, #fff);
+  padding: 6px 24px;
 `;
 
 export default BookingSchedule;

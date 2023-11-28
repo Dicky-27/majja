@@ -76,7 +76,7 @@ function Dashboard({ updateRes }) {
     setCatatan(record.catatan);
   };
 
-  const handleStatusChange = (value, id, note) => {
+  const handleStatusChange = (value, id, note, isJustNotes) => {
     axios
       .post(
         `/api/booking/update_actionstatus`,
@@ -89,9 +89,11 @@ function Dashboard({ updateRes }) {
       )
       .then((res) => {
         if (res.status == 200) {
-          toast.success("Edit Action Status Success!");
-          // localStorage.setItem('halamandash', 1)
-          // window.location.reload()
+          toast.success(
+            isJustNotes
+              ? "Update Notes Success!"
+              : "Edit Action Status Success!"
+          );
           setModalOpen(false);
           fetchData();
           updateRes(1);
@@ -545,6 +547,15 @@ function Dashboard({ updateRes }) {
                   value={catatan}
                   onChange={(e) => setCatatan(e.target.value)}
                 />
+                <div className="mt-4">
+                  <SaveButton
+                    onClick={() =>
+                      handleStatusChange(statusbook, idBooking, catatan, true)
+                    }
+                  >
+                    Simpan
+                  </SaveButton>
+                </div>
               </div>
             </div>
           </div>
@@ -552,7 +563,7 @@ function Dashboard({ updateRes }) {
             {statusbook == 1 ? (
               <button
                 className="buttonModalReminded"
-                onClick={() => handleStatusChange(2, idBooking, catatan)}
+                onClick={() => handleStatusChange(2, idBooking, catatan, false)}
               >
                 Reminded
               </button>
@@ -560,13 +571,17 @@ function Dashboard({ updateRes }) {
               <div className="text-end">
                 <button
                   className="buttonModalNot mx-1"
-                  onClick={() => handleStatusChange(4, idBooking, catatan)}
+                  onClick={() =>
+                    handleStatusChange(4, idBooking, catatan, false)
+                  }
                 >
                   Not Shown
                 </button>
                 <button
                   className="buttonModalComplete mx-1"
-                  onClick={() => handleStatusChange(3, idBooking, catatan)}
+                  onClick={() =>
+                    handleStatusChange(3, idBooking, catatan, false)
+                  }
                 >
                   Completed
                 </button>
@@ -641,4 +656,20 @@ const StyledCardPercentNeg = styled.span`
   font-family: Poppins;
   font-weight: 500;
 `;
+
+const SaveButton = styled.a`
+  color: #df3034;
+  text-align: center;
+  font-family: Poppins;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+
+  border-radius: 8px;
+  border: 1px solid #df3034;
+  background: var(--White, #fff);
+  padding: 6px 24px;
+`;
+
 export default Dashboard;
