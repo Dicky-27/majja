@@ -82,12 +82,15 @@ function ArticleDashboard({ updateRes }) {
   const [link, setlink] = useState();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const url = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
   const urlsquidex = "https://cloud.squidex.io/api/apps/artikel/assets";
   const editorRef = useRef(null);
   const creator = Cookies.get("username");
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedArticleId, setSelectedArticleId] = useState(null);
+  const [isUpdateArticle, setIsUpdateArticle] = useState(false);
+  const [currentContent, setCurrentContent] = useState();
+  const [articleId, setArticleId] = useState();
+  const [currentImage, setCurrentImage] = useState();
 
   const disabledDate = (current) => {
     return current && current > dayjs().endOf("day");
@@ -117,22 +120,82 @@ function ArticleDashboard({ updateRes }) {
           },
         }).then((dataRes) => {
           if (dataRes.data.createArtikelContent.id) {
-            toast.success("Upload Artikel Sukses"),
+            toast.success("Article Uploaded Successfully"),
               setjudul(),
               setDate(),
               setlink(),
               setImage(),
               setImagePreview();
-            setEditArticle(false),
-              // localStorage.setItem('halamandash', 6)
-              // window.location.reload()
-              refetch();
+            setEditArticle(false), refetch();
             updateRes(6);
           } else {
-            toast.error("Gagal Menambahkan Artikel");
+            toast.error("Article Upload Failed");
           }
         });
       });
+  };
+
+  const updateArticle = (image) => {
+    fetch(`https://cloud.squidex.io/api/content/artikel/artikel/${articleId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        judul: { iv: judul },
+        photo: {
+          iv: image,
+        },
+        date: { iv: moment(date).format("DD MMMM YYYY HH:mm") },
+        content: { iv: editorRef.current.getContent() },
+        creator: { iv: creator },
+      }),
+    }).then((dataRes) => {
+      if (dataRes.status === 200) {
+        toast.success("Article Updated Successfully"),
+          setjudul(),
+          setDate(),
+          setlink(),
+          setImage(),
+          setImagePreview();
+        setEditArticle(false), refetch();
+        updateRes(6);
+      } else {
+        toast.error("Article Update Failed");
+      }
+    });
+  };
+
+  const onUpdate = () => {
+    if (currentImage !== imagePreview) {
+      const uploadimg = new FormData();
+      uploadimg.append("file", image);
+
+      console.log(uploadimg);
+
+      fetch(urlsquidex, {
+        method: "POST",
+        body: uploadimg,
+      })
+        .then((response) => response.json())
+        .then((dataRes) => {
+          updateArticle(
+            "https://cloud.squidex.io/api/assets/artikel/" + dataRes.id
+          );
+        });
+    } else {
+      updateArticle(currentImage);
+    }
+  };
+
+  const handleUpdateArticle = (judul, image, content, id) => {
+    setEditArticle(true);
+    setjudul(judul);
+    setImagePreview(image);
+    setCurrentImage(image);
+    setCurrentContent(content);
+    setIsUpdateArticle(true);
+    setArticleId(id);
   };
 
   useEffect(() => {
@@ -153,13 +216,11 @@ function ArticleDashboard({ updateRes }) {
       })
       .then((res) => {
         if (res.status == 204) {
-          toast.success("Hapus Artikel Berhasil!");
-          // localStorage.setItem('halamandash', 6)
-          // window.location.reload()
+          toast.success("Delete Article Successful!");
           refetch();
           updateRes(6);
         } else {
-          toast.success("Gagal Hapus Artikel");
+          toast.success("Failed to Delete Article");
         }
       });
   };
@@ -213,17 +274,48 @@ function ArticleDashboard({ updateRes }) {
                           aspectRatio: "4/3",
                           objectFit: "cover",
                           borderRadius: "10px 10px 0 0",
+                          cursor: "pointer",
                         }}
+                        onClick={() =>
+                          handleUpdateArticle(
+                            item.data.judul.iv,
+                            item.data.photo != null ? item.data.photo.iv : "",
+                            item.data.content.iv,
+                            item.id
+                          )
+                        }
                       ></img>
                       <div className="cardArticle d-flex flex-column justify-content-between p-4">
                         <div>
-                          <h1 className="cardArticleTitle">
+                          <h1
+                            className="cardArticleTitle"
+                            style={{ cursor: "pointer" }}
+                            onClick={() =>
+                              handleUpdateArticle(
+                                item.data.judul.iv,
+                                item.data.photo != null
+                                  ? item.data.photo.iv
+                                  : "",
+                                item.data.content.iv,
+                                item.id
+                              )
+                            }
+                          >
                             {item.data.judul.iv}
                           </h1>
-                          {/* <a className="cardDate my-2">{item.data.date != null ? item.data.date.iv : ''}</a> */}
                           <div
                             className="cardArticleText mb-1"
-                            style={{ maxHeight: "90px" }}
+                            style={{ maxHeight: "90px", cursor: "pointer" }}
+                            onClick={() =>
+                              handleUpdateArticle(
+                                item.data.judul.iv,
+                                item.data.photo != null
+                                  ? item.data.photo.iv
+                                  : "",
+                                item.data.content.iv,
+                                item.id
+                              )
+                            }
                           >
                             <div
                               dangerouslySetInnerHTML={{
@@ -234,7 +326,8 @@ function ArticleDashboard({ updateRes }) {
                         </div>
                         <div className="d-flex flex-row justify-content-between pt-3">
                           <div>
-                            {/* <Icon
+                            {/* TODO: hide after views api is ready
+                            <Icon
                                 icon="mdi:eye"
                                 className="ms-1 align-self-center"
                                 style={{
@@ -274,7 +367,6 @@ function ArticleDashboard({ updateRes }) {
                 </div>
               ) : (
                 <BigCard className="col my-2">
-                  {/* <form className=""> */}
                   <div className="py-2"></div>
                   <div className="row">
                     <div className="col-lg-7 p-2">
@@ -283,19 +375,9 @@ function ArticleDashboard({ updateRes }) {
                       </label>
                       <Input
                         placeholder="Judul Artikel Anda"
+                        value={judul}
                         onChange={(e) => setjudul(e.target.value)}
                       />
-                      {/* <label className="mt-3"><b>Link</b></label>
-                      <Input placeholder="judul-artikel-yang-anda-tulis" onChange={(e) => setlink(e.target.value)}/> */}
-                      {/* <label className="mt-3"><b>Tanggal</b></label><br></br>
-                      <DatePicker
-                      className=""
-                      style={{width:'100%'}}
-                      placeholder="Pilih Tanggal"
-                      format="DD-MM-YY"
-                      onChange={onChangeDate}
-                      disabledDate={disabledDate}
-                    /> */}
                     </div>
                     <div className="col-lg-5 p-2">
                       <div className="image-upload text-center">
@@ -326,7 +408,6 @@ function ArticleDashboard({ updateRes }) {
                         <input
                           id="avatar"
                           type="file"
-                          // name="avatar"
                           accept="image/png, image/jpeg"
                           onChange={(event) => {
                             const img = event.target.files[0];
@@ -354,7 +435,7 @@ function ArticleDashboard({ updateRes }) {
                       <Editor
                         apiKey="yb7nbucxamekcoxt82en93nnuzub68521603grazs6vd5pan"
                         onInit={(evt, editor) => (editorRef.current = editor)}
-                        // initialValue="<p>This is the initial content of the editor.</p>"
+                        initialValue={currentContent}
                         init={{
                           height: 300,
                           menubar: false,
@@ -371,8 +452,11 @@ function ArticleDashboard({ updateRes }) {
                       />
                       {/* </div> */}
                     </div>
-                    <button onClick={onSubmit} className="button my-5">
-                      Upload Artikel
+                    <button
+                      onClick={isUpdateArticle ? onUpdate : onSubmit}
+                      className="button my-5"
+                    >
+                      {isUpdateArticle ? "Update Article" : "Upload Article"}
                     </button>
                   </div>
                   {/* </form> */}
