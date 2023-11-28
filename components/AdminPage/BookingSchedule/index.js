@@ -90,8 +90,6 @@ function BookingSchedule({ updateRes, isAdmin, email }) {
       .then((res) => {
         if (res.status == 200) {
           toast.success("Edit Action Status Success!");
-          // localStorage.setItem('halamandash', 2)
-          // window.location.reload()
           setModalOpen(false);
           isAdmin ? fetchDataAdmin() : fetchDataNonAdmin;
           updateRes(2);
@@ -107,19 +105,11 @@ function BookingSchedule({ updateRes, isAdmin, email }) {
       dataIndex: "nama",
       sorter: (a, b) => a.nama.localeCompare(b.nama),
       width: 200,
-      // render: (_, record) => (
-      //   <span
-      //     style={{ cursor: "pointer" }}
-      //     onClick={() => openBookingSchedule(record)}
-      //   >
-      //     {record.nama}
-      //   </span>
-      // ),
     },
     {
       title: "Jadwal Konsultasi",
       dataIndex: "tanggal_booking",
-      defaultSortOrder: "ascend",
+      defaultSortOrder: "descend",
       sorter: (a, b) => {
         const dateTimeA = moment(
           a.tanggal_booking + " " + a.jam_booking,
@@ -188,17 +178,24 @@ function BookingSchedule({ updateRes, isAdmin, email }) {
               handleStatusChange(value, record.id, record.catatan)
             }
             style={{
+              fontFamily: "Poppins",
+              fontSize: "12px",
+              fontStyle: "normal",
+              fontWeight: "500",
+              lineHeight: "22px",
               color:
                 record.action_status &&
                 (record.action_status == 1
-                  ? "#1D5D9B"
+                  ? "#1890FF"
                   : record.action_status == 2
-                  ? "#F4D160"
+                  ? "#FAAD14"
                   : record.action_status == 3
-                  ? "#54B435"
+                  ? "#09A53E"
                   : record.action_status == 4
-                  ? "#666"
+                  ? "#433B3B"
                   : ""),
+              cursor: "not-allowed",
+              opacity: 0.7,
             }}
             onClick={(e) => e.stopPropagation()} // stop onRow click on table
           >
@@ -224,8 +221,6 @@ function BookingSchedule({ updateRes, isAdmin, email }) {
             ))}
           </Select>
         );
-
-        // return statusLabels[record.action_status]
       },
     },
     {
@@ -241,19 +236,11 @@ function BookingSchedule({ updateRes, isAdmin, email }) {
       dataIndex: "nama",
       sorter: (a, b) => a.nama.localeCompare(b.nama),
       width: 200,
-      // render: (_, record) => (
-      //   <span
-      //     style={{ cursor: "pointer" }}
-      //     onClick={() => openBookingSchedule(record)}
-      //   >
-      //     {record.nama}
-      //   </span>
-      // ),
     },
     {
       title: "Jadwal Konsultasi",
       dataIndex: "tanggal_booking",
-      defaultSortOrder: "ascend",
+      defaultSortOrder: "descend",
       sorter: (a, b) => {
         const dateTimeA = moment(
           a.tanggal_booking + " " + a.jam_booking,
@@ -311,50 +298,65 @@ function BookingSchedule({ updateRes, isAdmin, email }) {
         };
 
         return (
-          <Select
-            value={record.action_status && record.action_status.toString()}
-            onChange={(value) =>
-              handleStatusChange(value, record.id, record.catatan)
-            }
+          <div
             style={{
+              fontFamily: "Poppins",
+              fontSize: "12px",
+              fontStyle: "normal",
+              fontWeight: "500",
+              lineHeight: "22px",
+              display: "inline-block",
+              padding: "2px 8px",
               color:
                 record.action_status &&
                 (record.action_status == 1
-                  ? "#1D5D9B"
+                  ? "#1890FF"
                   : record.action_status == 2
-                  ? "#F4D160"
+                  ? "#FAAD14"
                   : record.action_status == 3
-                  ? "#54B435"
+                  ? "#09A53E"
                   : record.action_status == 4
-                  ? "#666"
+                  ? "#433B3B"
                   : ""),
-            }}
-            onClick={(e) => e.stopPropagation()} // stop onRow click on table
-          >
-            {Object.entries(statusLabels).map(([value, label]) => (
-              <Option
-                key={value}
-                value={value}
-                style={{
-                  color:
-                    value == 1
-                      ? "#1D5D9B" // biru
-                      : value == 2
-                      ? "#F4D160" // kuning
-                      : value == 3
-                      ? "#54B435" // hijau
-                      : value == 4
-                      ? "#666" // abu
-                      : "",
-                }}
-              >
-                {label}
-              </Option>
-            ))}
-          </Select>
-        );
+              backgroundColor:
+                record.action_status &&
+                (record.action_status == 1
+                  ? "#E6F7FF"
+                  : record.action_status == 2
+                  ? "#FFFBE6"
+                  : record.action_status == 3
+                  ? "#EDFFF3"
+                  : record.action_status == 4
+                  ? "#FAFAFA"
+                  : ""),
+              cursor: "not-allowed",
+              opacity: 0.7,
+              border:
+                record.action_status &&
+                (record.action_status == 1
+                  ? "1px solid #91D5FF"
+                  : record.action_status == 2
+                  ? "1px solid #FFE58F"
+                  : record.action_status == 3
+                  ? "1px solid #8FEBAE"
+                  : record.action_status == 4
+                  ? "1px solid #D9D9D9"
+                  : ""),
 
-        // return statusLabels[record.action_status]
+              borderRadius: "12px",
+            }}
+          >
+            <span>
+              {record.action_status == 1
+                ? "New Bookings"
+                : record.action_status == 2
+                ? "Reminded"
+                : record.action_status == 3
+                ? "Completed"
+                : "Not Shown"}
+            </span>
+          </div>
+        );
       },
     },
     {

@@ -54,7 +54,6 @@ function Dashboard({ updateRes }) {
   const [countPasien, setcountPasien] = useState(0);
   const [countEarning, setcountEarning] = useState(0);
   const router = useRouter();
-  const url = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
   const onChange = (pagination, filters, sorter, extra) => {
     console.log("params", pagination, filters, sorter, extra);
@@ -158,14 +157,10 @@ function Dashboard({ updateRes }) {
       title: "Nama Pasien",
       dataIndex: "nama",
       sorter: (a, b) => a.nama.localeCompare(b.nama),
-      // render: ((_, record) => (
-      //   <span style={{cursor:'pointer'}} onClick={() => openModal(record)}>{record.nama}</span>
-      // ))
     },
     {
       title: "Jadwal Konsultasi",
       dataIndex: "tanggal_booking",
-      defaultSortOrder: "ascend",
       sorter: (a, b) => {
         const dateTimeA = moment(
           a.tanggal_booking + " " + a.jam_booking,
@@ -197,6 +192,7 @@ function Dashboard({ updateRes }) {
     {
       title: "Status",
       dataIndex: "action_status",
+      defaultSortOrder: "ascend",
       sorter: (a, b) => a.action_status - b.action_status,
       render: (text, record) => {
         const statusLabels = {
@@ -213,6 +209,11 @@ function Dashboard({ updateRes }) {
               handleStatusChange(value, record.id, record.catatan)
             }
             style={{
+              fontFamily: "Poppins",
+              fontSize: "12px",
+              fontStyle: "normal",
+              fontWeight: "500",
+              lineHeight: "22px",
               width: "100%",
               color:
                 record.action_status &&
@@ -418,9 +419,6 @@ function Dashboard({ updateRes }) {
               <SmallCard className="col m-2">
                 <StyledCardTitle>Pengunjung Website</StyledCardTitle>
                 <StyledCardContent>Google Analytics</StyledCardContent>
-                {/* <StyledCardSubTitle>
-                Weekly Visitors <StyledCardPercent>^ 0%</StyledCardPercent>
-              </StyledCardSubTitle> */}
               </SmallCard>
             </div>
             <div className="row">
@@ -473,7 +471,6 @@ function Dashboard({ updateRes }) {
         open={modalOpen}
         footer={null}
         width={650}
-        // onOk={() => setModalOpen(false)}
         onCancel={() => setModalOpen(false)}
       >
         <div className="p-3">
