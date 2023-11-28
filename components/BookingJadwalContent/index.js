@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-// import ChooseBooking from "./ChooseBooking";
 import DetailBooking from "./DetailBooking";
-import { Card, Input, Radio, Select } from "antd";
+import { Card, Input, Select } from "antd";
 import "@amir04lm26/react-modern-calendar-date-picker/lib/DatePicker.css";
 import { Calendar, utils } from "@amir04lm26/react-modern-calendar-date-picker";
 import { Icon } from "@iconify/react";
@@ -18,49 +17,37 @@ import {
 } from "../../lib/getEveryDate";
 import axios from "axios";
 import { toast } from "react-toastify";
-import getConfig from "next/config";
 
 function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
   const router = useRouter();
   const [selectedDay, setSelectedDay] = useState(utils().getToday());
-  let days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
   let d = new Date(
     selectedDay.year + "-" + selectedDay.month + "-" + selectedDay.day
   );
-  // let dayName = days[d.getDay()];
   let date = moment(
     `${selectedDay.year}-${selectedDay.month}-${selectedDay.day}`,
     "YYYY-MM-DD"
   );
   date.locale("id");
   let dayName = date.format("dddd");
-  const [today, setToday] = useState(new Date());
   const [bookingan, setbookingan] = useState([]);
-  // const [DayofWeek, setDayofWeek] = useState(utils().getDayOfWeek());
-  // const [filteredDate, setFilteredDate] = useState([]);
   const [valuejam, setValuejam] = useState();
   const [nama, setnama] = useState();
   const [phone, setphone] = useState();
   const [rekamMedis, setrekamMedis] = useState("");
-  const [showRekamMedis, setshowrekamMedis] = useState(false);
   const [showCalendar, setshowCalendar] = useState(true);
   const [kategoriPasien, setKategoriPasien] = useState();
   const [keluhan, setkeluhan] = useState();
   const [errornama, seterrornama] = useState(false);
   const [errorphone, seterrorphone] = useState(false);
-  const [errorphone2, seterrorphone2] = useState(false);
-  const [errorkategori, seterrorkategori] = useState(false);
-  const [errorrekam, seterrorrekam] = useState(false);
-  const regExPhone = /^(\+62|62)8[1-9]{1}\d{1}[\s-]?\d{4}[\s-]?\d{2,5}$/;
   const [errorTime, setErrorTime] = useState(false);
   const [loading, setLoading] = useState(false);
-  const url = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+  const [isChecked, setCheck] = useState(false);
 
-  const { publicRuntimeConfig } = getConfig();
   const { Option } = Select;
   const { TextArea } = Input;
 
-  const checkBooking = async (time) => {
+  const checkBooking = (time) => {
     axios
       .post(
         `/api/booking/checkbooking`,
@@ -92,15 +79,6 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
       });
   };
 
-  const onChangeKategori = (e) => {
-    setKategoriPasien(e.target.value);
-    if (e.target.value == "lama") {
-      setshowrekamMedis(true);
-    } else {
-      setshowrekamMedis(false);
-    }
-  };
-
   // Minggu jadi Days off
   const AllHariMingguOffInThisYear = getArrayEveryNDayDates(["0"]);
   const disabledMingguDaysDynamic = transformDatesToFormatDaysOff(
@@ -108,7 +86,6 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
   );
 
   // Jadwal Days off
-  // const JadwalHariOff = data && data.jadwal && data.jadwal.filter((jadwal) => !jadwal.jam);
   const convertHariOff = convertDaysToNumbers(
     hariOff && hariOff.map((hari) => hari)
   );
@@ -148,16 +125,9 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
     return arrJam;
   };
 
-  // Membuat array dari 00:00:00 hingga 23:59:59
-  const allTimes = Array.from({ length: 24 }, (_, i) =>
-    moment(i, "H").format("HH:mm:ss")
-  );
-
   const dgnPerjanjian = Array.from(
     { length: 12 },
-    (_, i) =>
-      // moment(i+8, "H").format("HH:mm")
-      Number(i + 8) + ".00"
+    (_, i) => Number(i + 8) + ".00"
   );
 
   const handleSelectedTime = (e) => {
@@ -173,13 +143,34 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
     return selectedDateTime.isAfter(moment());
   };
 
+  const searchUser = (phoneNumber) => {
+    axios
+      .get(`/api/patient/search-by-phone/${phoneNumber}`)
+      .then((response) => {
+        const result = response.data.pasien;
+
+        if (response.status == 200) {
+          if (result.length !== 0) {
+            setKategoriPasien("lama");
+            setnama(result[0].nama);
+            setrekamMedis(result[0].no_rekam_medis);
+          } else {
+            setKategoriPasien("baru");
+            setrekamMedis("");
+          }
+          setCheck(true);
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error.message);
+      });
+  };
+
   function bayar() {
     setLoading(true);
     seterrornama(false);
     seterrorphone(false);
-    seterrorkategori(false);
-    seterrorrekam(false);
-    if (!nama || !phone || !kategoriPasien) {
+    if (!nama || !phone) {
       if (!nama) {
         setLoading(false);
         seterrornama(true);
@@ -188,18 +179,6 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
         setLoading(false);
         seterrorphone(true);
       }
-      // if(phone && !phone.match(regExPhone)){
-      //   seterrorphone2(true)
-      //   setLoading(false)
-      // }
-      if (!kategoriPasien) {
-        setLoading(false);
-        seterrorkategori(true);
-      }
-      // if(kategoriPasien == "lama" && !rekamMedis){
-      //   setLoading(false);
-      //   seterrorrekam(true)
-      // }
     } else {
       const jam = valuejam.split(".");
       axios
@@ -341,8 +320,6 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
           <div className="row flex-reverse-column-sm ">
             <div className="col-lg-9 col-12 my-2">
               <Card
-                // title={<p>&nbsp;</p>}
-                // headStyle={{ backgroundColor: 'rgba(255, 255, 255, 0.0)', border: 0 }}
                 style={{
                   width: "100%",
                   maxheight: "auto",
@@ -469,7 +446,41 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
                   </div>
                 ) : (
                   <div className="row align-items-center align-self-center">
-                    <div className="col-md-7 col-12 p-3">
+                    <div className="row justify-content-center align-items-center">
+                      <div className="col-10 p-3">
+                        <span className="bookingInputLabel py-2">
+                          Nomor Telepon<span className="required">*</span>
+                        </span>
+                        <Input
+                          placeholder="Tulis nomor HP di sini"
+                          value={phone}
+                          type="number"
+                          onChange={(event) => setphone(event.target.value)}
+                        />
+                        {errorphone && (
+                          <span className="error mt-4">
+                            Nomor Telepon Anda harus diisi!
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="col-md-2 p-3">
+                        {phone ? (
+                          <CheckButton onClick={() => searchUser(phone)}>
+                            Check
+                          </CheckButton>
+                        ) : (
+                          <DisabledButton
+                            onClick={() => searchUser(phone)}
+                            disabled={true}
+                          >
+                            Check
+                          </DisabledButton>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="col-12 p-3">
                       <span className="bookingInputLabel py-2">
                         Nama lengkap pasien<span className="required">*</span>
                       </span>
@@ -484,61 +495,6 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
                         </span>
                       )}
                     </div>
-                    <div className="col-md-5 col-12 p-3">
-                      <span className="bookingInputLabel py-2">
-                        Nomor Telepon<span className="required">*</span>
-                      </span>
-                      <Input
-                        placeholder="Tulis nomor HP di sini"
-                        value={phone}
-                        type="number"
-                        onChange={(event) => setphone(event.target.value)}
-                      />
-                      {errorphone && (
-                        <span className="error mt-4">
-                          Nomor Telepon Anda harus diisi!
-                        </span>
-                      )}
-                    </div>
-                    <div className="col-12 p-3">
-                      <span className="bookingInputLabel py-2">
-                        Kategori Pasien<span className="required">*</span>
-                      </span>
-                      <br></br>
-                      <Radio.Group
-                        className="kategori"
-                        onChange={onChangeKategori}
-                        value={kategoriPasien}
-                      >
-                        <Radio value="baru">Pasien Baru</Radio>
-                        <Radio value="lama">Pasien Lama</Radio>
-                      </Radio.Group>
-                      <br></br>
-                      {errorkategori && (
-                        <span className="error mt-4">
-                          Kategori harus dipilih!
-                        </span>
-                      )}
-                    </div>
-                    {showRekamMedis && (
-                      <div className="col-md-6 col-12 p-3">
-                        <span className="bookingInputLabel py-2">
-                          Nomor Rekam Medis
-                          {/* <span className='required'>*</span> */}
-                        </span>
-                        <Input
-                          placeholder="Ex: 12345678"
-                          value={rekamMedis}
-                          onChange={(event) =>
-                            setrekamMedis(event.target.value)
-                          }
-                        />
-                        {/* {
-                        errorrekam &&
-                          <span className='error mt-4'>Rekam medis harus diisi!</span>
-                        } */}
-                      </div>
-                    )}
                     <div className="col-12 p-3">
                       <span className="bookingInputLabel py-2">Keluhan</span>
                       <TextArea
@@ -560,6 +516,7 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
                 setshowCalendar={setshowCalendar}
                 bayar={bayar}
                 loading={loading}
+                isChecked={isChecked}
               />
             </div>
           </div>
@@ -691,40 +648,39 @@ const StyledTextWIcon = styled.div`
   color: #8d8d8d;
 `;
 
-const RenderJamWrapper = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
-  grid-gap: 1rem;
-
-  overflow-y: auto;
+const CheckButton = styled.button`
+  background: #df3034;
   width: 100%;
-  height: 14.813rem;
-`;
-
-const BtnWrapper = styled.div`
-  padding: 5% 0 0 0;
-`;
-
-const StyledButton = styled.button`
-  /* display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center; */
-  padding: 0.8rem 4rem;
-
-  background: #ffffff;
-  border: 0.2rem solid #e0e0e0;
-  border-radius: 1rem;
+  border: none;
+  padding: 0.3rem 0.5rem;
+  border-radius: 8px;
+  cursor: pointer;
 
   font-family: "Poppins";
   font-style: normal;
   font-weight: 600;
-  font-size: var(--fs-14);
+  font-size: 16px;
+  color: #ffffff;
 
-  :focus {
-    color: #ffffff;
-    background: #df3034;
-  }
+  margin-top: 15%;
+`;
+
+const DisabledButton = styled.button`
+  background: #ccc;
+  width: 100%;
+  border: none;
+  padding: 0.3rem 0.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  color: #ffffff;
+  cursor: not-allowed;
+
+  margin-top: 15%;
 `;
 
 export default BookingJadwalContent;

@@ -1,30 +1,58 @@
 import Head from "next/head";
-import React from "react";
+import React, { useEffect } from "react";
 import Footer from "../../../components/footer";
 import Navbar from "../../../components/Navbar";
-import axios from "axios";
 import FloatingWA from "../../../components/FloatingWA";
 import { Card } from "antd";
 import styled from "styled-components";
-// import Lottie from 'react-lottie';
 import Lottie from "lottie-react";
-import * as animationData from "../../../public/images/success.json";
+import * as animationDataSuccess from "../../../public/images/success.json";
+import * as animationDataFail from "../../../public/images/fail.json";
 import moment from "moment";
+import axios from "axios";
 
 function BookingSuccess() {
-  const defaultOptions = {
-    loop: true,
-    autoplay: true,
-    animationData: animationData,
-    rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice",
-    },
+  const [paymentStatus, setPaymentStatus] = useState("");
+
+  const checkPaymentStatus = () => {
+    const time = localStorage.getItem("jam_booking");
+    const date = localStorage.getItem("tanggal_booking");
+    const phone = localStorage.getItem("phone_booking");
+    const idDoctor = localStorage.getItem("idDokter_booking");
+
+    const requestData = {
+      phone: phone,
+      tanggal: moment(date, "dddd, YYYY-MM-DD").format("YYYY-MM-DD"),
+      jam: time,
+      id_dokter: idDoctor,
+    };
+
+    axios
+      .post("/api/booking/payment_status", requestData)
+      .then((response) => {
+        const result = response.data.result;
+        if (result.length !== 0) {
+          const paymentStatus = result[0].payment_status;
+          setPaymentStatus(paymentStatus);
+        } else {
+          console.log("No payment status found for the given booking ID.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error.response.data);
+      });
   };
+
+  useEffect(() => {
+    checkPaymentStatus();
+  }, []);
 
   return (
     <>
       <Head>
-        <title>Booking Success</title>
+        <title>
+          {paymentStatus == "settlement" ? "Booking Success" : "Booking Failed"}
+        </title>
       </Head>
       <Navbar></Navbar>
       <Wrapper id="findUs">
@@ -36,23 +64,45 @@ function BookingSuccess() {
                 <Card
                   style={{
                     width: "100%",
-                    // height: "32rem",
                     backgroundColor: "white",
                     borderRadius: "1rem",
                     boxShadow: "0px 4px 20px rgba(192, 192, 192, 0.25)",
                   }}
                 >
                   <div className="align-self-center pt-4">
-                    <h1 className="successTitle">Pembayaran Berhasil</h1>
-                    {/* <img src='/images/successful.gif' width="60%"></img> */}
+                    <h1
+                      className={
+                        paymentStatus == "settlement"
+                          ? "successTitle"
+                          : "failTitle"
+                      }
+                    >
+                      {paymentStatus == "settlement"
+                        ? "Pembayaran Berhasil"
+                        : "Pembayaran Gagal"}
+                    </h1>
                     <div className="row justify-content-center">
                       <div className="col-lg-8 col-12">
-                        <Lottie animationData={animationData} loop={true} />
+                        <Lottie
+                          animationData={
+                            paymentStatus == "settlement"
+                              ? animationDataSuccess
+                              : animationDataFail
+                          }
+                          loop={true}
+                        />
                       </div>
                     </div>
-                    <p className="successText">
-                      Anda akan segera menerima pesan konfirmasi melalui
-                      Whatsapp
+                    <p
+                      className={
+                        paymentStatus == "settlement"
+                          ? "successText"
+                          : "failText"
+                      }
+                    >
+                      {paymentStatus == "settlement"
+                        ? "Anda akan segera menerima pesan konfirmasi melalui Whatsapp"
+                        : "Mohon maaf, kami mengalami kendala dalam memproses pembayaran untuk booking jadwal Anda saat ini. Harap mencoba kembali!"}
                     </p>
                   </div>
                 </Card>
@@ -61,7 +111,6 @@ function BookingSuccess() {
                 <Card
                   style={{
                     width: "100%",
-                    // height: "32rem",
                     backgroundColor: "white",
                     borderRadius: "1rem",
                     boxShadow: "0px 4px 20px rgba(192, 192, 192, 0.25)",
@@ -161,10 +210,6 @@ function BookingSuccess() {
 }
 
 const Wrapper = styled.div`
-  /* display: flex;
-  justify-content: center;
-  align-items: center; */
-
   background: #edf6ff;
   background-size: cover;
   background-repeat: no-repeat;
@@ -192,118 +237,6 @@ const PC = styled.div`
 const MOBILE = styled.div`
   @media (min-width: 1121px) {
     display: none;
-  }
-`;
-
-const StyledSectionTitle = styled.div`
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 600;
-  font-size: var(--fs-32);
-  color: #a5090c;
-
-  padding: 0 0 0 5%;
-`;
-
-const StyledSelected = styled.div`
-  font-family: "Lato";
-  font-style: normal;
-  font-weight: 600;
-  font-size: var(--fs-12);
-  color: #df3034;
-
-  display: list-item;
-  list-style-type: "•";
-  list-style-position: inside;
-`;
-
-const StyledAvailable = styled.div`
-  font-family: "Lato";
-  font-style: normal;
-  font-weight: 600;
-  font-size: var(--fs-12);
-  color: #09a53e;
-
-  display: list-item;
-  list-style-type: "•";
-  list-style-position: inside;
-`;
-
-const StyledNotAvail = styled.div`
-  font-family: "Lato";
-  font-style: normal;
-  font-weight: 600;
-  font-size: var(--fs-12);
-  color: #8d8d8d;
-
-  display: list-item;
-  list-style-type: "•";
-  list-style-position: inside;
-`;
-
-const StyledTitle = styled.div`
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 600;
-  font-size: var(--fs-18);
-  color: #433b3b;
-
-  margin-bottom: 2%;
-`;
-
-const StyledText = styled.div`
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 500;
-  text-align: "center";
-  font-size: var(--fs-14);
-  color: #8d8d8d;
-
-  margin-bottom: 10%;
-`;
-
-const StyledTextWIcon = styled.div`
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 500;
-  text-align: "center";
-  font-size: var(--fs-14);
-  color: #8d8d8d;
-`;
-
-const RenderJamWrapper = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
-  grid-gap: 10px;
-
-  overflow-y: auto;
-  width: 100%;
-  height: 13.813rem;
-`;
-
-const BtnWrapper = styled.div`
-  padding: 5% 0 0 0;
-`;
-
-const StyledButton = styled.button`
-  /* display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center; */
-  padding: 0.8rem 4rem;
-
-  background: #ffffff;
-  border: 0.2rem solid #e0e0e0;
-  border-radius: 1rem;
-
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 600;
-  font-size: var(--fs-14);
-
-  :focus {
-    color: #ffffff;
-    background: #df3034;
   }
 `;
 
