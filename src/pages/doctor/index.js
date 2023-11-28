@@ -98,7 +98,7 @@ function Dokter() {
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`https://dev.klinikmajja.com/api/doctors/list`, {
+      .get(`/api/doctors/list`, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -109,7 +109,7 @@ function Dokter() {
       });
 
     axios
-      .get(`https://dev.klinikmajja.com/api/doctors/schedule/list`, {
+      .get(`/api/doctors/schedule/list`, {
         headers: {
           "Content-Type": "application/json",
         },
