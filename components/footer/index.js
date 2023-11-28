@@ -90,8 +90,7 @@ function Footer() {
                   <a
                     className="social"
                     target="_blank"
-                    //*TODO: add social link
-                    href=""
+                    href="https://www.facebook.com/profile.php?id=100075123987417"
                     rel="noreferrer"
                   >
                     <Icon
@@ -103,8 +102,7 @@ function Footer() {
                   <a
                     className="social"
                     target="_blank"
-                    //*TODO: add social link
-                    href=""
+                    href="https://www.instagram.com/majja_kfer/"
                     rel="noreferrer"
                   >
                     <Icon
@@ -116,12 +114,23 @@ function Footer() {
                   <a
                     className="social"
                     target="_blank"
-                    //*TODO: add social link
-                    href=""
+                    href="https://www.youtube.com/@majjakfer6570/videos"
                     rel="noreferrer"
                   >
                     <Icon
                       icon="ph:youtube-logo-fill"
+                      className=""
+                      style={{ cursor: "pointer", marginTop: "-20px" }}
+                    />
+                  </a>
+                  <a
+                    className="social"
+                    target="_blank"
+                    href="https://linktr.ee/MAJJAKFER"
+                    rel="noreferrer"
+                  >
+                    <Icon
+                      icon="simple-icons:linktree"
                       className=""
                       style={{ cursor: "pointer", marginTop: "-20px" }}
                     />
