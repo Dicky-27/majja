@@ -1,5 +1,5 @@
 import Head from "next/head";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Footer from "../../../components/footer";
 import Navbar from "../../../components/Navbar";
 import FloatingWA from "../../../components/FloatingWA";
