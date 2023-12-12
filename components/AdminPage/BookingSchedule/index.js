@@ -8,11 +8,12 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
+import AddSchedule from "../Dashboard/AddSchedule";
+import NewDoctor from "../Dashboard/NewDoctor";
 moment.locale("id");
 const { Search } = Input;
 const { Option } = Select;
 const { TextArea } = Input;
-const url = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
 function BookingSchedule({ updateRes, isAdmin, email }) {
   const [DataBookingSchedule, setDataBookingSchedule] = useState();
@@ -27,6 +28,7 @@ function BookingSchedule({ updateRes, isAdmin, email }) {
   const [keluhan, setkeluhan] = useState();
   const [catatan, setCatatan] = useState();
   const [idBooking, setidBooking] = useState();
+  const [showAddSchedule, setShowAddSchedule] = useState(false);
   const router = useRouter();
 
   const fetchDataAdmin = async () => {
@@ -396,41 +398,71 @@ function BookingSchedule({ updateRes, isAdmin, email }) {
     setDataBookingSchedule(filteredData);
   };
 
+  const addScheduleHandler = () => {
+    setShowAddSchedule(false);
+    fetchDataAdmin();
+  };
+
   return (
     <>
-      <Wrapper className="container-fluid">
-        <div className="row">
-          <StyledTitle>Jadwal Temu</StyledTitle>
-        </div>
-        <div className="row">
-          <BigCard className="col m-2">
-            {/* <StyledTitle>Jadwal Booking Konsultasi</StyledTitle> */}
-            <div className="col-lg-3 col-12 ">
-              <Search
-                className="py-2"
-                placeholder="Search"
-                allowClear
-                onSearch={onSearch}
-              />
+      {showAddSchedule ? (
+        // Add new Schedule
+        <AddSchedule
+          closeHandler={setShowAddSchedule}
+          saveHandler={addScheduleHandler}
+        ></AddSchedule>
+      ) : (
+        // All Schedule
+        <Wrapper className="container-fluid">
+          {isAdmin ? (
+            <div className="row">
+              <div className="col-6">
+                <StyledTitle>Jadwal Temu</StyledTitle>
+              </div>
+              <div className="col-6 text-end align-self-center">
+                <button
+                  className="buttonAlt"
+                  onClick={() => setShowAddSchedule(true)}
+                >
+                  + Tambah Jadwal Temu
+                </button>
+              </div>
             </div>
-            <div>
-              <Table
-                columns={isAdmin ? columns : columnsDoctor}
-                dataSource={DataBookingSchedule}
-                onChange={onChange}
-                pagination={false}
-                onRow={(record, rowIndex) => {
-                  return {
-                    onClick: (event) => {
-                      openBookingSchedule(record);
-                    },
-                  };
-                }}
-              />
+          ) : (
+            <div className="row">
+              <StyledTitle>Jadwal Temu</StyledTitle>
             </div>
-          </BigCard>
-        </div>
-      </Wrapper>
+          )}
+          <div className="row">
+            <BigCard className="col m-2">
+              {/* <StyledTitle>Jadwal Booking Konsultasi</StyledTitle> */}
+              <div className="col-lg-3 col-12 ">
+                <Search
+                  className="py-2"
+                  placeholder="Search"
+                  allowClear
+                  onSearch={onSearch}
+                />
+              </div>
+              <div>
+                <Table
+                  columns={isAdmin ? columns : columnsDoctor}
+                  dataSource={DataBookingSchedule}
+                  onChange={onChange}
+                  pagination={false}
+                  onRow={(record, rowIndex) => {
+                    return {
+                      onClick: (event) => {
+                        openBookingSchedule(record);
+                      },
+                    };
+                  }}
+                />
+              </div>
+            </BigCard>
+          </div>
+        </Wrapper>
+      )}
       <Modal
         centered
         open={modalOpen}
