@@ -75,7 +75,6 @@ function BookingSchedule({ updateRes, isAdmin, email }) {
     } else {
       isAdmin ? fetchDataAdmin() : fetchDataNonAdmin();
     }
-    fetchDataAdmin();
   }, []);
 
   const handleStatusChange = (value, id, note, isJustNotes) => {
