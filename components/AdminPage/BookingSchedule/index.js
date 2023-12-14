@@ -449,7 +449,7 @@ function BookingSchedule({ updateRes, isAdmin, email }) {
                   columns={isAdmin ? columns : columnsDoctor}
                   dataSource={DataBookingSchedule}
                   onChange={onChange}
-                  pagination={false}
+                  pagination={true}
                   onRow={(record, rowIndex) => {
                     return {
                       onClick: (event) => {

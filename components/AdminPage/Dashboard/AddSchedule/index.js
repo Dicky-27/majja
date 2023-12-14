@@ -275,7 +275,7 @@ function AddSchedule({ closeHandler, saveHandler }) {
         <div className="row">
           {/* <Calendar Section /> */}
           <BigCard className="row mt-3 my-2 p-4">
-            <div className="col-sm-4">
+            <div className="col-xl-4 col-lg-6 col-md-12 col-sm-12 p-0 d-flex justify-content-start">
               <Calendar
                 value={selectedDay}
                 onChange={setSelectedDay}
@@ -300,7 +300,7 @@ function AddSchedule({ closeHandler, saveHandler }) {
                 )}
               />
             </div>
-            <div className="col-sm-8 pt-4">
+            <div className="col-xl-7 col-lg-7 col-md-12 col-sm-12 pt-4">
               <div className="pt-3">
                 <span className="waktuTemu pt-5">Pilih Dokter</span>
                 <br></br>
@@ -369,9 +369,9 @@ function AddSchedule({ closeHandler, saveHandler }) {
 
           {/* <Patient Section /> */}
           <BigCard className="row">
-            <div className="">
+            <div>
               <div className="row justify-content-center align-items-end">
-                <div className="col-5">
+                <div className="col-xl-4 col-md-12 col-sm-12">
                   <span className="bookingInputLabel py-2">
                     Nomor Telepon<span className="required">*</span>
                   </span>
@@ -389,7 +389,7 @@ function AddSchedule({ closeHandler, saveHandler }) {
                   )}
                 </div>
 
-                <div className="col-1">
+                <div className="col-xl-2 col-md-12 col-sm-12 mt-2 mt-md-2 text-center">
                   {phone ? (
                     <CheckButton onClick={() => searchUser(phone)}>
                       Check
@@ -404,7 +404,7 @@ function AddSchedule({ closeHandler, saveHandler }) {
                   )}
                 </div>
 
-                <div className="col-6">
+                <div className="col-xl-6 col-md-12 col-sm-12 mt-4 mt-md-0">
                   <span className="bookingInputLabel py-2">
                     Nama lengkap pasien<span className="required">*</span>
                   </span>

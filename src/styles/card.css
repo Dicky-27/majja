@@ -126,11 +126,28 @@
     line-height: 5px;
     color: white !important;
 }
-.buttonAlt{
+.buttonDisabled{
+    border: 0.2rem solid #ccc;
     padding: 0.7rem 1.4rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    color: #ffffff;
+    background-color: #ccc;
+    background-size: 31.25rem;
+    background-repeat: no-repeat;
+    background-position: 0%;
+    transition: 0.5s ease-in-out;
+    font-family: "Poppins";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+}
+.buttonAlt{
+    padding: 0.75rem 1.4rem;
     background: #FFFFFF;
     border: 1px solid #DF3034;
-    border-radius: 8px;
+    border-radius: 0.5rem;
     font-family: 'Poppins';
     font-style: normal;
     font-weight: 600;

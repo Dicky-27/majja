@@ -100,7 +100,7 @@ function PatientList({ updateRes }) {
               <Table
                 columns={columns}
                 dataSource={DataPatient}
-                pagination={false}
+                pagination={true}
               />
             ) : (
               <div className="loader">
