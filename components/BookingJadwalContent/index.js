@@ -224,7 +224,7 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
             }
             axios
               .post(
-                `${process.env.NEXT_PUBLIC_AWSENDPOINT}/gateway1/snap/checkout`,
+                `https://dev-payment.klinikmajja.com/gateway1/snap/checkout`,
                 {
                   booking_id: res.data.result.insertId,
                   amount: 50000,
