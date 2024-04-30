@@ -4,7 +4,7 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
   },
-  output: 'standalone',
+  // output: 'standalone',
   images: {
     domains: ['cloud.squidex.io', 'lh3.googleusercontent.com']
   },
