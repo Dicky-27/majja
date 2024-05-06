@@ -21,6 +21,10 @@ import { toast } from "react-toastify";
 function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
   const router = useRouter();
   const [selectedDay, setSelectedDay] = useState(utils().getToday());
+  const today = utils().getToday();
+  const oneMonthFromToday = utils().getToday();
+  oneMonthFromToday.month += 1;
+
   let d = new Date(
     selectedDay.year + "-" + selectedDay.month + "-" + selectedDay.day
   );
@@ -102,7 +106,9 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
   const convertHariOn = convertDaysToNumbers(
     hariOn && hariOn.map((hari) => hari)
   );
-  const AllHariOnInThisYear = getArrayEveryNDayDatesFromToday(convertHariOn);
+  const AllHariOnInThisYear = getArrayEveryNDayDatesFromToday(
+    convertHariOn
+  ).filter((date) => moment(date).isSameOrBefore(moment().add(1, "month")));
 
   // Jadwal Days on Jam on
   const availableDaysDynamic =
@@ -341,6 +347,7 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
                         onChange={setSelectedDay}
                         shouldHighlightWeekends
                         minimumDate={utils().getToday()}
+                        maximumDate={oneMonthFromToday}
                         disabledDays={disabledDaysDynamic.concat(
                           disabledMingguDaysDynamic
                         )} // here to disable off days
@@ -449,8 +456,8 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
                   </div>
                 ) : (
                   <div className="row align-items-center align-self-center">
-                    <div className="row justify-content-center align-items-center">
-                      <div className="col-10 p-3">
+                    <div className="d-flex p-3 p-md-4 gap-3 flex-column flex-md-row align-items-end justify-content-center">
+                      <div className="col-12 col-md-10 ">
                         <span className="bookingInputLabel py-2">
                           Nomor Telepon<span className="required">*</span>
                         </span>
@@ -467,7 +474,7 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
                         )}
                       </div>
 
-                      <div className="col-md-2 p-3">
+                      <div className="col-12 col-md-2 ">
                         {phone ? (
                           <CheckButton onClick={() => searchUser(phone)}>
                             Check
@@ -664,8 +671,6 @@ const CheckButton = styled.button`
   font-weight: 600;
   font-size: 16px;
   color: #ffffff;
-
-  margin-top: 15%;
 `;
 
 const DisabledButton = styled.button`
@@ -682,8 +687,6 @@ const DisabledButton = styled.button`
   font-size: 16px;
   color: #ffffff;
   cursor: not-allowed;
-
-  margin-top: 15%;
 `;
 
 export default BookingJadwalContent;
