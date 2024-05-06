@@ -423,26 +423,54 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
                           value={valuejam}
                         >
                           {jadwal &&
-                            jadwal.map(
+                            sortJadwal(jadwal).map(
                               (item, i) =>
-                                // dayName undefined @ safari, need to convert DateJS to MomentJS or DaysJS, fixed but need to check expected result
                                 dayName == item.hari &&
                                 (item.jam_mulai == "Dengan Perjanjian"
                                   ? filteredTimes(bookingan, dgnPerjanjian)
                                       .filter((time) => isFutureTime(time))
+                                      .sort(
+                                        (a, b) =>
+                                          new Date(
+                                            `1970-01-01T${a.replace(
+                                              ".",
+                                              ":"
+                                            )}:00`
+                                          ) -
+                                          new Date(
+                                            `1970-01-01T${b.replace(
+                                              ".",
+                                              ":"
+                                            )}:00`
+                                          )
+                                      )
                                       .map((time, i3) => (
                                         <Option key={i3} value={time}>
                                           {time}
                                         </Option>
                                       ))
-                                  : // Pecah jam item.jam menjadi array jam_booking yang telah dipesan
-                                    filteredTimes(
+                                  : filteredTimes(
                                       bookingan,
                                       pecahjam(
                                         item.jam_mulai + "-" + item.jam_selesai
-                                      ).map((item2, i2) => item2)
+                                      )
                                     )
-                                      .filter((time) => isFutureTime(time)) // Filter only future times
+                                      .filter((time) => isFutureTime(time))
+                                      .sort(
+                                        (a, b) =>
+                                          new Date(
+                                            `1970-01-01T${a.replace(
+                                              ".",
+                                              ":"
+                                            )}:00`
+                                          ) -
+                                          new Date(
+                                            `1970-01-01T${b.replace(
+                                              ".",
+                                              ":"
+                                            )}:00`
+                                          )
+                                      )
                                       .map((time, i3) => (
                                         <Option key={i3} value={time}>
                                           {time}
@@ -542,6 +570,14 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
       </Config>
     </Wrapper>
   );
+}
+
+function sortJadwal(jadwal) {
+  return jadwal.sort((a, b) => {
+    let dateA = new Date(`1970-01-01T${a.jam_mulai.replace(".", ":")}:00`);
+    let dateB = new Date(`1970-01-01T${b.jam_mulai.replace(".", ":")}:00`);
+    return dateA - dateB;
+  });
 }
 
 const Wrapper = styled.div`

@@ -232,28 +232,42 @@ function Dokter() {
                         </div>
                       </div>
                       <div className="dot my-3"></div>
-                      {harihari.map((hari, i) => (
-                        <div key={i}>
-                          <div className="row py-1">
-                            <div className="col-2 text">{hari}</div>
-                            {DataJadwalDokter?.map(
-                              (jdwl, i) =>
-                                jdwl?.id_dokter == item?.id_dokter &&
-                                jdwl.hari == hari && (
-                                  <div className="col-5">
-                                    <span className="text2">
-                                      {jdwl.jam_mulai +
-                                        (jdwl.jam_selesai != null
-                                          ? " - " + jdwl.jam_selesai
-                                          : "")}
-                                    </span>
-                                  </div>
-                                )
-                            )}
+                      {harihari.map((hari, i) => {
+                        const relevantSchedules = DataJadwalDokter.filter(
+                          (jdwl) =>
+                            jdwl?.id_dokter === item?.id_dokter &&
+                            jdwl.hari === hari
+                        ).map((jdwl) => {
+                          const jamMulai = jdwl.jam_mulai || "00:00";
+                          const jamSelesai = jdwl.jam_selesai || "23:59";
+                          return {
+                            jamMulai,
+                            jamSelesai,
+                            displayText: `${jamMulai} - ${jamSelesai}`,
+                          };
+                        });
+
+                        // Sort schedules based on the starting time (jamMulai)
+                        relevantSchedules.sort((a, b) =>
+                          a.jamMulai.localeCompare(b.jamMulai)
+                        );
+
+                        return (
+                          <div key={i}>
+                            <div className="row py-1">
+                              <div className="col-2 text">{hari}</div>
+                              {relevantSchedules.map((schedule, index) => (
+                                <div className="col-5" key={index}>
+                                  <span className="text2">
+                                    {schedule.displayText}
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
+                            <div className="line"></div>
                           </div>
-                          <div className="line"></div>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
 
                     <Link
