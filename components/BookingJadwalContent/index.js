@@ -190,6 +190,13 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
       }
     } else {
       const jam = valuejam.split(".");
+      const selectedDateString = `${selectedDay.year}-${String(
+        selectedDay.month
+      ).padStart(2, "0")}-${String(selectedDay.day).padStart(2, "0")}`;
+      const tanggal_booking = moment(selectedDateString, "YYYY-MM-DD").format(
+        "YYYY-MM-DD"
+      );
+
       axios
         .post(
           `/api/booking/add`,
@@ -199,9 +206,7 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
             kategori: kategoriPasien,
             no_rekam_medis: rekamMedis,
             keluhan,
-            tanggal_booking: moment(
-              selectedDay.year + "-" + selectedDay.month + "-" + selectedDay.day
-            ).format("YYYY-MM-DD"),
+            tanggal_booking: tanggal_booking,
             jam_booking: moment.utc(jam, "THH Z").format("HH:mm:ss"),
             id_dokter: router.query.id,
             action_status: 1,

@@ -65,13 +65,13 @@ function DoctorSchedule({ updateRes, isAdmin, email }) {
     try {
       axios
         .get(`/api/doctors/schedule/list`, {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          })
-          .then((res) => {
-            setDataDokter(res.data.jadwal);
-          });
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => {
+          setDataDokter(res.data.jadwal);
+        });
 
       axios
         .get(`/api/doctors/list`, {
@@ -1019,8 +1019,8 @@ function DoctorSchedule({ updateRes, isAdmin, email }) {
     {
       title: "Jadwal Praktek",
       dataIndex: "hari",
-      defaultSortOrder: "ascend",
-      // sorter: (a, b) => a.hari.localeCompare(b.hari),
+      defaultSortOrder: "descend",
+      sorter: (a, b) => a.hari.localeCompare(b.hari),
       width: 300,
     },
     {
