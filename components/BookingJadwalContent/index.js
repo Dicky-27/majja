@@ -304,25 +304,48 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
     }
   }
 
-  function pecahjam(jam, bookingan) {
-    var temp = [];
-    var jamstring;
-    if (jam) {
-      jam.split(".");
-      var awal = jam[0] + jam[1];
-      var awalconverted = Number(awal);
-      var akhir = jam[6] + jam[7];
-      var akhirconverted = Number(akhir);
-      for (var i = awalconverted; i < akhirconverted; i++) {
-        if (i >= 10 && i <= 99) {
-          jamstring = i + ".00";
-        } else {
-          jamstring = "0" + i + ".00";
-        }
-        temp.push(jamstring);
-      }
+  function pecahjam(jam) {
+    const [start, end] = jam.split("-");
+    const startHour = parseInt(start.split(".")[0], 10);
+    const endHour = parseInt(end.split(".")[0], 10);
+    const times = [];
+
+    for (let i = startHour; i < endHour; i++) {
+      const hour = i < 10 ? `0${i}` : `${i}`;
+      times.push(`${hour}.00`);
     }
-    return temp;
+
+    return times;
+  }
+
+  function generateUniqueTimeSlots(jadwal) {
+    const uniqueTimes = new Set();
+    jadwal.forEach((item) => {
+      pecahjam(`${item.jam_mulai}-${item.jam_selesai}`).forEach((time) => {
+        uniqueTimes.add(time);
+      });
+    });
+
+    return Array.from(uniqueTimes).sort((a, b) => {
+      return (
+        new Date(`1970-01-01T${a.replace(".", ":")}:00`) -
+        new Date(`1970-01-01T${b.replace(".", ":")}:00`)
+      );
+    });
+  }
+
+  function handleSelectedDay(day) {
+    setSelectedDay(day);
+
+    // Filter bookingan based on the selected day
+    const selectedDayName = moment(
+      `${day.year}-${day.month}-${day.day}`,
+      "YYYY-M-D"
+    ).format("dddd");
+    const filteredBookingan = jadwal.filter(
+      (item) => item.hari === selectedDayName
+    );
+    setbookingan(filteredBookingan);
   }
 
   return (
@@ -349,7 +372,7 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
                     <div className="col-xl-5 col-lg-5 col-md-12 col-sm-12 p-0 d-flex justify-content-center">
                       <Calendar
                         value={selectedDay}
-                        onChange={setSelectedDay}
+                        onChange={handleSelectedDay}
                         shouldHighlightWeekends
                         minimumDate={utils().getToday()}
                         maximumDate={oneMonthFromToday}
@@ -422,61 +445,16 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
                           onChange={handleSelectedTime}
                           value={valuejam}
                         >
-                          {jadwal &&
-                            sortJadwal(jadwal).map(
-                              (item, i) =>
-                                dayName == item.hari &&
-                                (item.jam_mulai == "Dengan Perjanjian"
-                                  ? filteredTimes(bookingan, dgnPerjanjian)
-                                      .filter((time) => isFutureTime(time))
-                                      .sort(
-                                        (a, b) =>
-                                          new Date(
-                                            `1970-01-01T${a.replace(
-                                              ".",
-                                              ":"
-                                            )}:00`
-                                          ) -
-                                          new Date(
-                                            `1970-01-01T${b.replace(
-                                              ".",
-                                              ":"
-                                            )}:00`
-                                          )
-                                      )
-                                      .map((time, i3) => (
-                                        <Option key={i3} value={time}>
-                                          {time}
-                                        </Option>
-                                      ))
-                                  : filteredTimes(
-                                      bookingan,
-                                      pecahjam(
-                                        item.jam_mulai + "-" + item.jam_selesai
-                                      )
-                                    )
-                                      .filter((time) => isFutureTime(time))
-                                      .sort(
-                                        (a, b) =>
-                                          new Date(
-                                            `1970-01-01T${a.replace(
-                                              ".",
-                                              ":"
-                                            )}:00`
-                                          ) -
-                                          new Date(
-                                            `1970-01-01T${b.replace(
-                                              ".",
-                                              ":"
-                                            )}:00`
-                                          )
-                                      )
-                                      .map((time, i3) => (
-                                        <Option key={i3} value={time}>
-                                          {time}
-                                        </Option>
-                                      )))
-                            )}
+                          {generateUniqueTimeSlots(
+                            filterJadwalByDate(
+                              jadwal || [],
+                              `${selectedDay.year}-${selectedDay.month}-${selectedDay.day}`
+                            )
+                          ).map((time, i3) => (
+                            <Option key={i3} value={time}>
+                              {time}
+                            </Option>
+                          ))}
                         </Select>
                       </div>
                       {errorTime && (
@@ -572,11 +550,40 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
   );
 }
 
-function sortJadwal(jadwal) {
-  return jadwal.sort((a, b) => {
-    let dateA = new Date(`1970-01-01T${a.jam_mulai.replace(".", ":")}:00`);
-    let dateB = new Date(`1970-01-01T${b.jam_mulai.replace(".", ":")}:00`);
-    return dateA - dateB;
+function filterJadwalByDate(jadwal, selectedDate) {
+  return jadwal.filter((item) => {
+    const selectedDay = moment(selectedDate, "YYYY-MM-DD");
+    const itemDay = moment(item.hari, "dddd");
+
+    // Check end conditions
+    if (item.berakhir_pada && selectedDay.isAfter(moment(item.berakhir_pada))) {
+      return false;
+    }
+    if (
+      item.berakhir_setelah &&
+      selectedDay.diff(moment(), "weeks") > item.berakhir_setelah
+    ) {
+      return false;
+    }
+    if (item.tidak_diulang && selectedDay.isAfter(moment(item.tidak_diulang))) {
+      return false;
+    }
+
+    // Check recurrence
+    switch (item.recurring) {
+      case 1: // Weekly
+        return selectedDay.day() === itemDay.day();
+      case 2: // Bi-weekly
+        return (
+          selectedDay.day() === itemDay.day() && selectedDay.week() % 2 === 0
+        );
+      case 3: // Monthly
+        return selectedDay.date() === itemDay.date();
+      case 4: // Unrecognized recurring value (treat as no recurrence)
+        return selectedDay.day() === itemDay.day();
+      default: // Unknown recurring pattern, exclude
+        return false;
+    }
   });
 }
 
