@@ -7,7 +7,7 @@ import styled from "styled-components";
 
 const dokter = [
   {
-    id: 3,
+    id: 1,
     name: "Dr. Cindy Rani Wirasti, SpOG-KFER",
     position: "Endocrinology Consultant",
     image: "images/doctor1.png",
@@ -20,34 +20,37 @@ const dokter = [
     image: "images/doctor2.png",
     xp: "Pengalaman: 13 tahun",
   },
-  {
-    id: 14,
-    name: "Dr. Surya Tjahyadi, SpOG-KFER",
-    position: "Endocrinology Consultant",
-    image: "images/doctor3.png",
-    xp: "Pengalaman: 7 tahun",
-  },
-  {
-    id: 15,
-    name: "Dr. Viviana Agustina, SpOG-KFER",
-    position: "Endocrinology Consultant",
-    image: "images/doctor5.png",
-    xp: "Pengalaman: 10 tahun",
-  },
-  {
-    id: 16,
-    name: "Dr. Reza Adisatria, SpOG-KFER",
-    position: "Endocrinology Consultant",
-    image: "images/doctor4.png",
-    xp: "Pengalaman: 10 tahun",
-  },
-  {
-    id: 17,
-    name: "Dr. Herlina Pertiwi, SpOG-KFER",
-    position: "Endocrinology Consultant",
-    image: "images/doctor6.png",
-    xp: "Pengalaman: 5 tahun",
-  },
+
+  //* TODO: unhide when data is ready
+
+  // {
+  //   id: 14,
+  //   name: "Dr. Surya Tjahyadi, SpOG-KFER",
+  //   position: "Endocrinology Consultant",
+  //   image: "images/doctor3.png",
+  //   xp: "Pengalaman: 7 tahun",
+  // },
+  // {
+  //   id: 15,
+  //   name: "Dr. Viviana Agustina, SpOG-KFER",
+  //   position: "Endocrinology Consultant",
+  //   image: "images/doctor5.png",
+  //   xp: "Pengalaman: 10 tahun",
+  // },
+  // {
+  //   id: 16,
+  //   name: "Dr. Reza Adisatria, SpOG-KFER",
+  //   position: "Endocrinology Consultant",
+  //   image: "images/doctor4.png",
+  //   xp: "Pengalaman: 10 tahun",
+  // },
+  // {
+  //   id: 17,
+  //   name: "Dr. Herlina Pertiwi, SpOG-KFER",
+  //   position: "Endocrinology Consultant",
+  //   image: "images/doctor6.png",
+  //   xp: "Pengalaman: 5 tahun",
+  // },
 ];
 
 function DoctorHome() {

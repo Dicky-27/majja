@@ -10,25 +10,28 @@ import styled from "styled-components";
 const ImageSlider = () => {
   return (
     <Wrapper>
+      {/*TODO: unhide after assets is ready*/}
       <Swiper
         modules={[Navigation, Pagination, Scrollbar, A11y]}
         spaceBetween={50}
         slidesPerView={1}
-        navigation={{ nextEl: ".arrow-right", prevEl: ".arrow-left" }}
+        // navigation={{ nextEl: ".arrow-right", prevEl: ".arrow-left" }}
         loop={true}
         autoplay={true}
       >
-        <button className="arrow-left arrow">
+        {/* <button className="arrow-left arrow">
           <img src="/images/ic-chevron-left.svg" />
         </button>
         <button className="arrow-right arrow">
           <img src="/images/ic-chevron-right.svg" />
-        </button>
+        </button> */}
 
         <SwiperSlide>
-          <img src="/images/offering1.png" alt="slide1" />
+          <div class="py-4">
+            <img src="/images/img-banner-1.webp" alt="slide1" class="rounded" />
+          </div>
         </SwiperSlide>
-        <SwiperSlide>
+        {/* <SwiperSlide>
           <img src="/images/offering1.png" alt="slide2" />
         </SwiperSlide>
         <SwiperSlide>
@@ -36,7 +39,7 @@ const ImageSlider = () => {
         </SwiperSlide>
         <SwiperSlide>
           <img src="/images/offering1.png" alt="slide4" />
-        </SwiperSlide>
+        </SwiperSlide> */}
       </Swiper>
     </Wrapper>
   );
@@ -45,6 +48,7 @@ const ImageSlider = () => {
 const Wrapper = styled.div`
   width: 100%;
   position: relative;
+  padding: 5%;
 
   .swiper {
     width: 100%;

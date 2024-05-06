@@ -26,12 +26,15 @@ function Dokter() {
   ]);
   const url = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
   const [loading, setLoading] = useState(false);
+  const itemsPerPage = 9;
+  const [currentPage, setCurrentPage] = useState(1);
 
   const onSearch = (value) => {
     const filteredData = DataDokterMaster.filter((entry) =>
-      entry.nama.toLowerCase().includes(value)
+      entry.nama.toLowerCase().includes(value.toLowerCase())
     );
-    setDataDokter(filteredData);
+    setDataDokter(filteredData.slice(0, itemsPerPage));
+    setCurrentPage(1);
   };
 
   const filterday = (value) => {
@@ -55,45 +58,32 @@ function Dokter() {
     const filteredData = DataDokterMaster.filter((entry) =>
       entry.posisi.includes(value)
     );
-    setDataDokter(filteredData);
+    setDataDokter(filteredData.slice(0, itemsPerPage));
+    setCurrentPage(1);
   };
 
   const sortNama = (value) => {
+    let sortedData = [];
     if (value == "atoz") {
-      const filteredData = DataDokterMaster.sort((a, b) => {
-        if (b.nama[4].toLowerCase() > a.nama[4].toLowerCase()) {
-          return -1;
-        }
-      });
-      setDataDokter(filteredData);
+      sortedData = [...DataDokterMaster].sort((a, b) =>
+        a.nama.localeCompare(b.nama)
+      );
     } else {
-      const filteredData = DataDokterMaster.sort((a, b) => {
-        if (b.nama[4].toLowerCase() < a.nama[4].toLowerCase()) {
-          return -1;
-        }
-      });
-      setDataDokter(filteredData);
+      sortedData = [...DataDokterMaster].sort((a, b) =>
+        b.nama.localeCompare(a.nama)
+      );
     }
+    setDataDokter(sortedData.slice(0, itemsPerPage));
+    setCurrentPage(1);
   };
 
   const handlePagination = (value) => {
-    if (DataDokterMaster.length < value * 9) {
-      setDataDokter([
-        ...slice2(DataDokterMaster, (value - 1) * 9, DataDokterMaster.length),
-      ]);
-    } else {
-      setDataDokter([...slice2(DataDokterMaster, (value - 1) * 9, value * 9)]);
-    }
+    setCurrentPage(value);
+    const startIndex = (value - 1) * itemsPerPage;
+    setDataDokter(
+      DataDokterMaster.slice(startIndex, startIndex + itemsPerPage)
+    );
   };
-
-  function slice2(array, val, offset) {
-    var subarray = [];
-    for (var i = val; i < offset; i++) {
-      subarray.push(array[i]);
-    }
-
-    return subarray;
-  }
 
   useEffect(() => {
     setLoading(true);
@@ -104,7 +94,7 @@ function Dokter() {
         },
       })
       .then((res) => {
-        setDataDokter([...slice2(res.data.dokter, 0, 9)]);
+        setDataDokter(res.data.dokter.slice(0, itemsPerPage));
         setDataDokterMaster(res.data.dokter);
       });
 
@@ -291,8 +281,9 @@ function Dokter() {
           <div className="row justify-content-center">
             <div className="col-12 text-center py-4">
               <Pagination
-                onChange={(value) => handlePagination(value)}
-                defaultCurrent={1}
+                current={currentPage}
+                onChange={handlePagination}
+                defaultPageSize={itemsPerPage}
                 total={DataDokterMaster?.length}
               />
             </div>
