@@ -47,6 +47,9 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
   const { Option } = Select;
   const { TextArea } = Input;
 
+  const paymentUrl =
+    process.env.NEXT_PUBLIC_AWSENDPOINT || "https://pay.klinikmajja.com";
+
   const checkBooking = (time) => {
     axios
       .post(
@@ -224,7 +227,7 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
             }
             axios
               .post(
-                `${process.env.NEXT_PUBLIC_AWSENDPOINT}/gateway1/snap/checkout`,
+                `${paymentUrl}/gateway1/snap/checkout`,
                 {
                   booking_id: res.data.result.insertId,
                   amount: 50000,
