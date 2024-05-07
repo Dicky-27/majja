@@ -1,5 +1,5 @@
 import Head from "next/head";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Footer from "../../../components/footer";
 import Navbar from "../../../components/Navbar";
 import FloatingWA from "../../../components/FloatingWA";
@@ -7,48 +7,9 @@ import { Card } from "antd";
 import styled from "styled-components";
 import Lottie from "lottie-react";
 import * as animationDataSuccess from "../../../public/images/success.json";
-import * as animationDataFail from "../../../public/images/fail.json";
 import moment from "moment";
-import axios from "axios";
 
 function BookingSuccess() {
-  // const [paymentStatus, setPaymentStatus] = useState("");
-
-  // const checkPaymentStatus = () => {
-  //   const time = localStorage.getItem("jam_booking");
-  //   const date = moment(localStorage.getItem("tanggal_booking")).format(
-  //     "YYYY-MM-DD"
-  //   );
-  //   const phone = localStorage.getItem("phone_booking");
-  //   const idDoctor = localStorage.getItem("idDokter_booking");
-
-  //   const requestData = {
-  //     phone: phone,
-  //     tanggal: date,
-  //     jam: time,
-  //     id_dokter: idDoctor,
-  //   };
-
-  //   axios
-  //     .post("/api/booking/payment_status", requestData)
-  //     .then((response) => {
-  //       const result = response.data.result;
-  //       if (result.length !== 0) {
-  //         const paymentStatus = result[0].payment_status;
-  //         setPaymentStatus(paymentStatus);
-  //       } else {
-  //         console.log("No payment status found for the given booking ID.");
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error:", error.response.data);
-  //     });
-  // };
-
-  // useEffect(() => {
-  //   checkPaymentStatus();
-  // }, []);
-
   return (
     <>
       <Head>
@@ -70,44 +31,16 @@ function BookingSuccess() {
                   }}
                 >
                   <div className="align-self-center pt-4">
-                    <h1
-                      className={"successTitle"}
-                      // className={
-                      //   paymentStatus == "settlement"
-                      //     ? "successTitle"
-                      //     : "failTitle"
-                      // }
-                    >
-                      {/* {paymentStatus == "settlement"
-                        ? "Pembayaran Berhasil"
-                        : "Pembayaran Gagal"} */}
-                      Pembayaran Berhasil
-                    </h1>
+                    <h1 className={"successTitle"}>Pembayaran Berhasil</h1>
                     <div className="row justify-content-center">
                       <div className="col-lg-8 col-12">
                         <Lottie
-                          // animationData={
-                          //   paymentStatus == "settlement"
-                          //     ? animationDataSuccess
-                          //     : animationDataFail
-                          // }
                           animationData={animationDataSuccess}
                           loop={true}
                         />
                       </div>
                     </div>
-                    <p
-                      // className={
-                      //   paymentStatus == "settlement"
-                      //     ? "successText"
-                      //     : "failText"
-                      // }
-                      className={"successText"}
-                    >
-                      {/* {paymentStatus == "settlement"
-                        ? "Anda akan segera menerima pesan konfirmasi melalui Whatsapp"
-                        : "Mohon maaf, kami mengalami kendala dalam memproses pembayaran untuk booking jadwal Anda saat ini. Harap mencoba kembali!"}
-                         */}
+                    <p className={"successText"}>
                       Anda akan segera menerima pesan konfirmasi melalui
                       Whatsapp
                     </p>
