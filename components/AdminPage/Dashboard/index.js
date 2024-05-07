@@ -357,6 +357,10 @@ function Dashboard({ updateRes }) {
                     <StyledCardPercentPos>
                       +{percentBook?.toFixed(2)}%
                     </StyledCardPercentPos>
+                  ) : percentBook === 0 ? (
+                    <StyledCardPercentZero>
+                      {percentBook?.toFixed(2)}%
+                    </StyledCardPercentZero>
                   ) : (
                     <StyledCardPercentNeg>
                       {percentBook?.toFixed(2)}%
@@ -383,6 +387,10 @@ function Dashboard({ updateRes }) {
                     <StyledCardPercentPos>
                       +{percentPasien?.toFixed(2)}%
                     </StyledCardPercentPos>
+                  ) : percentPasien === 0 ? (
+                    <StyledCardPercentZero>
+                      {percentPasien?.toFixed(2)}%
+                    </StyledCardPercentZero>
                   ) : (
                     <StyledCardPercentNeg>
                       {percentPasien?.toFixed(2)}%
@@ -411,6 +419,10 @@ function Dashboard({ updateRes }) {
                     <StyledCardPercentPos>
                       +{percentEarning?.toFixed(2)}%
                     </StyledCardPercentPos>
+                  ) : percentEarning === 0 ? (
+                    <StyledCardPercentZero>
+                      {percentEarning?.toFixed(2)}%
+                    </StyledCardPercentZero>
                   ) : (
                     <StyledCardPercentNeg>
                       {percentEarning?.toFixed(2)}%
@@ -650,6 +662,14 @@ const StyledCardPercentPos = styled.span`
   font-family: Poppins;
   font-weight: 500;
 `;
+
+const StyledCardPercentZero = styled.span`
+  color: #8d8d8d;
+  font-size: var(--fs-12);
+  font-family: Poppins;
+  font-weight: 500;
+`;
+
 const StyledCardPercentNeg = styled.span`
   color: #df3034;
   font-size: var(--fs-12);
