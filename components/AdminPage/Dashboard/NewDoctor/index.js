@@ -233,7 +233,7 @@ function NewDoctor({ updateBatal, updateSimpan, callData }) {
                     placeholder="3"
                     min={0}
                     type="number"
-                    max={xpText == "bulan" ? 12 : ""}
+                    // max={xpText == "bulan" ? 12 : ""}
                     style={{ width: "100%" }}
                     value={xpNumber}
                     onChange={(event) => setxpNumber(event.target.value)}
@@ -243,9 +243,10 @@ function NewDoctor({ updateBatal, updateSimpan, callData }) {
                   <Select
                     placeholder="Tahun"
                     style={{ width: "100%" }}
-                    onChange={(e) => (
-                      setxpText(e), xpNumber > 12 && setxpNumber(12)
-                    )}
+                    onChange={(e) =>
+                      // setxpText(e), xpNumber > 12 && setxpNumber(12)
+                      setxpText(e)
+                    }
                     value={xpText}
                     options={[
                       {

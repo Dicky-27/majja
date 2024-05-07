@@ -12,49 +12,47 @@ import moment from "moment";
 import axios from "axios";
 
 function BookingSuccess() {
-  const [paymentStatus, setPaymentStatus] = useState("");
+  // const [paymentStatus, setPaymentStatus] = useState("");
 
-  const checkPaymentStatus = () => {
-    const time = localStorage.getItem("jam_booking");
-    const date = moment(localStorage.getItem("tanggal_booking")).format(
-      "YYYY-MM-DD"
-    );
-    const phone = localStorage.getItem("phone_booking");
-    const idDoctor = localStorage.getItem("idDokter_booking");
+  // const checkPaymentStatus = () => {
+  //   const time = localStorage.getItem("jam_booking");
+  //   const date = moment(localStorage.getItem("tanggal_booking")).format(
+  //     "YYYY-MM-DD"
+  //   );
+  //   const phone = localStorage.getItem("phone_booking");
+  //   const idDoctor = localStorage.getItem("idDokter_booking");
 
-    const requestData = {
-      phone: phone,
-      tanggal: date,
-      jam: time,
-      id_dokter: idDoctor,
-    };
+  //   const requestData = {
+  //     phone: phone,
+  //     tanggal: date,
+  //     jam: time,
+  //     id_dokter: idDoctor,
+  //   };
 
-    axios
-      .post("/api/booking/payment_status", requestData)
-      .then((response) => {
-        const result = response.data.result;
-        if (result.length !== 0) {
-          const paymentStatus = result[0].payment_status;
-          setPaymentStatus(paymentStatus);
-        } else {
-          console.log("No payment status found for the given booking ID.");
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error.response.data);
-      });
-  };
+  //   axios
+  //     .post("/api/booking/payment_status", requestData)
+  //     .then((response) => {
+  //       const result = response.data.result;
+  //       if (result.length !== 0) {
+  //         const paymentStatus = result[0].payment_status;
+  //         setPaymentStatus(paymentStatus);
+  //       } else {
+  //         console.log("No payment status found for the given booking ID.");
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error:", error.response.data);
+  //     });
+  // };
 
-  useEffect(() => {
-    checkPaymentStatus();
-  }, []);
+  // useEffect(() => {
+  //   checkPaymentStatus();
+  // }, []);
 
   return (
     <>
       <Head>
-        <title>
-          {paymentStatus == "settlement" ? "Booking Success" : "Booking Failed"}
-        </title>
+        <title>Booking Success</title>
       </Head>
       <Navbar></Navbar>
       <Wrapper id="findUs">
@@ -73,38 +71,45 @@ function BookingSuccess() {
                 >
                   <div className="align-self-center pt-4">
                     <h1
-                      className={
-                        paymentStatus == "settlement"
-                          ? "successTitle"
-                          : "failTitle"
-                      }
+                      className={"successTitle"}
+                      // className={
+                      //   paymentStatus == "settlement"
+                      //     ? "successTitle"
+                      //     : "failTitle"
+                      // }
                     >
-                      {paymentStatus == "settlement"
+                      {/* {paymentStatus == "settlement"
                         ? "Pembayaran Berhasil"
-                        : "Pembayaran Gagal"}
+                        : "Pembayaran Gagal"} */}
+                      Pembayaran Berhasil
                     </h1>
                     <div className="row justify-content-center">
                       <div className="col-lg-8 col-12">
                         <Lottie
-                          animationData={
-                            paymentStatus == "settlement"
-                              ? animationDataSuccess
-                              : animationDataFail
-                          }
+                          // animationData={
+                          //   paymentStatus == "settlement"
+                          //     ? animationDataSuccess
+                          //     : animationDataFail
+                          // }
+                          animationData={animationDataSuccess}
                           loop={true}
                         />
                       </div>
                     </div>
                     <p
-                      className={
-                        paymentStatus == "settlement"
-                          ? "successText"
-                          : "failText"
-                      }
+                      // className={
+                      //   paymentStatus == "settlement"
+                      //     ? "successText"
+                      //     : "failText"
+                      // }
+                      className={"successText"}
                     >
-                      {paymentStatus == "settlement"
+                      {/* {paymentStatus == "settlement"
                         ? "Anda akan segera menerima pesan konfirmasi melalui Whatsapp"
                         : "Mohon maaf, kami mengalami kendala dalam memproses pembayaran untuk booking jadwal Anda saat ini. Harap mencoba kembali!"}
+                         */}
+                      Anda akan segera menerima pesan konfirmasi melalui
+                      Whatsapp
                     </p>
                   </div>
                 </Card>
