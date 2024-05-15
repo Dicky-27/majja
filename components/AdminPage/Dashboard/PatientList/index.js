@@ -14,35 +14,71 @@ const { Search } = Input;
 
 function PatientList({ updateRes }) {
   const [DataPatient, setDataPatient] = useState();
-  const [DataPatientMaster, setDataPatientMaster] = useState();
   const [loading, setLoading] = useState(false);
-  const url = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
   const router = useRouter();
-  const onSearch = (value) => {
-    const filteredData = DataPatientMaster.filter((entry) =>
-      entry.nama.toLowerCase().includes(value)
-    );
-    setDataPatient(filteredData);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalRecords, setTotalRecords] = useState(0);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debounceTimer, setDebounceTimer] = useState(null);
+
+  const handleSearchChange = (value) => {
+    setSearchTerm(value);
+  };
+
+  const handleSearchExecute = () => {
+    setCurrentPage(1);
+    fetchPatients();
+  };
+
+  const fetchPatients = () => {
+    setLoading(true);
+    axios
+      .get(`/api/patient/list`, {
+        params: {
+          search: searchTerm,
+          page: currentPage,
+          limit: pageSize,
+        },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((res) => {
+        setLoading(false);
+        setDataPatient(res.data.pasien);
+        setTotalRecords(res.data.total || 0);
+      })
+      .catch((error) => {
+        setLoading(false);
+        console.error("Failed to fetch patients:", error);
+        toast.error("Failed to load data");
+      });
   };
 
   useEffect(() => {
-    setLoading(true);
+    if (debounceTimer) {
+      clearTimeout(debounceTimer);
+    }
+
+    const timer = setTimeout(() => {
+      handleSearchExecute();
+    }, 1000); // Wait for 1 second of inactivity
+
+    setDebounceTimer(timer);
+
+    // Cleanup function to clear timer on component unmount
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
+
+  useEffect(() => {
     if (!Cookies.get("token")) {
       router.push("/login");
     } else {
-      axios
-        .get(`/api/patient/list`, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-        .then((res) => {
-          setLoading(false);
-          setDataPatient(res.data.pasien);
-          setDataPatientMaster(res.data.pasien);
-        });
+      fetchPatients(currentPage, pageSize);
     }
-  }, []);
+  }, [currentPage, pageSize]);
 
   const columns = [
     {
@@ -54,7 +90,7 @@ function PatientList({ updateRes }) {
     },
     {
       title: "Nomor Telepon",
-      dataIndex: "phone",
+      dataIndex: "telp",
       width: 350,
     },
     {
@@ -64,12 +100,12 @@ function PatientList({ updateRes }) {
     },
     {
       title: "Status",
-      dataIndex: "kategori",
-      sorter: (a, b) => a.kategori.localeCompare(b.kategori),
+      dataIndex: "category",
+      sorter: (a, b) => a.category.localeCompare(b.category),
       render: (_, record) =>
-        record.kategori == "baru" ? (
+        record.category == "baru" ? (
           <Tag color="geekblue">Pasien Baru</Tag>
-        ) : record.kategori == "lama" ? (
+        ) : record.category == "lama" ? (
           <Tag color="magenta">Pasien Lama</Tag>
         ) : (
           <Tag color="red">Unknown</Tag>
@@ -92,7 +128,8 @@ function PatientList({ updateRes }) {
               className="py-2"
               placeholder="Cari Pasien"
               allowClear
-              onSearch={onSearch}
+              onChange={(e) => handleSearchChange(e.target.value)}
+              onSearch={handleSearchExecute}
             />
           </div>
           <div>
@@ -100,7 +137,18 @@ function PatientList({ updateRes }) {
               <Table
                 columns={columns}
                 dataSource={DataPatient}
-                pagination={true}
+                loading={loading}
+                pagination={{
+                  current: currentPage,
+                  pageSize: pageSize,
+                  total: totalRecords,
+                  onChange: (page, pageSize) => {
+                    setCurrentPage(page);
+                    setPageSize(pageSize);
+                  },
+                  showSizeChanger: true, // Allows changing the number of items per page
+                  pageSizeOptions: ["10", "20", "50", "100"], // You can specify the options here
+                }}
               />
             ) : (
               <div className="loader">
