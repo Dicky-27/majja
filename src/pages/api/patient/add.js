@@ -32,7 +32,7 @@ export default async function exportDoctor(req, res) {
         });
         if (cekpasien.length > 0) {
           res.status(400).json({
-            msg: "Pasien Sudah Terdaftar! Silahkan Pilih Kategori Pasien Lama!",
+            msg: "Nomor Telepon Sudah Terdaftar!",
           });
         } else {
           const pasien = await excuteQuery({

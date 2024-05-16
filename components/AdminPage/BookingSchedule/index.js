@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Table, Tag, Modal, Select, Input, Pagination } from "antd";
+import { Table, Tag, Modal, Select, Input } from "antd";
 import moment from "moment";
 import "moment/locale/id";
 import { Icon } from "@iconify/react";
@@ -9,7 +9,6 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import AddSchedule from "../Dashboard/AddSchedule";
-import NewDoctor from "../Dashboard/NewDoctor";
 moment.locale("id");
 const { Search } = Input;
 const { Option } = Select;
@@ -29,6 +28,9 @@ function BookingSchedule({ updateRes, isAdmin, email }) {
   const [catatan, setCatatan] = useState();
   const [idBooking, setidBooking] = useState();
   const [showAddSchedule, setShowAddSchedule] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [selectedBookingId, setSelectedBookingId] = useState();
+
   const router = useRouter();
 
   const fetchDataAdmin = async () => {
@@ -70,12 +72,20 @@ function BookingSchedule({ updateRes, isAdmin, email }) {
   };
 
   useEffect(() => {
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [openDeleteModal]);
+
+  const fetchData = () => {
     if (!Cookies.get("token")) {
       router.push("/login");
     } else {
       isAdmin ? fetchDataAdmin() : fetchDataNonAdmin();
     }
-  }, []);
+  };
 
   const handleStatusChange = (value, id, note, isJustNotes) => {
     axios
@@ -102,6 +112,24 @@ function BookingSchedule({ updateRes, isAdmin, email }) {
           toast.error("Silahkan Coba Lagi");
         }
       });
+  };
+
+  const onDelete = async () => {
+    try {
+      const response = await axios.delete(
+        `/api/booking/delete?id=${selectedBookingId}`
+      );
+
+      if (response.status === 200) {
+        toast.success("Jadwal Temu Berhasil dihapus!");
+        setOpenDeleteModal(false);
+        setModalOpen(false);
+      } else {
+        toast.error("Silahkan Coba Lagi");
+      }
+    } catch (error) {
+      toast.error("Silahkan Coba Lagi");
+    }
   };
 
   const columns = [
@@ -142,7 +170,6 @@ function BookingSchedule({ updateRes, isAdmin, email }) {
     {
       title: "Dokter",
       dataIndex: "nama_dokter",
-      width: 400,
     },
     {
       title: "Status",
@@ -231,6 +258,18 @@ function BookingSchedule({ updateRes, isAdmin, email }) {
       title: "Catatan",
       dataIndex: "catatan",
       width: 400,
+    },
+    {
+      title: "Creator",
+      dataIndex: "creator",
+      render: (_, record) =>
+        record.creator == "user" ? (
+          <Tag color="geekblue">User</Tag>
+        ) : record.creator == "admin" ? (
+          <Tag color="magenta">Admin</Tag>
+        ) : (
+          <Tag color="red">Unknown</Tag>
+        ),
     },
   ];
 
@@ -371,6 +410,7 @@ function BookingSchedule({ updateRes, isAdmin, email }) {
 
   const openBookingSchedule = (record) => {
     setModalOpen(true);
+    setSelectedBookingId(record.id);
     setnama(record.nama);
     setjadwal(
       moment(record.tanggal_booking).format("DD MMM YY") +
@@ -467,8 +507,10 @@ function BookingSchedule({ updateRes, isAdmin, email }) {
         open={modalOpen}
         footer={null}
         width={650}
-        // onOk={() => setModalOpen(false)}
-        onCancel={() => setModalOpen(false)}
+        onCancel={() => {
+          setModalOpen(false);
+          setSelectedBookingId(null);
+        }}
       >
         <div className="p-3">
           <h5 className="pb-3 modalDoctorTitle">{nama}</h5>
@@ -560,36 +602,71 @@ function BookingSchedule({ updateRes, isAdmin, email }) {
               </div>
             </div>
           </div>
+          <div className="row px-2 py-2">
+            <DeleteButton
+              onClick={() => setOpenDeleteModal(true)}
+              className="col-lg-3"
+            >
+              Hapus
+            </DeleteButton>
+
+            <div className="col-lg-9 text-end">
+              {statusbook == 1 ? (
+                <button
+                  className="buttonModalReminded"
+                  onClick={() =>
+                    handleStatusChange(2, idBooking, catatan, false)
+                  }
+                >
+                  Reminded
+                </button>
+              ) : statusbook == 2 ? (
+                <div className="text-end">
+                  <button
+                    className="buttonModalNot mx-1"
+                    onClick={() =>
+                      handleStatusChange(4, idBooking, catatan, false)
+                    }
+                  >
+                    Not Shown
+                  </button>
+                  <button
+                    className="buttonModalComplete mx-1"
+                    onClick={() =>
+                      handleStatusChange(3, idBooking, catatan, false)
+                    }
+                  >
+                    Completed
+                  </button>
+                </div>
+              ) : (
+                ""
+              )}
+            </div>
+          </div>
+        </div>
+      </Modal>
+      {/* Delete Confirmation Modal*/}
+      <Modal
+        centered
+        open={openDeleteModal}
+        footer={null}
+        width={350}
+        closable={false}
+      >
+        <div className="p-3">
+          <h5 className="pb-3 modalDoctorTitle">Hapus Jadwal Temu?</h5>
+
           <div className="text-end">
-            {statusbook == 1 ? (
-              <button
-                className="buttonModalReminded"
-                onClick={() => handleStatusChange(2, idBooking, catatan, false)}
-              >
-                Reminded
-              </button>
-            ) : statusbook == 2 ? (
-              <div className="text-end">
-                <button
-                  className="buttonModalNot mx-1"
-                  onClick={() =>
-                    handleStatusChange(4, idBooking, catatan, false)
-                  }
-                >
-                  Not Shown
-                </button>
-                <button
-                  className="buttonModalComplete mx-1"
-                  onClick={() =>
-                    handleStatusChange(3, idBooking, catatan, false)
-                  }
-                >
-                  Completed
-                </button>
-              </div>
-            ) : (
-              ""
-            )}
+            <ModalButtonCancel
+              className="batalkan me-3"
+              onClick={() => setOpenDeleteModal(false)}
+            >
+              Batalkan
+            </ModalButtonCancel>
+            <ModalButtonOk className="ok" onClick={() => onDelete()}>
+              OK
+            </ModalButtonOk>
           </div>
         </div>
       </Modal>
@@ -629,6 +706,37 @@ const SaveButton = styled.a`
   border: 1px solid #df3034;
   background: var(--White, #fff);
   padding: 6px 24px;
+`;
+
+const DeleteButton = styled.a`
+  color: #ffffff;
+  text-align: center;
+  font-family: Poppins;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+
+  border-radius: 8px;
+  border: 1px solid #df3034;
+  background: var(--White, #df3034);
+  padding: 6px 24px;
+`;
+
+const ModalButtonOk = styled.a`
+  color: #df3034;
+  font-family: Poppins;
+  font-size: var(--fs-16);
+  font-style: normal;
+  font-weight: 600;
+`;
+
+const ModalButtonCancel = styled.a`
+  color: #262626;
+  font-family: Poppins;
+  font-size: var(--fs-16);
+  font-style: normal;
+  font-weight: 500;
 `;
 
 export default BookingSchedule;

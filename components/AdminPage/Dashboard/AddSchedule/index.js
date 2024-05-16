@@ -133,9 +133,7 @@ function AddSchedule({ closeHandler, saveHandler }) {
 
   const searchUser = (phoneNumber) => {
     axios
-      .get(
-        `/api/patient/search-by-phone/${phoneNumber}`
-      )
+      .get(`/api/patient/search-by-phone/${phoneNumber}`)
       .then((response) => {
         const result = response.data.pasien;
 
@@ -159,14 +157,11 @@ function AddSchedule({ closeHandler, saveHandler }) {
   const fetchData = async () => {
     setDoctorsLoading(true);
     try {
-      const response = await axios.get(
-        `/api/doctors/list`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await axios.get(`/api/doctors/list`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       setDoctors(response.data.dokter);
       setDoctorsLoading(false);
       setIsInitialLoad(false);
@@ -247,6 +242,7 @@ function AddSchedule({ closeHandler, saveHandler }) {
           id_dokter: selectedDoctorId,
           action_status: 1,
           payment: "manual",
+          creator: "admin",
         },
         {
           headers: {

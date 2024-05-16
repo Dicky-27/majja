@@ -175,10 +175,11 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
       });
   };
 
-  function bayar() {
+  async function bayar() {
     setLoading(true);
     seterrornama(false);
     seterrorphone(false);
+
     if (!nama || !phone) {
       if (!nama) {
         setLoading(false);
@@ -197,8 +198,28 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
         "YYYY-MM-DD"
       );
 
-      axios
-        .post(
+      try {
+        // If new patient, add patient data first
+        if (kategoriPasien === "baru") {
+          const patientResponse = await axios.post(
+            `/api/patient/add`,
+            { nama, telp: phone.toString() },
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          if (patientResponse.status !== 200) {
+            toast.error(patientResponse.data.msg);
+            setLoading(false);
+            return;
+          }
+        }
+
+        // Add booking
+        const bookingResponse = await axios.post(
           `/api/booking/add`,
           {
             nama,
@@ -210,97 +231,76 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
             jam_booking: moment.utc(jam, "THH Z").format("HH:mm:ss"),
             id_dokter: router.query.id,
             action_status: 1,
+            creator: "user",
           },
           {
             headers: {
               "Content-Type": "application/json",
             },
           }
-        )
-        .then((res) => {
-          if (res.status == 200) {
-            if (kategoriPasien == "baru") {
-              axios
-                .post(
-                  `/api/patient/add`,
-                  { nama, telp: phone.toString() },
-                  {
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                  }
-                )
-                .then((res) => {
-                  if (res.status != 200) {
-                    toast.error(res.data.msg);
-                  }
-                });
+        );
+
+        if (bookingResponse.status === 200) {
+          // Proceed with payment
+          const paymentResponse = await axios.post(
+            `${paymentUrl}/gateway1/snap/checkout`,
+            {
+              booking_id: bookingResponse.data.result.insertId,
+              amount: 50000,
+              full_name: nama,
+              phone: phone.toString(),
+            },
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
             }
-            axios
-              .post(
-                `${paymentUrl}/gateway1/snap/checkout`,
-                {
-                  booking_id: res.data.result.insertId,
-                  amount: 50000,
-                  full_name: nama,
-                  phone: phone.toString(),
-                },
-                {
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                }
-              )
-              .then((res) => {
-                if (res.status == 200) {
-                  if (typeof window !== "undefined") {
-                    localStorage.setItem("nama_booking", nama);
-                    localStorage.setItem("phone_booking", phone.toString());
-                    localStorage.setItem("kategori_booking", kategoriPasien);
-                    localStorage.setItem("rekamMedis_booking", rekamMedis);
-                    localStorage.setItem("keluhan_booking", keluhan);
-                    localStorage.setItem(
-                      "tanggal_booking",
-                      moment(
-                        selectedDay.year +
-                          "-" +
-                          selectedDay.month +
-                          "-" +
-                          selectedDay.day
-                      ).format("dddd, YYYY-MM-DD")
-                    );
-                    localStorage.setItem(
-                      "jam_booking",
-                      moment.utc(jam, "THH Z").format("HH:mm:ss")
-                    );
-                    localStorage.setItem("idDokter_booking", router.query.id);
-                  }
-                  var url = res.data.url;
-                  window.location.replace(url);
-                }
-              });
-          } else {
-            toast.error("cek kembali data Anda!");
-          }
-        })
-        .catch(function (error) {
-          setLoading(true);
-          if (error.response) {
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-            if (error.response.status == 404) {
-              toast.error(error);
-              setLoading(false);
+          );
+
+          if (paymentResponse.status === 200) {
+            if (typeof window !== "undefined") {
+              localStorage.setItem("nama_booking", nama);
+              localStorage.setItem("phone_booking", phone.toString());
+              localStorage.setItem("kategori_booking", kategoriPasien);
+              localStorage.setItem("rekamMedis_booking", rekamMedis);
+              localStorage.setItem("keluhan_booking", keluhan);
+              localStorage.setItem(
+                "tanggal_booking",
+                moment(
+                  selectedDay.year +
+                    "-" +
+                    selectedDay.month +
+                    "-" +
+                    selectedDay.day
+                ).format("dddd, YYYY-MM-DD")
+              );
+              localStorage.setItem(
+                "jam_booking",
+                moment.utc(jam, "THH Z").format("HH:mm:ss")
+              );
+              localStorage.setItem("idDokter_booking", router.query.id);
             }
-          } else if (error.request) {
-            console.log(error.request);
-            setLoading(false);
-          } else {
-            console.log("Error", error.message);
-            setLoading(false);
+            const url = paymentResponse.data.url;
+            window.location.replace(url);
           }
-        });
+        } else {
+          toast.error("Cek kembali data Anda!");
+        }
+      } catch (error) {
+        setLoading(false);
+        if (error.response) {
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+          if (error.response.status === 404) {
+            toast.error(error);
+          }
+        } else if (error.request) {
+          console.log(error.request);
+        } else {
+          console.log("Error", error.message);
+        }
+      }
     }
   }
 

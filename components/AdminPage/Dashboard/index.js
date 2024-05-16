@@ -121,7 +121,7 @@ function Dashboard({ updateRes }) {
 
   function percentage(time) {
     axios
-      .get(`/api/dashboard/` + time, {
+      .get(`/api/dashboard/overview?period=${time}`, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -139,18 +139,17 @@ function Dashboard({ updateRes }) {
 
   function handleRangeChange(value) {
     setrange(value);
-    if (value == "7") {
-      // callData(sevendays, today)
-      percentage("weekly");
+
+    if (value == "1") {
+      percentage("today");
+    } else if (value == "7") {
+      percentage("7_days");
     } else if (value == "30") {
-      // callData(thirtydays, today)
-      percentage("monthly");
-    } else if (value == "1") {
-      // callData(yesterday, tomorrow)
-      percentage("daily");
+      percentage("30_days");
+    } else if (value == "356") {
+      percentage("1_year");
     } else {
-      // callData(oneyear, today)
-      percentage("annualy");
+      percentage("all_time");
     }
   }
 
@@ -262,12 +261,24 @@ function Dashboard({ updateRes }) {
       dataIndex: "catatan",
       width: 300,
     },
+    {
+      title: "Creator",
+      dataIndex: "creator",
+      render: (_, record) =>
+        record.creator == "user" ? (
+          <Tag color="geekblue">User</Tag>
+        ) : record.creator == "admin" ? (
+          <Tag color="magenta">Admin</Tag>
+        ) : (
+          <Tag color="red">Unknown</Tag>
+        ),
+    },
   ];
 
   const fetchData = async () => {
     try {
       callData(yesterday, nextyear);
-      percentage("daily");
+      percentage("today");
 
       axios
         .get(`/api/patient/list`, {

@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Table, Tag, Modal, Select } from "antd";
+import { Table, Tag } from "antd";
 import moment from "moment";
 import "moment/locale/id";
-import { Input, Pagination } from "antd";
-import { Icon } from "@iconify/react";
+import { Input } from "antd";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
