@@ -81,17 +81,19 @@ function AddSchedule({ closeHandler, saveHandler }) {
   const availableDaysDynamic =
     transformDatesToFormatDaysOn(AllHariOnInThisYear);
 
+  // Function to check if the selected time is in the future and at least 2 hours before now
   const isFutureTime = (time) => {
     const selectedDateTime = moment(
       `${selectedDay.year}-${selectedDay.month}-${selectedDay.day} ${time}`,
       "YYYY-M-D HH:mm"
     );
-    return selectedDateTime.isAfter(moment());
+    const twoHoursBeforeNow = moment().add(2, "hours");
+    return selectedDateTime.isAfter(twoHoursBeforeNow);
   };
 
-  const handleSelectedTime = (selectedTime, doctorId) => {
+  const handleSelectedTime = (selectedTime) => {
     setValuejam(selectedTime);
-    checkBooking(doctorId);
+    checkBooking(selectedTime, selectedDoctorId);
   };
 
   const handleSelectedDoctor = (id) => {
@@ -109,27 +111,6 @@ function AddSchedule({ closeHandler, saveHandler }) {
         phone !== ""
     );
   };
-
-  function pecahjam(jam) {
-    var temp = [];
-    var jamstring;
-    if (jam) {
-      jam.split(".");
-      var awal = jam[0] + jam[1];
-      var awalconverted = Number(awal);
-      var akhir = jam[6] + jam[7];
-      var akhirconverted = Number(akhir);
-      for (var i = awalconverted; i < akhirconverted; i++) {
-        if (i >= 10 && i <= 99) {
-          jamstring = i + ".00";
-        } else {
-          jamstring = "0" + i + ".00";
-        }
-        temp.push(jamstring);
-      }
-    }
-    return temp;
-  }
 
   const searchUser = (phoneNumber) => {
     axios
@@ -211,7 +192,9 @@ function AddSchedule({ closeHandler, saveHandler }) {
       )
       .then((response) => {
         const result = response.data.result;
-        if (result.length !== 0) {
+        // Check if the bookings for the selected time have reached
+
+        if (result.length >= 4) {
           setErrorTime(true);
           setValuejam(null);
         } else {
@@ -224,41 +207,116 @@ function AddSchedule({ closeHandler, saveHandler }) {
   };
 
   const addSchedule = async () => {
-    try {
-      setIsLoading(true);
+    setIsLoading(true);
+    seterrornama(false);
+    seterrorphone(false);
+
+    if (!nama || !phone) {
+      if (!nama) {
+        setIsLoading(false);
+        seterrornama(true);
+      }
+      if (!phone) {
+        setIsLoading(false);
+        seterrorphone(true);
+      }
+    } else {
       const jam = valuejam.split(".");
-      await axios.post(
-        "/api/booking/add",
-        {
-          nama: nama,
-          phone: phone.toString(),
-          kategori: kategoriPasien,
-          no_rekam_medis: rekamMedis,
-          keluhan: keluhan,
-          tanggal_booking: moment(
-            selectedDay.year + "-" + selectedDay.month + "-" + selectedDay.day
-          ).format("YYYY-MM-DD"),
-          jam_booking: moment.utc(jam, "THH Z").format("HH:mm:ss"),
-          id_dokter: selectedDoctorId,
-          action_status: 1,
-          payment: "manual",
-          creator: "admin",
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+      const selectedDateString = `${selectedDay.year}-${String(
+        selectedDay.month
+      ).padStart(2, "0")}-${String(selectedDay.day).padStart(2, "0")}`;
+      const tanggal_booking = moment(selectedDateString, "YYYY-MM-DD").format(
+        "YYYY-MM-DD"
       );
-      saveHandler();
-      toast.success("Successfully added a schedule");
-    } catch (error) {
-      console.error("Error:", error);
-      toast.error(error);
-    } finally {
-      setIsLoading(false);
+
+      try {
+        // If new patient, add patient data first
+        if (kategoriPasien === "baru") {
+          const patientResponse = await axios.post(
+            `/api/patient/add`,
+            { nama, telp: phone.toString() },
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          if (patientResponse.status !== 200) {
+            toast.error(patientResponse.data.msg);
+            setIsLoading(false);
+            return;
+          }
+        }
+
+        // Add booking
+        const bookingResponse = await axios.post(
+          "/api/booking/add",
+          {
+            nama,
+            phone: phone.toString(),
+            kategori: kategoriPasien,
+            no_rekam_medis: rekamMedis,
+            keluhan,
+            tanggal_booking: tanggal_booking,
+            jam_booking: moment.utc(jam, "THH Z").format("HH:mm:ss"),
+            id_dokter: selectedDoctorId,
+            action_status: 1,
+            payment: "manual",
+            creator: "user",
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (bookingResponse.status === 200) {
+          saveHandler();
+          toast.success("Successfully added a schedule");
+        } else {
+          console.error("Booking error:", bookingResponse.data);
+          toast.error(bookingResponse.data.msg || "Failed to add schedule");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        toast.error(error.message || "An error occurred");
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
+
+  function pecahjam(jam) {
+    const [start, end] = jam.split("-");
+    const startHour = parseInt(start.split(".")[0], 10);
+    const endHour = parseInt(end.split(".")[0], 10);
+    const times = [];
+
+    for (let i = startHour; i < endHour; i++) {
+      const hour = i < 10 ? `0${i}` : `${i}`;
+      times.push(`${hour}.00`);
+    }
+
+    return times;
+  }
+
+  function generateUniqueTimeSlots(jadwal) {
+    const uniqueTimes = new Set();
+    jadwal.forEach((item) => {
+      pecahjam(`${item.jam_mulai}-${item.jam_selesai}`).forEach((time) => {
+        uniqueTimes.add(time);
+      });
+    });
+
+    return Array.from(uniqueTimes).sort((a, b) => {
+      return (
+        new Date(`1970-01-01T${a.replace(".", ":")}:00`) -
+        new Date(`1970-01-01T${b.replace(".", ":")}:00`)
+      );
+    });
+  }
 
   return (
     <div className="container-fluid">
@@ -336,17 +394,18 @@ function AddSchedule({ closeHandler, saveHandler }) {
                     value={valuejam}
                   >
                     {schedules &&
-                      schedules.map(
-                        (item) =>
-                          dayName == item.hari &&
-                          pecahjam(item.jam_mulai + "-" + item.jam_selesai)
-                            .filter((time) => isFutureTime(time))
-                            .map((time, i) => (
-                              <Option key={i} value={time}>
-                                {time}
-                              </Option>
-                            ))
-                      )}
+                      generateUniqueTimeSlots(
+                        filterJadwalByDate(
+                          schedules || [],
+                          `${selectedDay.year}-${selectedDay.month}-${selectedDay.day}`
+                        )
+                      )
+                        .filter((time) => isFutureTime(time))
+                        .map((time, i3) => (
+                          <Option key={i3} value={time}>
+                            {time}
+                          </Option>
+                        ))}
                   </Select>
                 ) : (
                   <div className="d-flex flex-row">
@@ -457,6 +516,43 @@ function AddSchedule({ closeHandler, saveHandler }) {
       </div>
     </div>
   );
+}
+
+function filterJadwalByDate(jadwal, selectedDate) {
+  return jadwal.filter((item) => {
+    const selectedDay = moment(selectedDate, "YYYY-MM-DD");
+    const itemDay = moment(item.hari, "dddd");
+
+    // Check end conditions
+    if (item.berakhir_pada && selectedDay.isAfter(moment(item.berakhir_pada))) {
+      return false;
+    }
+    if (
+      item.berakhir_setelah &&
+      selectedDay.diff(moment(), "weeks") > item.berakhir_setelah
+    ) {
+      return false;
+    }
+    if (item.tidak_diulang && selectedDay.isAfter(moment(item.tidak_diulang))) {
+      return false;
+    }
+
+    // Check recurrence
+    switch (item.recurring) {
+      case 1: // Weekly
+        return selectedDay.day() === itemDay.day();
+      case 2: // Bi-weekly
+        return (
+          selectedDay.day() === itemDay.day() && selectedDay.week() % 2 === 0
+        );
+      case 3: // Monthly
+        return selectedDay.date() === itemDay.date();
+      case 4: // Unrecognized recurring value (treat as no recurrence)
+        return selectedDay.day() === itemDay.day();
+      default: // Unknown recurring pattern, exclude
+        return false;
+    }
+  });
 }
 
 const BigCard = styled.div`

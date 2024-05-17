@@ -16,7 +16,6 @@ const { TextArea } = Input;
 
 function BookingSchedule({ updateRes, isAdmin, email }) {
   const [DataBookingSchedule, setDataBookingSchedule] = useState();
-  const [DataBookingScheduleMaster, setDataBookingScheduleMaster] = useState();
   const [modalOpen, setModalOpen] = useState(false);
   const [nama, setnama] = useState();
   const [jadwal, setjadwal] = useState();
@@ -31,31 +30,65 @@ function BookingSchedule({ updateRes, isAdmin, email }) {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [selectedBookingId, setSelectedBookingId] = useState();
 
+  const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalRecords, setTotalRecords] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debounceTimer, setDebounceTimer] = useState(null);
+
   const router = useRouter();
 
+  const handleSearchChange = (value) => {
+    setSearchTerm(value);
+  };
+
+  const handleSearchExecute = () => {
+    setCurrentPage(1);
+    fetchData();
+  };
+
   const fetchDataAdmin = async () => {
+    setLoading(true);
     try {
       axios
         .get(`/api/booking`, {
+          params: {
+            search: searchTerm,
+            page: currentPage,
+            limit: pageSize,
+          },
           headers: {
             "Content-Type": "application/json",
           },
         })
         .then((res) => {
-          setDataBookingSchedule(res.data.result);
-          setDataBookingScheduleMaster(res.data.result);
+          setDataBookingSchedule(res.data.bookings);
+          setTotalRecords(res.data.total || 0);
         });
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const fetchDataNonAdmin = async () => {
+    setLoading(true);
     try {
       axios
         .post(
           `/api/booking/bookingonemail`,
-          { email: JSON.parse(email) },
+          {
+            email: email.replace(/^"|"$/g, ""),
+          },
+          {
+            params: {
+              search: searchTerm,
+              page: currentPage,
+              limit: pageSize,
+            },
+          },
           {
             headers: {
               "Content-Type": "application/json",
@@ -63,17 +96,34 @@ function BookingSchedule({ updateRes, isAdmin, email }) {
           }
         )
         .then((res) => {
-          setDataBookingSchedule(res.data.result);
-          setDataBookingScheduleMaster(res.data.result);
+          setDataBookingSchedule(res.data.bookings);
+          setTotalRecords(res.data.total || 0);
         });
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
+    if (debounceTimer) {
+      clearTimeout(debounceTimer);
+    }
+
+    const timer = setTimeout(() => {
+      handleSearchExecute();
+    }, 1000); // Wait for 1 second of inactivity
+
+    setDebounceTimer(timer);
+
+    // Cleanup function to clear timer on component unmount
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
+
+  useEffect(() => {
     fetchData();
-  }, []);
+  }, [currentPage, pageSize]);
 
   useEffect(() => {
     fetchData();
@@ -426,20 +476,9 @@ function BookingSchedule({ updateRes, isAdmin, email }) {
     setCatatan(record.catatan);
   };
 
-  const onChange = (pagination, filters, sorter, extra) => {
-    console.log("params", pagination, filters, sorter, extra);
-  };
-
-  const onSearch = (value) => {
-    const filteredData = DataBookingScheduleMaster.filter((entry) =>
-      entry.nama.toLowerCase().includes(value)
-    );
-    setDataBookingSchedule(filteredData);
-  };
-
   const addScheduleHandler = () => {
     setShowAddSchedule(false);
-    fetchDataAdmin();
+    fetchData();
   };
 
   return (
@@ -474,29 +513,50 @@ function BookingSchedule({ updateRes, isAdmin, email }) {
           )}
           <div className="row">
             <BigCard className="col m-2">
-              {/* <StyledTitle>Jadwal Booking Konsultasi</StyledTitle> */}
               <div className="col-lg-3 col-12 ">
                 <Search
                   className="py-2"
-                  placeholder="Search"
+                  placeholder="Cari..."
                   allowClear
-                  onSearch={onSearch}
+                  onChange={(e) => handleSearchChange(e.target.value)}
+                  onSearch={handleSearchExecute}
                 />
               </div>
               <div>
-                <Table
-                  columns={isAdmin ? columns : columnsDoctor}
-                  dataSource={DataBookingSchedule}
-                  onChange={onChange}
-                  pagination={true}
-                  onRow={(record, rowIndex) => {
-                    return {
-                      onClick: (event) => {
-                        openBookingSchedule(record);
+                {!loading ? (
+                  <Table
+                    columns={isAdmin ? columns : columnsDoctor}
+                    dataSource={DataBookingSchedule}
+                    loading={loading}
+                    pagination={{
+                      current: currentPage,
+                      pageSize: pageSize,
+                      total: totalRecords,
+                      onChange: (page, pageSize) => {
+                        setCurrentPage(page);
+                        setPageSize(pageSize);
                       },
-                    };
-                  }}
-                />
+                      showSizeChanger: true, // Allows changing the number of items per page
+                      pageSizeOptions: ["10", "20", "50", "100"], // You can specify the options here
+                    }}
+                    onRow={(record, rowIndex) => {
+                      return {
+                        onClick: (event) => {
+                          openBookingSchedule(record);
+                        },
+                      };
+                    }}
+                  />
+                ) : (
+                  <div className="loader">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+                )}
               </div>
             </BigCard>
           </div>
@@ -603,14 +663,16 @@ function BookingSchedule({ updateRes, isAdmin, email }) {
             </div>
           </div>
           <div className="row px-2 py-2">
-            <DeleteButton
-              onClick={() => setOpenDeleteModal(true)}
-              className="col-lg-3"
-            >
-              Hapus
-            </DeleteButton>
+            {isAdmin && (
+              <DeleteButton
+                onClick={() => setOpenDeleteModal(true)}
+                className="col-lg-3"
+              >
+                Hapus
+              </DeleteButton>
+            )}
 
-            <div className="col-lg-9 text-end">
+            <div className={`${isAdmin ? "col-lg-9" : "col-lg-12"} text-end`}>
               {statusbook == 1 ? (
                 <button
                   className="buttonModalReminded"

@@ -74,7 +74,9 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
       )
       .then((response) => {
         const result = response.data.result;
-        if (result.length !== 0) {
+        // Check if the bookings for the selected time have reached
+
+        if (result.length >= 4) {
           setErrorTime(true);
           setValuejam(null);
         } else {
@@ -101,8 +103,6 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
     transformDatesToFormatDaysOff(AllHariOffInThisYear);
 
   // Jadwal Days on
-  const JadwalHariOn =
-    data && data.jadwal && data.jadwal.filter((jadwal) => jadwal.jam);
   const convertHariOn = convertDaysToNumbers(
     hariOn && hariOn.map((hari) => hari)
   );
@@ -114,42 +114,19 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
   const availableDaysDynamic =
     transformDatesToFormatDaysOn(AllHariOnInThisYear);
 
-  // Memfilter waktu yang telah dipesan dari pilihan waktu yang akan ditampilkan
-  const filteredTimes = (bookedTimes, allTimes) => {
-    let arrJam;
-    if (bookedTimes.length > 0) {
-      let setJam = new Set();
-      allTimes.map((all) =>
-        bookedTimes.map((booked) =>
-          moment(d).format("YYYY-MM-DD") ==
-          moment(booked.tanggal_booking).format("YYYY-MM-DD")
-            ? all != booked.jam_booking && setJam.add(all)
-            : setJam.add(all)
-        )
-      );
-      arrJam = Array.from(setJam);
-    } else {
-      arrJam = allTimes;
-    }
-    return arrJam;
-  };
-
-  const dgnPerjanjian = Array.from(
-    { length: 12 },
-    (_, i) => Number(i + 8) + ".00"
-  );
-
   const handleSelectedTime = (e) => {
     setValuejam(e);
     checkBooking(e);
   };
 
+  // Function to check if the selected time is in the future and at least 2 hours before now
   const isFutureTime = (time) => {
     const selectedDateTime = moment(
       `${selectedDay.year}-${selectedDay.month}-${selectedDay.day} ${time}`,
       "YYYY-M-D HH:mm"
     );
-    return selectedDateTime.isAfter(moment());
+    const twoHoursBeforeNow = moment().add(2, "hours");
+    return selectedDateTime.isAfter(twoHoursBeforeNow);
   };
 
   const searchUser = (phoneNumber) => {
@@ -450,11 +427,13 @@ function BookingJadwalContent({ data, id, jadwal, hariOff, hariOn }) {
                               jadwal || [],
                               `${selectedDay.year}-${selectedDay.month}-${selectedDay.day}`
                             )
-                          ).map((time, i3) => (
-                            <Option key={i3} value={time}>
-                              {time}
-                            </Option>
-                          ))}
+                          )
+                            .filter((time) => isFutureTime(time))
+                            .map((time, i3) => (
+                              <Option key={i3} value={time}>
+                                {time}
+                              </Option>
+                            ))}
                         </Select>
                       </div>
                       {errorTime && (
